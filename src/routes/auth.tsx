@@ -17,7 +17,7 @@ export const Route = createFileRoute("/auth")({
       { title: "Sign in — Gaming IQ" },
       {
         name: "description",
-        content: "Log in or create your Gaming IQ account to save sensitivity setups, presets and Aim Lab runs.",
+        content: "Log in or create your Gaming IQ account to save your generated sensitivity settings.",
       },
       { property: "og:title", content: "Sign in — Gaming IQ" },
       {
@@ -153,14 +153,12 @@ function AuthPage() {
   };
 
   return (
-    <main className="relative flex min-h-dvh flex-col overflow-hidden bg-background text-foreground">
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[460px] bg-gradient-hero" />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-dots opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent_60%)]" />
-      <header className="relative grid grid-cols-[auto_1fr] items-center gap-3 px-5 py-4 md:px-8">
+    <main className="flex min-h-dvh flex-col bg-background text-foreground">
+      <header className="grid grid-cols-[auto_1fr] items-center gap-3 border-b border-border px-4 py-3 sm:px-6">
         <Link
           to="/"
           aria-label="Back to app"
-          className="grid size-10 place-items-center rounded-xl border border-border bg-secondary text-muted-foreground transition-colors hover:text-foreground"
+          className="grid size-9 place-items-center rounded-lg border border-border bg-card text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="size-4" aria-hidden="true" />
         </Link>
@@ -169,14 +167,13 @@ function AuthPage() {
         </div>
       </header>
 
-      <div className="relative flex flex-1 items-start justify-center px-5 pb-12 pt-6 md:items-center">
+      <div className="flex flex-1 items-start justify-center px-4 pb-12 pt-10 md:items-center">
         <div className="w-full max-w-sm">
           <div className="mb-7">
-            <div className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
-              <span className="size-1.5 rounded-full bg-primary shadow-glow" />
+            <div className="mb-2 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
               {step === "check-email" ? "Almost there" : step === "password" ? (mode === "login" ? "Log in" : "Sign up") : "Account"}
             </div>
-            <h1 className="font-display text-[42px] font-extrabold leading-[0.95] tracking-tight">
+            <h1 className="text-2xl font-semibold tracking-tight">
               {step === "check-email"
                 ? "Check your inbox"
                 : step === "password"
@@ -188,17 +185,17 @@ function AuthPage() {
             <p className="mt-2 text-sm text-muted-foreground">
               {step === "check-email"
                 ? `We sent a confirmation link to ${email}. Open it to activate your account.`
-                : "Save setups, publish presets and track Aim Lab runs across devices."}
+                : "Save your generated settings and open them on any device."}
             </p>
           </div>
 
           {step === "check-email" ? (
-            <div className="surface rounded-3xl p-5">
-              <MailCheck className="size-8 text-primary" aria-hidden="true" />
+            <div className="surface rounded-xl p-5">
+              <MailCheck className="size-7 text-foreground/80" aria-hidden="true" />
               <p className="mt-3 text-sm text-card-foreground">
                 After confirming, come back here and log in with your email and password.
               </p>
-              <Button variant="surface" size="md" className="mt-5 w-full" onClick={resetToEmail}>
+              <Button variant="outline" size="md" className="mt-5 w-full" onClick={resetToEmail}>
                 Back to sign in
               </Button>
             </div>
@@ -206,7 +203,7 @@ function AuthPage() {
             <>
               <form
                 onSubmit={step === "email" ? handleEmailSubmit : handlePasswordSubmit}
-                className="surface space-y-4 rounded-3xl p-5"
+                className="surface space-y-4 rounded-xl p-5"
                 noValidate
               >
                 <div className="space-y-2">
@@ -221,15 +218,15 @@ function AuthPage() {
                       placeholder="you@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="h-12 rounded-xl border-border bg-secondary focus-visible:ring-primary/40"
+                      className="h-11 rounded-lg border-input bg-card shadow-none focus-visible:ring-2 focus-visible:ring-ring"
                     />
                   ) : (
-                    <div className="flex h-12 items-center justify-between gap-3 rounded-xl border border-border bg-secondary px-3.5">
+                    <div className="flex h-11 items-center justify-between gap-3 rounded-lg border border-border bg-secondary px-3">
                       <span className="truncate text-sm">{email}</span>
                       <button
                         type="button"
                         onClick={resetToEmail}
-                        className="shrink-0 text-xs font-semibold text-primary hover:underline"
+                        className="shrink-0 text-xs font-medium text-foreground underline-offset-4 hover:underline"
                       >
                         Change
                       </button>
@@ -242,7 +239,7 @@ function AuthPage() {
                     <div
                       role="tablist"
                       aria-label="Account action"
-                      className="grid grid-cols-2 gap-1 rounded-2xl border border-border bg-background/60 p-1"
+                      className="grid grid-cols-2 gap-0.5 rounded-lg border border-border bg-secondary p-0.5"
                     >
                       {(["login", "signup"] as const).map((m) => (
                         <button
@@ -255,9 +252,9 @@ function AuthPage() {
                             setError(null);
                           }}
                           className={cn(
-                            "h-10 rounded-xl text-sm font-semibold transition-all",
+                            "h-9 rounded-md text-sm font-medium transition-colors",
                             mode === m
-                              ? "bg-gradient-primary text-primary-foreground shadow-glow"
+                              ? "bg-card text-foreground ring-1 ring-border"
                               : "text-muted-foreground hover:text-foreground",
                           )}
                         >
@@ -267,7 +264,7 @@ function AuthPage() {
                     </div>
 
                     <p className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <CheckCircle2 className="size-4 text-primary" aria-hidden="true" />
+                      <CheckCircle2 className="size-4 text-foreground/70" aria-hidden="true" />
                       {accountFound
                         ? "We found your account — enter your password to log in."
                         : "No account with this email yet — choose a password to sign up."}
@@ -283,7 +280,7 @@ function AuthPage() {
                         placeholder={mode === "login" ? "Your password" : "At least 6 characters"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="h-12 rounded-xl border-border bg-secondary focus-visible:ring-primary/40"
+                        className="h-11 rounded-lg border-input bg-card shadow-none focus-visible:ring-2 focus-visible:ring-ring"
                       />
                     </div>
                   </div>
@@ -295,7 +292,7 @@ function AuthPage() {
                   </p>
                 ) : null}
 
-                <Button type="submit" variant="glow" size="md" disabled={busy} className="w-full h-12">
+                <Button type="submit" size="md" disabled={busy} className="w-full h-11">
                   {busy ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
                   {step === "email" ? (
                     <>
@@ -310,7 +307,7 @@ function AuthPage() {
                 </Button>
               </form>
 
-              <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-wider text-muted-foreground">
+              <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
                 <span className="h-px flex-1 bg-border" />
                 or
                 <span className="h-px flex-1 bg-border" />
@@ -320,7 +317,7 @@ function AuthPage() {
                 type="button"
                 variant="google"
                 size="google"
-                className="w-full h-12"
+                className="w-full h-11"
                 disabled={googleBusy}
                 onClick={() => void handleGoogle()}
               >

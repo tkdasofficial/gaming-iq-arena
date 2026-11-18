@@ -17,11 +17,11 @@
 - [x] Verify on phone + desktop
 
 ## Premium minimalist rebuild (Nov 2026 brief)
-- [ ] New design system: light/dark follows phone, graphite accent, no gradients/glow
-- [ ] Database: games table + small starter catalog (8 brands)
-- [ ] Brand → Model → Game → Generate flow with verified device preview
-- [ ] Recommendation computed on the server per game
-- [ ] Results page with Copy All, Save
-- [ ] Dashboard sections: benefits + supported games
-- [ ] Keep only Saved results; remove Presets and Aim Lab from the app (tables kept)
-- [ ] Verify on phone + desktop, light + dark
+- [x] New design system: light/dark follows phone, graphite accent, no gradients/glow
+- [x] Database: games table + small starter catalog (8 brands)
+- [x] Brand → Model → Game → Generate flow with verified device preview
+- [x] Recommendation computed on the server per game
+- [x] Results page with Copy All, Save
+- [x] Dashboard sections: benefits + supported games
+- [x] Keep only Saved results; remove Presets and Aim Lab from the app (tables kept)
+- [x] Verify on phone + desktop, light + dark

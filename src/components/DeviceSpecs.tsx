@@ -13,7 +13,7 @@ export function deviceSpecRows(d: VerifiedDevice, full = false): SpecRow[] {
     d.gyroscope === 'hardware' ? 'Hardware' : d.gyroscope === 'software' ? 'Software only' : d.gyroscope === 'none' ? 'Not available' : null;
   const rows: SpecRow[] = [
     { label: 'Chipset', value: d.chipset },
-    { label: 'Display', value: d.display.sizeInches ? `${d.display.sizeInches}"${d.display.panelType ? ` ${d.display.panelType}` : ''}` : null },
+    { label: 'Display', value: d.display.sizeInches ? `${d.display.sizeInches}"${full && d.display.panelType ? ` ${d.display.panelType}` : ''}` : null },
     { label: 'Refresh rate', value: d.display.refreshHz ? `${d.display.refreshHz} Hz` : null },
     { label: 'Touch sampling', value: d.display.touchSamplingHz ? `${d.display.touchSamplingHz} Hz` : null },
     { label: 'Resolution', value: d.display.resolution },
@@ -36,7 +36,7 @@ export function DeviceSpecs({ device, full = false, className }: { device: Verif
   return (
     <dl className={cn('grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-3', className)}>
       {rows.map((r) => (
-        <div key={r.label} className="min-w-0">
+        <div key={r.label} className={cn('min-w-0', r.label === 'Chipset' && 'col-span-2 sm:col-span-full')}>
           <dt className="text-[11px] text-muted-foreground">{r.label}</dt>
           <dd className="mt-0.5 flex items-center gap-1.5 text-[13px] font-medium">
             {r.value ? (

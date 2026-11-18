@@ -52,7 +52,7 @@ export const generateRecommendation = createServerFn({ method: 'POST' })
     if (!deviceRes.data) return { ok: false, error: 'This phone is not in the catalog.' };
     if (!gameRes.data) return { ok: false, error: 'This game is not supported.' };
 
-    const raw = { ...((deviceRes.data.data ?? {}) as Record<string, unknown>), id: deviceRes.data.id };
+    const raw: Record<string, unknown> = { ...((deviceRes.data.data ?? {}) as Record<string, unknown>), id: deviceRes.data.id };
     let chipset: Record<string, unknown> | null = null;
     if (typeof raw.chipsetId === 'string') {
       const chip = await db.from('chipsets').select('data').eq('id', raw.chipsetId).maybeSingle();

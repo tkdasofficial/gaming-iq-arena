@@ -90,7 +90,7 @@ export function Notice({ tone = 'neutral', icon: Icon, children, action, classNa
 /** Two-to-four option segmented control. */
 export function Segmented<T extends string>({ options, value, onChange, ariaLabel, className }: { options: { id: T; label: ReactNode }[]; value: T; onChange: (v: T) => void; ariaLabel?: string; className?: string }) {
   return (
-    <div role="tablist" aria-label={ariaLabel} className={cn('inline-flex rounded-lg border border-border bg-secondary p-0.5', className)}>
+    <div role="tablist" aria-label={ariaLabel} className={cn('no-scrollbar flex overflow-x-auto rounded-lg border border-border bg-secondary p-0.5', className)}>
       {options.map((o) => {
         const active = o.id === value;
         return (
@@ -101,7 +101,7 @@ export function Segmented<T extends string>({ options, value, onChange, ariaLabe
             aria-selected={active}
             onClick={() => onChange(o.id)}
             className={cn(
-              'h-8 min-w-0 flex-1 truncate rounded-md px-3 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+              'h-8 flex-1 shrink-0 whitespace-nowrap rounded-md px-2 text-[13px] sm:px-3 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
               active ? 'bg-card text-foreground ring-1 ring-border' : 'text-muted-foreground hover:text-foreground'
             )}
           >

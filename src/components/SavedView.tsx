@@ -1,155 +1,162 @@
 import { useState } from 'react';
-import { motion } from 'motion/react';
-import { Bookmark, Check, Copy, LogIn, Smartphone, SlidersHorizontal, Trash2, Upload } from 'lucide-react';
-import { formatDeviceFullName } from '../engine/devices';
-import type { SavedSetup } from '../engine/types';
+import { ArrowLeft, Bookmark, Check, Copy, LogIn, SlidersHorizontal, Trash2 } from 'lucide-react';
+import { formatRecommendationText } from '../engine/recommend';
+import { removeSavedResult, type SavedResult } from '../backend/services';
+import { useBackend } from '../backend/BackendContext';
 import { Button } from '@/components/ui/button';
-import { EmptyState, PageHeader } from './giq/primitives';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { ResultsView } from './ResultsView';
+import { EmptyState, Notice, PageHeader } from './giq/primitives';
 
-interface SavedViewProps {
-  savedSetups: SavedSetup[];
-  isSignedIn: boolean;
-  authReady: boolean;
-  onSignIn: () => void;
-  onLoadSetup: (setup: SavedSetup) => void;
-  onDeleteSetup: (id: string) => Promise<void>;
-  onCopySetupObject: (setup: SavedSetup) => void;
-  onGoToCalibrate: () => void;
-}
+const dateFmt = new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 
-export function SavedView({
-  savedSetups,
-  isSignedIn,
-  authReady,
-  onSignIn,
-  onLoadSetup,
-  onDeleteSetup,
-  onCopySetupObject,
-  onGoToCalibrate,
-}: SavedViewProps) {
+export function SavedView({ onGoToGenerate }: { onGoToGenerate: () => void }) {
+  const { user, authReady, savedResults, savedLoaded, savedError, requestSignIn } = useBackend();
+  const [openId, setOpenId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [confirm, setConfirm] = useState<SavedResult | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
-  const handleCopy = (setup: SavedSetup) => {
-    onCopySetupObject(setup);
-    setCopiedId(setup.id);
-    window.setTimeout(() => setCopiedId(null), 1800);
-  };
+  const open = savedResults.find((s) => s.id === openId);
 
-  const handleDelete = async (id: string) => {
-    setDeletingId(id);
+  const copy = async (item: SavedResult) => {
     try {
-      await onDeleteSetup(id);
-    } finally {
-      setDeletingId(null);
+      await navigator.clipboard.writeText(formatRecommendationText(item.recommendation));
+      setCopiedId(item.id);
+      window.setTimeout(() => setCopiedId(null), 1800);
+    } catch {
+      /* clipboard unavailable */
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <PageHeader
-        kicker="Your library"
-        title="Saved profiles"
-        subtitle="Your setups, synced to your account on every device."
-        action={
-          isSignedIn && savedSetups.length > 0 ? (
-            <span className="rounded-xl border border-border bg-secondary px-3 py-2 font-mono text-sm font-bold tabular-nums">
-              {savedSetups.length}
-            </span>
-          ) : undefined
-        }
-      />
+  const doDelete = async () => {
+    if (!user || !confirm) return;
+    setDeleteError(null);
+    try {
+      await removeSavedResult(user.uid, confirm.id);
+      if (openId === confirm.id) setOpenId(null);
+    } catch {
+      setDeleteError('Could not delete that result. Please try again.');
+    } finally {
+      setConfirm(null);
+    }
+  };
 
-      {authReady && !isSignedIn ? (
+  if (open) {
+    return (
+      <div className="mx-auto max-w-3xl space-y-4">
+        <Button variant="ghost" size="sm" onClick={() => setOpenId(null)} className="-ml-2 text-muted-foreground">
+          <ArrowLeft /> All saved results
+        </Button>
+        <ResultsView rec={open.recommendation} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-3xl space-y-6">
+      <PageHeader eyebrow="Your library" title="Saved results" subtitle="Settings you saved, available on any device you sign in to." />
+
+      {!authReady || (user && !savedLoaded) ? (
+        <div className="space-y-2">
+          {[0, 1].map((i) => (
+            <div key={i} className="skeleton h-28 rounded-xl" />
+          ))}
+        </div>
+      ) : !user ? (
         <EmptyState
           icon={LogIn}
-          title="Sign in to see your saves"
-          body="Saved profiles live in your account, so they follow you to any phone."
+          title="Sign in to see your saved results"
+          body="Saved settings live in your account so they follow you to any phone."
           actions={
-            <Button variant="glow" size="md" onClick={onSignIn}>
+            <Button onClick={requestSignIn} size="md">
               <LogIn /> Sign in
             </Button>
           }
         />
-      ) : savedSetups.length === 0 ? (
+      ) : savedError ? (
+        <Notice tone="danger">{savedError}</Notice>
+      ) : savedResults.length === 0 ? (
         <EmptyState
           icon={Bookmark}
           title="Nothing saved yet"
-          body="Generate a profile and tap Save — it'll show up here."
+          body="Generate settings for your phone and tap Save. They’ll appear here."
           actions={
-            <Button variant="glow" size="md" onClick={onGoToCalibrate}>
-              <SlidersHorizontal /> Open calibrator
+            <Button onClick={onGoToGenerate} size="md">
+              <SlidersHorizontal /> Generate settings
             </Button>
           }
         />
       ) : (
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {savedSetups.map((setup, i) => {
-            const isFF = setup.input.game === 'free-fire';
-            const previewEntries = Object.entries(setup.sliders).slice(0, 3);
-            const isCopied = copiedId === setup.id;
+        <ul className="space-y-2">
+          {deleteError ? <Notice tone="danger">{deleteError}</Notice> : null}
+          {savedResults.map((item) => {
+            const rec = item.recommendation;
             return (
-              <motion.article
-                key={setup.id}
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: Math.min(i, 8) * 0.05, duration: 0.35 }}
-                className="surface relative overflow-hidden rounded-3xl p-4"
-              >
-                <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-hero opacity-50" />
-                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                  <div className="min-w-0">
-                    <span className="rounded-full bg-primary/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
-                      {isFF ? 'Free Fire' : 'BGMI'}
-                    </span>
-                    <h2 className="mt-2.5 truncate font-display text-2xl font-bold leading-tight tracking-tight">{setup.name}</h2>
-                    <p className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-muted-foreground">
-                      <Smartphone className="size-3.5 shrink-0" />
-                      <span className="truncate">
-                        {formatDeviceFullName(setup.input.device.brand, setup.input.device.model)} ·{' '}
-                        {setup.input.claw.replace('-finger', 'F')} · {setup.input.playstyle.replace('-', ' ')}
-                      </span>
-                    </p>
-                  </div>
+              <li key={item.id} className="surface rounded-xl p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <button type="button" onClick={() => setOpenId(item.id)} className="min-w-0 text-left focus-visible:outline-none focus-visible:underline">
+                    <div className="truncate text-sm font-semibold">{rec.device.fullName}</div>
+                    <div className="mt-0.5 text-xs text-muted-foreground">
+                      {rec.gameName} · {dateFmt.format(new Date(item.createdAt))}
+                    </div>
+                  </button>
                   <button
                     type="button"
-                    disabled={deletingId === setup.id}
-                    onClick={() => void handleDelete(setup.id)}
-                    aria-label={`Delete ${setup.name}`}
-                    className="grid size-9 place-items-center rounded-xl text-subtle transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                    onClick={() => setConfirm(item)}
+                    aria-label={`Delete ${item.name}`}
+                    className="grid size-8 shrink-0 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
                   >
                     <Trash2 className="size-4" />
                   </button>
                 </div>
-
-                <div className="relative mt-4 grid grid-cols-3 gap-2">
-                  {previewEntries.map(([key, val]) => (
-                    <div key={key} className="min-w-0 rounded-2xl border border-border bg-background/50 px-3 py-2.5">
-                      <div className="truncate text-[10px] font-semibold uppercase tracking-wider text-subtle">
-                        {key.replace(/^(ff-|cam-|ads-|gyro-|fl-)/, '').replace(/-/g, ' ')}
-                      </div>
-                      <div className="mt-0.5 font-mono text-lg font-bold tabular-nums">
-                        {val}
-                        {!isFF ? <span className="text-xs text-primary">%</span> : null}
+                <div className="mt-3 grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-border bg-border">
+                  {rec.core.slice(0, 3).map((c) => (
+                    <div key={c.id} className="bg-card px-3 py-2">
+                      <div className="truncate text-[11px] text-muted-foreground">{c.label}</div>
+                      <div className="font-mono text-base font-medium tabular-nums">
+                        {c.value}
+                        {rec.unit}
                       </div>
                     </div>
                   ))}
                 </div>
-
-                <div className="relative mt-4 grid grid-cols-2 gap-2">
-                  <Button variant="glow" size="md" onClick={() => onLoadSetup(setup)}>
-                    <Upload /> Load
+                <div className="mt-3 flex gap-2">
+                  <Button size="sm" variant="outline" onClick={() => setOpenId(item.id)}>
+                    View all
                   </Button>
-                  <Button variant="surface" size="md" onClick={() => handleCopy(setup)} className={isCopied ? 'text-success' : ''}>
-                    {isCopied ? <Check /> : <Copy />}
-                    {isCopied ? 'Copied' : 'Copy'}
+                  <Button size="sm" variant="ghost" onClick={() => void copy(item)}>
+                    {copiedId === item.id ? <Check /> : <Copy />}
+                    {copiedId === item.id ? 'Copied' : 'Copy'}
                   </Button>
                 </div>
-              </motion.article>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
+
+      <AlertDialog open={Boolean(confirm)} onOpenChange={(o) => !o && setConfirm(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this saved result?</AlertDialogTitle>
+            <AlertDialogDescription>{confirm?.name} will be removed from your account.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => void doDelete()}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

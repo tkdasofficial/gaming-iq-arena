@@ -53,7 +53,7 @@ export async function fetchDevice(deviceId: string): Promise<VerifiedDevice> {
   const { data: row, error } = await supabase.from('devices').select('id, data').eq('id', deviceId).maybeSingle();
   if (error) throw new Error('Could not load this phone’s specifications.');
   if (!row) throw new Error('This phone is no longer in the catalog.');
-  const raw = { ...((row.data ?? {}) as Json), id: row.id };
+  const raw: Json = { ...((row.data ?? {}) as Json), id: row.id };
   const chipsetId = typeof raw.chipsetId === 'string' ? raw.chipsetId : null;
   let chipset: Json | null = null;
   if (chipsetId) {

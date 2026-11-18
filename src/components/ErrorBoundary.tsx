@@ -42,18 +42,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     if (this.state.hasError) {
       return (
         <div className="flex min-h-dvh items-center justify-center bg-background p-6 text-foreground">
-          <div className="surface w-full max-w-md space-y-5 rounded-3xl p-6">
-            <div className="grid size-12 place-items-center rounded-2xl border border-primary/40 bg-primary/10">
-              <AlertTriangle className="size-5 text-primary" />
+          <div className="surface w-full max-w-md space-y-5 rounded-xl p-6">
+            <div className="grid size-11 place-items-center rounded-lg border border-border bg-secondary">
+              <AlertTriangle className="size-5 text-destructive" />
             </div>
             <div className="space-y-1.5">
-              <h1 className="font-display text-3xl font-bold tracking-tight">Something went wrong</h1>
+              <h1 className="text-xl font-semibold tracking-tight">Something went wrong</h1>
               <p className="break-words text-sm text-muted-foreground">{this.state.message}</p>
             </div>
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-primary text-sm font-semibold text-primary-foreground shadow-glow"
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-medium text-primary-foreground hover:bg-primary/88"
             >
               <RotateCcw className="size-4" />
               Reload Gaming IQ

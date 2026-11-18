@@ -46,21 +46,18 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
           <div className="min-w-0">
             <Eyebrow>{rec.gameName}</Eyebrow>
             <h2 className="mt-1 truncate text-xl font-semibold tracking-tight">{rec.device.fullName}</h2>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Recommended starting values · scale 0–{rec.scaleMax === 400 ? '300/400' : rec.scaleMax}
-              {unit}
-            </p>
+            <p className="mt-0.5 text-xs text-muted-foreground">Recommended starting values</p>
           </div>
-          <div className="flex w-full gap-2 sm:w-auto">
-            <Button onClick={() => void copyAll()} size="md" className="flex-1 sm:flex-none" aria-live="polite">
+          <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
+            <Button onClick={() => void copyAll()} size="md" className="min-w-0 px-2 sm:px-4" aria-live="polite">
               {copied ? <Check /> : <Copy />}
-              {copied ? 'Copied' : 'Copy all settings'}
+              {copied ? 'Copied' : 'Copy all'}
             </Button>
             {saveState !== 'hidden' ? (
               <Button
                 variant="outline"
                 size="md"
-                className="flex-1 sm:flex-none"
+                className="min-w-0 px-2 sm:px-4"
                 onClick={onSave}
                 disabled={saveState === 'saving' || saveState === 'saved'}
               >
