@@ -1,13 +1,8 @@
 import { createServerFn } from '@tanstack/react-start';
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/integrations/supabase/types';
-import {
-  buildRecommendation,
-  normalizeDevice,
-  RecommendationError,
-  type GameConfig,
-  type Recommendation,
-} from '../engine/recommend';
+import { buildRecommendation, normalizeDevice, RecommendationError, type Recommendation } from '../engine/recommend';
+import { assembleGameRecord } from '../engine/sensitivity';
 
 const ID = /^[a-z0-9][a-z0-9-]{0,79}$/;
 
@@ -43,7 +38,11 @@ export const generateRecommendation = createServerFn({ method: 'POST' })
 
     const [deviceRes, gameRes] = await Promise.all([
       db.from('devices').select('id, data').eq('id', data.deviceId).maybeSingle(),
-      db.from('games').select('id, name, short_name, publisher, supports_gyro, config').eq('id', data.gameId).maybeSingle(),
+      db
+        .from('games')
+        .select('id, name, short_name, publisher, supports_gyro, sensitivity_schema_id, config')
+        .eq('id', data.gameId)
+        .maybeSingle(),
     ]);
     if (deviceRes.error || gameRes.error) {
       console.error('generateRecommendation read failed', deviceRes.error?.message, gameRes.error?.message);
@@ -51,23 +50,40 @@ export const generateRecommendation = createServerFn({ method: 'POST' })
     }
     if (!deviceRes.data) return { ok: false, error: 'This phone is not in the catalog.' };
     if (!gameRes.data) return { ok: false, error: 'This game is not supported.' };
+    const game = gameRes.data;
+    const schemaId = game.sensitivity_schema_id;
+    if (!schemaId) return { ok: false, error: `${game.name} has no sensitivity setup yet.` };
 
+    // The game's own sensitivity structure + its starting values. Nothing from other schemas is read.
     const raw: Record<string, unknown> = { ...((deviceRes.data.data ?? {}) as Record<string, unknown>), id: deviceRes.data.id };
-    let chipset: Record<string, unknown> | null = null;
-    if (typeof raw.chipsetId === 'string') {
-      const chip = await db.from('chipsets').select('data').eq('id', raw.chipsetId).maybeSingle();
-      chipset = (chip.data?.data as Record<string, unknown>) ?? null;
+    const chipsetId = typeof raw.chipsetId === 'string' ? raw.chipsetId : null;
+    const [schemaRes, catRes, setRes, profRes, chipRes] = await Promise.all([
+      db.from('sensitivity_schemas').select('id, name, unit').eq('id', schemaId).maybeSingle(),
+      db.from('sensitivity_categories').select('id, schema_id, label, description, display_order, requires_gyro').eq('schema_id', schemaId),
+      db
+        .from('sensitivity_settings')
+        .select('id, schema_id, category_id, key, label, description, min_value, max_value, display_order, input_kind, core_slot')
+        .eq('schema_id', schemaId),
+      db.from('game_sensitivity_profiles').select('game_id, schema_id, setting_id, recommended_value').eq('game_id', game.id),
+      chipsetId ? db.from('chipsets').select('data').eq('id', chipsetId).maybeSingle() : Promise.resolve(null),
+    ]);
+    const readError = schemaRes.error ?? catRes.error ?? setRes.error ?? profRes.error;
+    if (readError) {
+      console.error('generateRecommendation sensitivity read failed', readError.message);
+      return { ok: false, error: 'Could not reach the database. Please try again.' };
     }
+    const chipset = (chipRes?.data?.data as Record<string, unknown>) ?? null;
 
     try {
-      const recommendation = buildRecommendation(normalizeDevice(raw, chipset), {
-        id: gameRes.data.id,
-        name: gameRes.data.name,
-        shortName: gameRes.data.short_name,
-        publisher: gameRes.data.publisher,
-        supportsGyro: gameRes.data.supports_gyro,
-        config: gameRes.data.config as unknown as GameConfig,
+      const { game: record, issues } = assembleGameRecord({
+        game,
+        schema: schemaRes.data,
+        categories: catRes.data ?? [],
+        settings: setRes.data ?? [],
+        profiles: profRes.data ?? [],
       });
+      if (issues.length) console.warn('generateRecommendation ignored rows', game.id, issues);
+      const recommendation = buildRecommendation(normalizeDevice(raw, chipset), record);
       return { ok: true, recommendation };
     } catch (err) {
       if (err instanceof RecommendationError) return { ok: false, error: err.message };

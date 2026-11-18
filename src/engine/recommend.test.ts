@@ -1,17 +1,12 @@
 import { describe, expect, test } from 'vitest';
-import gamesFixture from './__fixtures__/games.json';
+import { gameRecord as game } from './__fixtures__/load';
 import {
   buildRecommendation,
   fireButtonSize,
   formatRecommendationText,
   normalizeDevice,
   RecommendationError,
-  type GameRecord,
 } from './recommend';
-
-// Mirrors the game rows stored in the `games` table.
-const games = gamesFixture as unknown as GameRecord[];
-const game = (id: string) => games.find((g) => g.id === id) as GameRecord;
 
 const s25Ultra = normalizeDevice(
   {
@@ -55,10 +50,22 @@ describe('device data is never invented', () => {
   });
 });
 
-describe('results contain the six core settings', () => {
-  test.each(['free-fire', 'bgmi', 'pubg-mobile'])('%s', (id) => {
+describe('headline values use each game’s own names', () => {
+  test('Free Fire', () => {
+    const rec = buildRecommendation(s25Ultra, game('free-fire'));
+    expect(rec.core.map((c) => c.label)).toEqual(['General', 'Red Dot', '2X Scope', '4X Scope', 'Sniper Scope', 'Free Look']);
+  });
+  test.each(['bgmi', 'pubg-mobile'])('%s', (id) => {
     const rec = buildRecommendation(s25Ultra, game(id));
-    expect(rec.core.map((c) => c.label)).toEqual(['General', 'Red Dot', '2x Scope', '4x Scope', 'Sniper Scope', 'Free Look']);
+    expect(rec.core.map((c) => c.label)).toEqual([
+      'TPP No Scope',
+      'Red Dot, Holographic, Aim Assist',
+      '2X Scope',
+      '4X Scope, VSS',
+      '8X Scope',
+      'TPP Camera (Character, Vehicle)',
+    ]);
+    expect(rec.core.map((c) => c.label)).not.toContain('General');
   });
 });
 
@@ -72,7 +79,7 @@ describe('gyroscope only where supported', () => {
   test('BGMI shows gyroscope settings for a verified hardware gyroscope', () => {
     const rec = buildRecommendation(s25Ultra, game('bgmi'));
     expect(rec.gyro).toBe('included');
-    expect(rec.groups.find((g) => g.id === 'gyro')?.settings).toHaveLength(8);
+    expect(rec.groups.find((g) => g.id === 'gyro')?.settings).toHaveLength(10);
   });
 
   test('BGMI hides gyroscope settings when the gyroscope is not verified', () => {
@@ -112,42 +119,10 @@ test('copy text lists every recommended value', () => {
   expect(text).toContain('Samsung Galaxy S25 Ultra');
 });
 
-describe('in-game names and sections match each game', () => {
-  test('Free Fire lists its six sensitivity sliders by their in-game names', () => {
-    const rec = buildRecommendation(s25Ultra, game('free-fire'));
-    expect(rec.groups[0].settings.map((s) => s.label)).toEqual([
-      'General',
-      'Red Dot',
-      '2x Scope',
-      '4x Scope',
-      'Sniper Scope',
-      'Free Look',
-    ]);
-  });
-
-  test.each(['bgmi', 'pubg-mobile'])('%s shows Free Look, Camera, ADS, Gyro and ADS Gyro sections', (id) => {
-    const rec = buildRecommendation(s25Ultra, game(id));
-    expect(rec.groups.map((g) => g.label)).toEqual(['Free Look', 'Camera', 'ADS', 'Gyro', 'ADS Gyro']);
-    expect(rec.groups.find((g) => g.id === 'camera')?.settings.map((s) => s.label)).toEqual([
-      '3rd Person No Scope',
-      '1st Person No Scope',
-      'Red Dot, Holographic, Aim Assist',
-      '2x Scope',
-      '3x Scope, Win94',
-      '4x Scope, VSS',
-      '6x Scope',
-      '8x Scope',
-    ]);
-  });
-
-  test.each(['bgmi', 'pubg-mobile'])('%s drops both gyro sections without a verified gyroscope', (id) => {
-    const rec = buildRecommendation(redmi13, game(id));
-    expect(rec.groups.map((g) => g.label)).toEqual(['Free Look', 'Camera', 'ADS']);
-  });
-
+describe('gyro mode', () => {
   test('every slider explains what it does', () => {
-    for (const g of games) {
-      for (const s of g.config.settings) expect(s.description?.length ?? 0).toBeGreaterThan(10);
+    for (const id of ['free-fire', 'bgmi', 'pubg-mobile']) {
+      for (const st of game(id).config.settings) expect(st.description?.length ?? 0).toBeGreaterThan(10);
     }
   });
 

@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Bookmark, BookmarkCheck, Check, Copy, ExternalLink, Info, LogIn } from 'lucide-react';
+import { Bookmark, BookmarkCheck, Check, ChevronDown, Copy, ExternalLink, Info, LogIn } from 'lucide-react';
 import { formatRecommendationText, type Recommendation } from '../engine/recommend';
 import { Button } from '@/components/ui/button';
 import { DeviceSpecs } from './DeviceSpecs';
-import { Eyebrow, Notice, Segmented, Spinner } from './giq/primitives';
+import { Eyebrow, Notice, Spinner } from './giq/primitives';
 
 const GYRO_NOTE: Partial<Record<Recommendation['gyro'], string>> = {
   'not-verified': 'Gyroscope settings are hidden because this phone’s gyroscope isn’t verified.',
@@ -23,8 +23,6 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
   const [copied, setCopied] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
   const multiGroup = rec.groups.length > 1;
-  const [groupId, setGroupId] = useState(rec.groups[0]?.id ?? '');
-  const group = rec.groups.find((g) => g.id === groupId) ?? rec.groups[0];
   const unit = rec.unit;
 
   const copyAll = async () => {
@@ -73,15 +71,18 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
         {/* Core values */}
         <div className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
           {rec.core.map((c) => (
-            <div key={c.id} className="min-w-0 bg-card p-3">
-              <div className="text-xs font-medium text-muted-foreground">{c.label}</div>
+            <div key={c.id} className="flex min-w-0 flex-col bg-card p-3">
+              <div className="text-xs font-medium leading-snug text-muted-foreground">{c.label}</div>
+              <div className="flex-1" />
               <div className="mt-1 font-mono text-[28px] font-medium leading-none tracking-tight tabular-nums">
                 {c.value}
                 {unit ? <span className="ml-0.5 text-sm text-muted-foreground">{unit}</span> : null}
               </div>
-              <div className="mt-1.5 truncate text-[11px] text-subtle" title={c.source}>
-                {c.source}
-              </div>
+              {c.source ? (
+                <div className="mt-1.5 truncate text-[11px] text-subtle" title={c.source}>
+                  {c.source}
+                </div>
+              ) : null}
             </div>
           ))}
         </div>
@@ -92,41 +93,41 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
         ) : null}
       </div>
 
-      {/* Every in-game slider with what it does */}
-      {group ? (
+      {/* Every in-game slider, laid out the way this game structures them */}
+      {rec.groups.length ? (
         <section className="surface rounded-xl p-4 sm:p-5" aria-label="All settings">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="min-w-0">
-              <h3 className="text-sm font-semibold">All in-game settings</h3>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">Same names and order as the game’s Sensitivity screen</p>
+          <h3 className="text-sm font-semibold">All {rec.gameShortName} settings</h3>
+          <p className="mt-0.5 text-[11px] text-muted-foreground">
+            {multiGroup ? 'Grouped like the game’s Sensitivity screen — tap a section to open it' : 'Same names as the game’s Sensitivity screen'}
+          </p>
+          {multiGroup ? (
+            <div className="mt-3 divide-y divide-border overflow-hidden rounded-lg border border-border">
+              {rec.groups.map((g, i) => (
+                <details key={g.id} open={i === 0} className="group">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-3 transition-colors hover:bg-secondary/60 [&::-webkit-details-marker]:hidden">
+                    <span className="min-w-0">
+                      <span className="block text-[13px] font-semibold">{g.label}</span>
+                      <span className="block text-[11px] text-muted-foreground">{g.settings.length} settings</span>
+                    </span>
+                    <ChevronDown className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
+                  </summary>
+                  <div className="px-3 pb-1">
+                    {g.description ? (
+                      <p className="rounded-lg bg-secondary px-3 py-2 text-[12px] leading-relaxed text-muted-foreground">{g.description}</p>
+                    ) : null}
+                    <SettingList settings={g.settings} unit={unit} />
+                  </div>
+                </details>
+              ))}
             </div>
-            {multiGroup ? (
-              <Segmented
-                ariaLabel="Settings group"
-                className="w-full sm:w-auto"
-                value={group.id}
-                onChange={setGroupId}
-                options={rec.groups.map((g) => ({ id: g.id, label: g.label }))}
-              />
-            ) : null}
-          </div>
-          {group.description ? (
-            <p className="mt-3 rounded-lg bg-secondary px-3 py-2 text-[12px] leading-relaxed text-muted-foreground">{group.description}</p>
-          ) : null}
-          <ul className="mt-2 divide-y divide-border">
-            {group.settings.map((s) => (
-              <li key={s.key} className="flex items-start justify-between gap-4 py-3">
-                <div className="min-w-0">
-                  <div className="text-[13px] font-medium text-foreground">{s.label}</div>
-                  {s.description ? <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{s.description}</p> : null}
-                </div>
-                <span className="shrink-0 pt-0.5 font-mono text-sm font-medium tabular-nums">
-                  {s.value}
-                  {unit}
-                </span>
-              </li>
-            ))}
-          </ul>
+          ) : (
+            <>
+              {rec.groups[0].description ? (
+                <p className="mt-3 rounded-lg bg-secondary px-3 py-2 text-[12px] leading-relaxed text-muted-foreground">{rec.groups[0].description}</p>
+              ) : null}
+              <SettingList settings={rec.groups[0].settings} unit={unit} />
+            </>
+          )}
         </section>
       ) : null}
 
@@ -174,5 +175,28 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
         in a training match.
       </p>
     </article>
+  );
+}
+
+function SettingList({ settings, unit }: { settings: Recommendation['groups'][number]['settings']; unit: string }) {
+  return (
+    <ul className="mt-2 divide-y divide-border">
+      {settings.map((s) => (
+        <li key={s.key} className="flex items-start justify-between gap-4 py-3">
+          <div className="min-w-0">
+            <div className="text-[13px] font-medium text-foreground">{s.label}</div>
+            {s.description ? <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{s.description}</p> : null}
+          </div>
+          {s.value === null ? (
+            <span className="shrink-0 pt-0.5 text-right text-[11px] text-muted-foreground">No starting value yet</span>
+          ) : (
+            <span className="shrink-0 pt-0.5 font-mono text-sm font-medium tabular-nums">
+              {s.value}
+              {unit}
+            </span>
+          )}
+        </li>
+      ))}
+    </ul>
   );
 }

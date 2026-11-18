@@ -64,7 +64,7 @@ export function subscribeSavedResults(
 }
 
 export async function saveResult(uid: string, name: string, rec: Recommendation): Promise<string> {
-  const sliders: Record<string, number> = {};
+  const sliders: Record<string, number | null> = {};
   for (const g of rec.groups) for (const s of g.settings) sliders[`${g.id}.${s.key}`] = s.value;
   const { data, error } = await supabase
     .from('saved_setups')

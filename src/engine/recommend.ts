@@ -42,10 +42,15 @@ export interface VerifiedDevice {
 }
 
 export interface GameSettingConfig {
+  /** Unique across the whole game (e.g. `pubg-family.camera.tpp-no-scope`). */
+  id: string;
+  /** Unique within its group (e.g. `tpp-no-scope`). */
   key: string;
   label: string;
   group: string;
-  base: number;
+  /** The game's starting value for this slider; null when none is stored yet. */
+  base: number | null;
+  /** The in-game slider range. */
   min: number;
   max: number;
   factor: 'touch' | 'gyro';
@@ -63,7 +68,7 @@ export interface GameOptionConfig {
 }
 
 export interface GameConfig {
-  scaleMax: number;
+  scaleMax?: number;
   unit: string;
   groups: { id: string; label: string; description?: string; requiresGyro?: boolean }[];
   settings: GameSettingConfig[];
@@ -83,7 +88,9 @@ export interface GameRecord {
 export interface RecommendedSetting {
   key: string;
   label: string;
-  value: number;
+  /** null when the game has no starting value for this slider yet. */
+  value: number | null;
+  min?: number;
   max: number;
   description?: string;
 }
@@ -103,15 +110,7 @@ export interface Recommendation {
   generatedAt: string;
 }
 
-export const CORE_LABELS: Record<CoreSettingId, string> = {
-  general: 'General',
-  redDot: 'Red Dot',
-  scope2x: '2x Scope',
-  scope4x: '4x Scope',
-  sniper: 'Sniper Scope',
-  freeLook: 'Free Look',
-};
-const CORE_ORDER: CoreSettingId[] = ['general', 'redDot', 'scope2x', 'scope4x', 'sniper', 'freeLook'];
+export const CORE_ORDER: CoreSettingId[] = ['general', 'redDot', 'scope2x', 'scope4x', 'sniper', 'freeLook'];
 
 export class RecommendationError extends Error {}
 
@@ -251,10 +250,10 @@ export function buildRecommendation(device: VerifiedDevice, game: GameRecord, no
           : 'not-verified';
 
   const groupLabel = new Map(cfg.groups.map((g) => [g.id, g.label]));
-  const values = new Map<string, number>();
+  const values = new Map<string, number | null>();
   for (const s of cfg.settings) {
     const factor = s.factor === 'gyro' ? gyroScale : touch;
-    values.set(s.key, clamp(s.base * factor, s.min, s.max));
+    values.set(s.id, s.base === null ? null : clamp(s.base * factor, s.min, s.max));
   }
 
   const groups = cfg.groups
@@ -268,19 +267,22 @@ export function buildRecommendation(device: VerifiedDevice, game: GameRecord, no
         .map((s) => ({
           key: s.key,
           label: s.label,
-          value: values.get(s.key) as number,
+          value: values.get(s.id) ?? null,
+          min: s.min,
           max: s.max,
           ...(s.description ? { description: s.description } : {}),
         })),
     }))
     .filter((g) => g.settings.length > 0);
 
+  // Headline values use the game's own slider names (never another game's).
+  const shownGroups = new Set(groups.map((g) => g.id));
   const core = CORE_ORDER.flatMap((id) => {
     const s = cfg.settings.find((x) => x.core === id);
-    if (!s) return [];
-    const group = groupLabel.get(s.group) ?? '';
-    const source = s.label === CORE_LABELS[id] ? group : `${group} · ${s.label}`;
-    return [{ id, label: CORE_LABELS[id], value: values.get(s.key) as number, source }];
+    const value = s ? values.get(s.id) : null;
+    if (!s || value === null || value === undefined || !shownGroups.has(s.group)) return [];
+    const source = groups.length > 1 ? (groupLabel.get(s.group) ?? '') : '';
+    return [{ id, label: s.label, value, source }];
   });
 
   const extras: Recommendation['extras'] = [];
@@ -322,7 +324,7 @@ export function buildRecommendation(device: VerifiedDevice, game: GameRecord, no
     gameShortName: game.shortName,
     device,
     unit: cfg.unit ?? '',
-    scaleMax: cfg.scaleMax,
+    scaleMax: cfg.scaleMax ?? Math.max(...cfg.settings.map((s) => s.max)),
     core,
     groups,
     gyro,
@@ -334,13 +336,14 @@ export function buildRecommendation(device: VerifiedDevice, game: GameRecord, no
 
 export function formatRecommendationText(rec: Recommendation): string {
   const u = rec.unit;
+  const val = (v: number | null) => (v === null ? 'not set yet' : `${v}${u}`);
   const lines = [`Gaming IQ · ${rec.gameName}`, `Device: ${rec.device.fullName}`, ''];
   if (rec.groups.length === 1) {
-    for (const s of rec.groups[0].settings) lines.push(`${s.label}: ${s.value}${u}`);
+    for (const s of rec.groups[0].settings) lines.push(`${s.label}: ${val(s.value)}`);
   } else {
     for (const g of rec.groups) {
       lines.push(`[${g.label}]`);
-      for (const s of g.settings) lines.push(`${s.label}: ${s.value}${u}`);
+      for (const s of g.settings) lines.push(`${s.label}: ${val(s.value)}`);
       lines.push('');
     }
   }
