@@ -21,7 +21,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     try {
       const parsed = JSON.parse(display) as { error?: string; operationType?: string; path?: string };
       if (parsed && parsed.error) {
-        display = `Firestore ${parsed.operationType || 'operation'} failed${
+        display = `Cloud ${parsed.operationType || 'operation'} failed${
           parsed.path ? ` (${parsed.path})` : ''
         }: ${parsed.error}`;
       }

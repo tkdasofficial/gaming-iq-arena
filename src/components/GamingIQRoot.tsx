@@ -1,13 +1,13 @@
-import { FirebaseProvider } from "../firebase/FirebaseContext";
+import { BackendProvider } from "../backend/BackendContext";
 import { ErrorBoundary } from "./ErrorBoundary";
 import GamingIQApp from "./GamingIQApp";
 
 export default function GamingIQRoot() {
   return (
     <ErrorBoundary>
-      <FirebaseProvider>
+      <BackendProvider>
         <GamingIQApp />
-      </FirebaseProvider>
+      </BackendProvider>
     </ErrorBoundary>
   );
 }

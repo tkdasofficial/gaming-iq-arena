@@ -24,7 +24,7 @@ import type {
   DeviceProfile,
   GameId,
 } from '../engine/types';
-import { BLUEPRINT_LIMITS } from '../firebase/validation';
+import { FIELD_LIMITS } from '../backend/validation';
 
 interface DeviceInfoSectionProps {
   game: GameId;
@@ -158,7 +158,7 @@ export function DeviceInfoSection({
                   : 'bg-[#111114] border-[#29292F] text-[#A1A1AA] hover:text-white'
               }`}
             >
-              {isManualMode ? 'Firestore Database' : 'Manual Entry'}
+              {isManualMode ? 'Cloud Database' : 'Manual Entry'}
             </button>
           ) : null}
 
@@ -204,7 +204,7 @@ export function DeviceInfoSection({
           <div className="flex items-center gap-2 text-[#A1A1AA]">
             <AlertTriangle className="w-4 h-4 text-[#F0263C] shrink-0" />
             <span>
-              Unable to load Cloud Firestore smartphone catalog. You can retry or enter specs manually.
+              Unable to load cloud smartphone catalog. You can retry or enter specs manually.
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -228,7 +228,7 @@ export function DeviceInfoSection({
       ) : brands.length === 0 ? (
         <div className="p-3.5 rounded-xl bg-[#111114] border border-[#29292F] flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="text-[#A1A1AA]">
-            Cloud Firestore device catalog has no synced models yet. Enter your device specs manually below
+            Cloud device catalog has no synced models yet. Enter your device specs manually below
             {isAdmin ? ' or sync the backend dataset.' : '.'}
           </div>
           {isAdmin ? (
@@ -238,13 +238,13 @@ export function DeviceInfoSection({
               className="min-h-[34px] px-3 rounded-lg bg-[#F0263C] text-white font-semibold inline-flex items-center gap-1.5"
             >
               <Database className="w-3.5 h-3.5" />
-              <span>Sync Firestore Catalog</span>
+              <span>Sync Cloud Catalog</span>
             </button>
           ) : null}
         </div>
       ) : null}
 
-      {/* Firestore Database Selectors OR Manual Entry Inputs */}
+      {/* Cloud Database Selectors OR Manual Entry Inputs */}
       {isDatabaseMode ? (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -528,7 +528,7 @@ export function DeviceInfoSection({
                 <input
                   id="device-brand-field"
                   type="text"
-                  maxLength={BLUEPRINT_LIMITS.deviceBrandMaxLength}
+                  maxLength={FIELD_LIMITS.deviceBrandMaxLength}
                   value={device.brand}
                   onChange={(e) => onUpdateDeviceField('brand', e.target.value)}
                   placeholder="e.g. Samsung, Apple"
@@ -555,7 +555,7 @@ export function DeviceInfoSection({
                 <input
                   id="device-model-field"
                   type="text"
-                  maxLength={BLUEPRINT_LIMITS.deviceModelMaxLength}
+                  maxLength={FIELD_LIMITS.deviceModelMaxLength}
                   value={device.model}
                   onChange={(e) => onUpdateDeviceField('model', e.target.value)}
                   placeholder="e.g. Galaxy S25 Ultra"
@@ -591,7 +591,7 @@ export function DeviceInfoSection({
                 <input
                   id="device-chipset"
                   type="text"
-                  maxLength={BLUEPRINT_LIMITS.deviceChipsetMaxLength}
+                  maxLength={FIELD_LIMITS.deviceChipsetMaxLength}
                   value={device.chipset}
                   onChange={(e) => onUpdateDeviceField('chipset', e.target.value)}
                   placeholder="Snapdragon 8 Elite"
@@ -695,7 +695,7 @@ export function DeviceInfoSection({
                 <input
                   id="device-resolution"
                   type="text"
-                  maxLength={BLUEPRINT_LIMITS.deviceResolutionMaxLength}
+                  maxLength={FIELD_LIMITS.deviceResolutionMaxLength}
                   value={device.resolution}
                   onChange={(e) =>
                     onUpdateDeviceField('resolution', e.target.value)

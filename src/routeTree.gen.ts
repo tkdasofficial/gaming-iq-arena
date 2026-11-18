@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ApiAdminDatasetRouteImport } from './routes/api/admin/dataset'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAdminDatasetRoute = ApiAdminDatasetRouteImport.update({
@@ -25,27 +31,31 @@ const ApiAdminDatasetRoute = ApiAdminDatasetRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/api/admin/dataset': typeof ApiAdminDatasetRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/api/admin/dataset': typeof ApiAdminDatasetRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/api/admin/dataset': typeof ApiAdminDatasetRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/admin/dataset'
+  fullPaths: '/' | '/auth' | '/api/admin/dataset'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/admin/dataset'
-  id: '__root__' | '/' | '/api/admin/dataset'
+  to: '/' | '/auth' | '/api/admin/dataset'
+  id: '__root__' | '/' | '/auth' | '/api/admin/dataset'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   ApiAdminDatasetRoute: typeof ApiAdminDatasetRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/admin/dataset': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   ApiAdminDatasetRoute: ApiAdminDatasetRoute,
 }
 export const routeTree = rootRouteImport

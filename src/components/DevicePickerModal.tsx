@@ -6,7 +6,7 @@ import {
   searchDevices,
 } from '../engine/devices';
 import type { BrandRecord, DeviceOs, DeviceProfile } from '../engine/types';
-import { BLUEPRINT_LIMITS } from '../firebase/validation';
+import { FIELD_LIMITS } from '../backend/validation';
 
 interface DevicePickerModalProps {
   isOpen: boolean;
@@ -154,7 +154,7 @@ export function DevicePickerModal({
               Cloud Smartphone Database
             </h2>
             <p className="text-xs text-[#A1A1AA] mt-0.5">
-              Search verified smartphones in Firestore or save custom hardware specs.
+              Search verified smartphones in the cloud catalog or save custom hardware specs.
             </p>
           </div>
           <button
@@ -179,7 +179,7 @@ export function DevicePickerModal({
               }`}
             >
               <Smartphone className="w-4 h-4" />
-              <span>Firestore Catalog ({combinedDevices.length})</span>
+              <span>Cloud Catalog ({combinedDevices.length})</span>
             </button>
             <button
               type="button"
@@ -249,8 +249,8 @@ export function DevicePickerModal({
                 <div className="py-10 text-center space-y-3">
                   <p className="text-sm text-[#A1A1AA]">
                     {combinedDevices.length === 0
-                      ? 'No smartphones synced in Firestore yet. Add custom device specs to get started.'
-                      : 'No matching smartphone found in Firestore.'}
+                      ? 'No smartphones synced to the cloud yet. Add custom device specs to get started.'
+                      : 'No matching smartphone found.'}
                   </p>
                   <button
                     type="button"
@@ -352,7 +352,7 @@ export function DevicePickerModal({
                 <input
                   id="custom-brand-name"
                   type="text"
-                  maxLength={BLUEPRINT_LIMITS.deviceBrandMaxLength}
+                  maxLength={FIELD_LIMITS.deviceBrandMaxLength}
                   value={customBrand}
                   onChange={(e) => setCustomBrand(e.target.value)}
                   placeholder="e.g. Samsung"
@@ -369,7 +369,7 @@ export function DevicePickerModal({
                 <input
                   id="custom-model-name"
                   type="text"
-                  maxLength={BLUEPRINT_LIMITS.deviceModelMaxLength}
+                  maxLength={FIELD_LIMITS.deviceModelMaxLength}
                   value={customModel}
                   onChange={(e) => setCustomModel(e.target.value)}
                   placeholder="e.g. Galaxy S25 Ultra"
@@ -389,7 +389,7 @@ export function DevicePickerModal({
                 <input
                   id="custom-chipset-name"
                   type="text"
-                  maxLength={BLUEPRINT_LIMITS.deviceChipsetMaxLength}
+                  maxLength={FIELD_LIMITS.deviceChipsetMaxLength}
                   value={customChipset}
                   onChange={(e) => setCustomChipset(e.target.value)}
                   placeholder="e.g. Snapdragon 8 Elite"
@@ -406,7 +406,7 @@ export function DevicePickerModal({
                 <input
                   id="custom-resolution-name"
                   type="text"
-                  maxLength={BLUEPRINT_LIMITS.deviceResolutionMaxLength}
+                  maxLength={FIELD_LIMITS.deviceResolutionMaxLength}
                   value={customResolution}
                   onChange={(e) => setCustomResolution(e.target.value)}
                   placeholder="e.g. 2400 × 1080"
@@ -553,7 +553,7 @@ export function DevicePickerModal({
                 className="w-full min-h-[48px] rounded-xl bg-[#F0263C] hover:bg-[#B8172A] disabled:opacity-60 text-white text-sm font-semibold transition-colors"
               >
                 {saving
-                  ? 'Saving to Firestore...'
+                  ? 'Saving to cloud...'
                   : isSignedIn
                     ? 'Save to Cloud & Apply Device'
                     : 'Apply Device Specs'}

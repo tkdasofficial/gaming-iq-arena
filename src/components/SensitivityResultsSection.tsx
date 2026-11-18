@@ -6,7 +6,7 @@ import type {
   CalibrationResult,
   SensitivitySliderItem,
 } from '../engine/types';
-import { BLUEPRINT_LIMITS } from '../firebase/validation';
+import { FIELD_LIMITS } from '../backend/validation';
 
 interface SensitivityResultsSectionProps {
   input: CalibrationInput;
@@ -318,7 +318,7 @@ export function SensitivityResultsSection({
           <input
             id="save-profile-name"
             type="text"
-            maxLength={BLUEPRINT_LIMITS.setupNameMaxLength}
+            maxLength={FIELD_LIMITS.setupNameMaxLength}
             value={profileName}
             onChange={(e) => setProfileName(e.target.value)}
             placeholder={`${input.device.model} · ${
@@ -357,7 +357,7 @@ export function SensitivityResultsSection({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <input
               type="text"
-              maxLength={BLUEPRINT_LIMITS.presetNameMaxLength}
+              maxLength={FIELD_LIMITS.presetNameMaxLength}
               value={profileName}
               onChange={(e) => setProfileName(e.target.value)}
               placeholder="Preset title (e.g. S24 Ultra 4-Finger Balanced)"
@@ -365,7 +365,7 @@ export function SensitivityResultsSection({
             />
             <input
               type="text"
-              maxLength={BLUEPRINT_LIMITS.presetArchetypeMaxLength}
+              maxLength={FIELD_LIMITS.presetArchetypeMaxLength}
               value={presetArchetype}
               onChange={(e) => setPresetArchetype(e.target.value)}
               placeholder="Weapon / Role (e.g. M416 · Assaulter)"
@@ -374,7 +374,7 @@ export function SensitivityResultsSection({
           </div>
           <input
             type="text"
-            maxLength={BLUEPRINT_LIMITS.presetDescriptionMaxLength}
+            maxLength={FIELD_LIMITS.presetDescriptionMaxLength}
             value={presetDescription}
             onChange={(e) => setPresetDescription(e.target.value)}
             placeholder="Brief note on how you tuned this setup..."
@@ -393,7 +393,7 @@ export function SensitivityResultsSection({
               disabled={submitting}
               className="min-h-[40px] px-4 rounded-lg bg-[#F0263C] hover:bg-[#B8172A] disabled:opacity-60 text-white text-xs font-semibold"
             >
-              {submitting ? 'Publishing...' : 'Publish to Firestore'}
+              {submitting ? 'Publishing...' : 'Publish Preset'}
             </button>
           </div>
         </form>

@@ -49,7 +49,7 @@ export function SavedView({
           Saved Profiles
         </h1>
         <p className="text-xs sm:text-sm text-[#A1A1AA]">
-          Cloud-synced sensitivity setups stored securely in your Firestore account.
+          Cloud-synced sensitivity setups stored securely in your Gaming IQ account.
         </p>
       </div>
 
@@ -63,7 +63,7 @@ export function SavedView({
               Sign In to Sync Saved Profiles
             </h2>
             <p className="text-sm text-[#A1A1AA] max-w-md mx-auto">
-              All saved sensitivity profiles are stored in Firestore so your configurations stay available across every device.
+              All saved sensitivity profiles are stored in the cloud so your configurations stay available across every device.
             </p>
           </div>
           <button
@@ -72,7 +72,7 @@ export function SavedView({
             className="min-h-[48px] px-5 rounded-xl bg-[#F0263C] hover:bg-[#B8172A] text-white text-sm font-semibold inline-flex items-center gap-2 transition-colors"
           >
             <LogIn className="w-4 h-4" />
-            <span>Sign In with Google</span>
+            <span>Sign In</span>
           </button>
         </div>
       ) : savedSetups.length === 0 ? (
@@ -85,7 +85,7 @@ export function SavedView({
               No Saved Setups Yet
             </h2>
             <p className="text-sm text-[#A1A1AA] max-w-md mx-auto">
-              Generate a sensitivity configuration and click Save to Cloud to store it in Firestore.
+              Generate a sensitivity configuration and click Save to Cloud to store it in your account.
             </p>
           </div>
           <button

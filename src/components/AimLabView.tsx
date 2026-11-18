@@ -431,7 +431,7 @@ export function AimLabView({
           {status === 'finished' ? (
             <div className="absolute inset-0 bg-black/75 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center pointer-events-none">
               <div className="text-xs font-semibold text-[#F0263C]">
-                Drill Complete {isSignedIn ? '· Saved to Firestore' : ''}
+                Drill Complete {isSignedIn ? '· Saved to cloud' : ''}
               </div>
               <h2 className="font-display text-3xl font-extrabold text-white mt-1">
                 {hits} Hits · {accuracy}% Accuracy
@@ -474,7 +474,7 @@ export function AimLabView({
         </div>
       </div>
 
-      {/* Firestore Drill History */}
+      {/* Drill history */}
       <section className="bg-[#141417] border border-[#29292F] rounded-xl p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between gap-3">
           <h2 className="font-display text-xl font-bold text-white">
@@ -494,11 +494,11 @@ export function AimLabView({
 
         {!isSignedIn ? (
           <p className="text-xs sm:text-sm text-[#A1A1AA]">
-            Sign in with Google to record and compare your reaction times and accuracy across sessions in Firestore.
+            Sign in to record and compare your reaction times and accuracy across sessions.
           </p>
         ) : aimLabRuns.length === 0 ? (
           <p className="text-xs sm:text-sm text-[#A1A1AA]">
-            Complete a 15-second drill to record your first run in Firestore.
+            Complete a 15-second drill to record your first run.
           </p>
         ) : (
           <div className="divide-y divide-[#29292F]">

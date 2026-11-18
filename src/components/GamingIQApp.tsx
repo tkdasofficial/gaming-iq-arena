@@ -24,8 +24,8 @@ import type {
   ProPreset,
   SavedSetup,
 } from '../engine/types';
-import { enrichDeviceProfile } from '../firebase/deviceDatabase';
-import { useFirebase } from '../firebase/FirebaseContext';
+import { enrichDeviceProfile } from '../backend/deviceDatabase';
+import { useBackend } from '../backend/BackendContext';
 import {
   createAimLabRun,
   createSavedSetup,
@@ -35,7 +35,7 @@ import {
   removePreset,
   removeSavedSetup,
   saveCustomDevice,
-} from '../firebase/services';
+} from '../backend/services';
 
 function createInitialInput(): CalibrationInput {
   const blankDevice = createBlankDeviceProfile();
@@ -76,10 +76,10 @@ export default function App() {
     loadBrandDevices,
     loadCatalogDevices,
     refreshDeviceDatabase,
-    signInWithGoogle,
+    requestSignIn,
     signOutUser,
     clearAuthError,
-  } = useFirebase();
+  } = useBackend();
 
   const autostart = useMemo(() => {
     if (typeof window === 'undefined') return false;
@@ -108,7 +108,7 @@ export default function App() {
     [brandDevices, selectedBrandId]
   );
 
-  // Initialize first brand from Firestore once brands load
+  // Initialize first brand from the cloud catalog once brands load
   useEffect(() => {
     if (brandsLoading || brands.length === 0) return;
     if (!selectedBrandId) {
@@ -119,7 +119,7 @@ export default function App() {
     }
   }, [brands, brandsLoading, selectedBrandId, loadBrandDevices]);
 
-  // Pre-select the newest smartphone model when Firestore catalog initializes and device is still blank
+  // Pre-select the newest smartphone model when the cloud catalog initializes and device is still blank
   useEffect(() => {
     if (
       brands.length > 0 &&
@@ -313,7 +313,7 @@ export default function App() {
 
   const handleSaveDeviceToCloud = async () => {
     if (!user) {
-      await signInWithGoogle();
+      requestSignIn();
       return;
     }
     if (!validateInputs()) return;
@@ -375,7 +375,7 @@ export default function App() {
 
   const handleSaveProfile = async (name: string) => {
     if (!user) {
-      await signInWithGoogle();
+      requestSignIn();
       return;
     }
     const sliderMap: Record<string, number> = {};
@@ -391,7 +391,7 @@ export default function App() {
     description: string;
   }) => {
     if (!user) {
-      await signInWithGoogle();
+      requestSignIn();
       return;
     }
     const sliderMap: Record<string, number> = {};
@@ -460,7 +460,7 @@ export default function App() {
         user={user}
         authReady={authReady}
         signingIn={signingIn}
-        onSignIn={() => void signInWithGoogle()}
+        onSignIn={requestSignIn}
         onSignOut={() => void signOutUser()}
       />
 
@@ -545,7 +545,7 @@ export default function App() {
             onRegenerate={handleRegenerate}
             onSaveProfile={handleSaveProfile}
             onPublishPreset={handlePublishPreset}
-            onRequestSignIn={() => void signInWithGoogle()}
+            onRequestSignIn={requestSignIn}
           />
         ) : null}
 
@@ -558,7 +558,7 @@ export default function App() {
             onApplyPreset={handleApplyPreset}
             onDeletePreset={removePreset}
             onGoToCalibrate={() => setActiveTab('calibrate')}
-            onRequestSignIn={() => void signInWithGoogle()}
+            onRequestSignIn={requestSignIn}
           />
         ) : null}
 
@@ -575,7 +575,7 @@ export default function App() {
               if (!user) return;
               await removeAimLabRun(user.uid, runId);
             }}
-            onSignIn={() => void signInWithGoogle()}
+            onSignIn={requestSignIn}
           />
         ) : null}
 
@@ -584,7 +584,7 @@ export default function App() {
             savedSetups={savedSetups}
             isSignedIn={Boolean(user)}
             authReady={authReady}
-            onSignIn={() => void signInWithGoogle()}
+            onSignIn={requestSignIn}
             onLoadSetup={handleLoadSetup}
             onDeleteSetup={handleDeleteSetup}
             onCopySetupObject={handleCopySavedSetup}

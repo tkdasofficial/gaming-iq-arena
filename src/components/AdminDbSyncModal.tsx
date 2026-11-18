@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { CheckCircle2, Database, RefreshCw, X } from 'lucide-react';
 import {
   fetchDatabaseCollectionCounts,
-  syncBackendDatasetToFirestore,
+  syncBackendDatasetToCloud,
   type DatasetCollectionCounts,
   type ImportProgress,
   type SyncDatasetResult,
-} from '../firebase/adminImport';
+} from '../backend/adminImport';
 
 interface AdminDbSyncModalProps {
   isOpen: boolean;
@@ -35,7 +35,7 @@ export function AdminDbSyncModal({
       setCounts(next);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Unable to read Firestore collection counts.'
+        err instanceof Error ? err.message : 'Unable to read cloud catalog counts.'
       );
     } finally {
       setLoadingCounts(false);
@@ -57,7 +57,7 @@ export function AdminDbSyncModal({
     setError(null);
     setResult(null);
     try {
-      const syncResult = await syncBackendDatasetToFirestore({
+      const syncResult = await syncBackendDatasetToCloud({
         overwriteExisting,
         onProgress: setProgress,
       });
@@ -66,7 +66,7 @@ export function AdminDbSyncModal({
       await onSyncComplete();
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : 'Failed to sync dataset to Firestore.'
+        err instanceof Error ? err.message : 'Failed to sync dataset to the cloud.'
       );
     } finally {
       setSyncing(false);
@@ -88,7 +88,7 @@ export function AdminDbSyncModal({
               id="admin-sync-title"
               className="font-display text-xl font-bold text-white tracking-tight"
             >
-              Firestore Device Database Sync
+              Cloud Device Database Sync
             </h2>
           </div>
           <button
@@ -129,7 +129,7 @@ export function AdminDbSyncModal({
               disabled={syncing}
               className="accent-[#F0263C]"
             />
-            <span>Overwrite existing Firestore records while preserving createdAt</span>
+            <span>Overwrite existing cloud records while preserving createdAt</span>
           </label>
 
           {progress ? (
@@ -165,7 +165,7 @@ export function AdminDbSyncModal({
             <div className="p-3 rounded-xl bg-[#1B1B20] border border-[#29292F] flex items-start gap-2.5 text-xs text-white">
               <CheckCircle2 className="w-4 h-4 text-[#F0263C] shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold">Firestore Sync Complete</div>
+                <div className="font-semibold">Cloud Sync Complete</div>
                 <div className="text-[#A1A1AA] font-mono mt-0.5">
                   Created {result.created} · Updated {result.updated} · Skipped{' '}
                   {result.skipped}

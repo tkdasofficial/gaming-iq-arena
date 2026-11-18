@@ -1,5 +1,5 @@
 import { Check, Copy, LogIn, LogOut } from 'lucide-react';
-import type { User } from 'firebase/auth';
+import type { AppUser } from '../backend/user';
 
 export type NavTab = 'calibrate' | 'presets' | 'aim-lab' | 'saved';
 
@@ -9,7 +9,7 @@ interface TopNavProps {
   onCopySetup: () => void;
   copied: boolean;
   savedCount: number;
-  user: User | null;
+  user: AppUser | null;
   authReady: boolean;
   signingIn: boolean;
   onSignIn: () => void;
@@ -79,7 +79,7 @@ export function TopNav({
           })}
         </nav>
 
-        {/* Zone 3: Quick actions + Google Auth */}
+        {/* Zone 3: Quick actions + account */}
         <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"

@@ -6,7 +6,8 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { onAuthStateChanged, signInWithPopup, signOut, type User } from 'firebase/auth';
+import { useNavigate } from '@tanstack/react-router';
+import { supabase } from '@/integrations/supabase/client';
 import type {
   AimLabRun,
   BrandRecord,
@@ -14,7 +15,6 @@ import type {
   ProPreset,
   SavedSetup,
 } from '../engine/types';
-import { auth, googleProvider } from './config';
 import {
   clearDeviceDatabaseCache,
   fetchAllPublicDevices,
@@ -27,11 +27,11 @@ import {
   subscribeCustomDevices,
   subscribePublicPresets,
   subscribeSavedSetups,
-  syncUserProfile,
 } from './services';
+import { toAppUser, type AppUser } from './user';
 
-interface FirebaseContextValue {
-  user: User | null;
+interface BackendContextValue {
+  user: AppUser | null;
   authReady: boolean;
   isAdmin: boolean;
   authError: string | null;
@@ -53,21 +53,21 @@ interface FirebaseContextValue {
   loadBrandDevices: (brandId: string, forceRefresh?: boolean) => Promise<DeviceProfile[]>;
   loadCatalogDevices: (forceRefresh?: boolean) => Promise<DeviceProfile[]>;
   refreshDeviceDatabase: () => Promise<void>;
-  signInWithGoogle: () => Promise<User | null>;
+  /** Opens the sign-in page (email/password or Google). */
+  requestSignIn: () => void;
   signOutUser: () => Promise<void>;
   clearAuthError: () => void;
 }
 
-const FirebaseContext = createContext<FirebaseContextValue | null>(null);
+const BackendContext = createContext<BackendContextValue | null>(null);
 
-const BOOTSTRAP_ADMIN_EMAIL = 'tusharkantidasofficial@gmail.com';
-
-export function FirebaseProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+export function BackendProvider({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<AppUser | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [signingIn, setSigningIn] = useState(false);
+  const signingIn = false;
 
   const [savedSetups, setSavedSetups] = useState<SavedSetup[]>([]);
   const [customDevices, setCustomDevices] = useState<DeviceProfile[]>([]);
@@ -85,28 +85,37 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
   const [presetsLoaded, setPresetsLoaded] = useState(false);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (nextUser) => {
-      setUser(nextUser);
+    let cancelled = false;
+    const applySession = async (nextUser: AppUser | null) => {
+      if (cancelled) return;
+      setUser((prev) => (prev && nextUser && prev.uid === nextUser.uid ? prev : nextUser));
       if (nextUser) {
-        try {
-          await syncUserProfile(nextUser);
-          const adminDoc = await checkIsAdmin(nextUser.uid);
-          setIsAdmin(
-            adminDoc ||
-              (nextUser.emailVerified && nextUser.email === BOOTSTRAP_ADMIN_EMAIL)
-          );
-        } catch (err) {
-          console.error('Failed to sync user profile:', err);
-        }
+        // Admin role lives in user_roles (granted server-side), never on the client.
+        const admin = await checkIsAdmin(nextUser.uid);
+        if (!cancelled) setIsAdmin(admin);
       } else {
         setIsAdmin(false);
         setSavedSetups([]);
         setCustomDevices([]);
         setAimLabRuns([]);
       }
-      setAuthReady(true);
+      if (!cancelled) setAuthReady(true);
+    };
+
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'TOKEN_REFRESHED') return;
+      // Defer Supabase calls out of the auth callback to avoid client deadlocks.
+      window.setTimeout(() => {
+        void applySession(session?.user ? toAppUser(session.user) : null);
+      }, 0);
     });
-    return unsub;
+    void supabase.auth.getUser().then(({ data }) => {
+      void applySession(data.user ? toAppUser(data.user) : null);
+    });
+    return () => {
+      cancelled = true;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   const loadBrands = useCallback(async (forceRefresh = false): Promise<BrandRecord[]> => {
@@ -118,7 +127,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
       return items;
     } catch (err) {
       const msg =
-        err instanceof Error ? err.message : 'Unable to load smartphone brands from Firestore.';
+        err instanceof Error ? err.message : 'Unable to load smartphone brands from the cloud catalog.';
       setBrandsError(msg);
       return [];
     } finally {
@@ -139,7 +148,7 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         const msg =
           err instanceof Error
             ? err.message
-            : 'Unable to load smartphone models from Firestore.';
+            : 'Unable to load smartphone models from the cloud catalog.';
         setDevicesError(msg);
         return [];
       } finally {
@@ -198,33 +207,21 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
     };
   }, [authReady, user]);
 
-  const signInWithGoogle = useCallback(async (): Promise<User | null> => {
+  const requestSignIn = useCallback(() => {
     setAuthError(null);
-    setSigningIn(true);
-    try {
-      const cred = await signInWithPopup(auth, googleProvider);
-      return cred.user;
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Unable to sign in with Google.';
-      if (!message.includes('auth/popup-closed-by-user')) {
-        setAuthError(message);
-      }
-      return null;
-    } finally {
-      setSigningIn(false);
-    }
-  }, []);
+    void navigate({ to: '/auth' });
+  }, [navigate]);
 
   const signOutUser = useCallback(async () => {
     setAuthError(null);
-    await signOut(auth);
+    const { error } = await supabase.auth.signOut();
+    if (error) setAuthError(error.message);
   }, []);
 
   const clearAuthError = useCallback(() => setAuthError(null), []);
 
   return (
-    <FirebaseContext.Provider
+    <BackendContext.Provider
       value={{
         user,
         authReady,
@@ -248,20 +245,20 @@ export function FirebaseProvider({ children }: { children: ReactNode }) {
         loadBrandDevices,
         loadCatalogDevices,
         refreshDeviceDatabase,
-        signInWithGoogle,
+        requestSignIn,
         signOutUser,
         clearAuthError,
       }}
     >
       {children}
-    </FirebaseContext.Provider>
+    </BackendContext.Provider>
   );
 }
 
-export function useFirebase(): FirebaseContextValue {
-  const ctx = useContext(FirebaseContext);
+export function useBackend(): BackendContextValue {
+  const ctx = useContext(BackendContext);
   if (!ctx) {
-    throw new Error('useFirebase must be used inside FirebaseProvider');
+    throw new Error('useBackend must be used inside BackendProvider');
   }
   return ctx;
 }

@@ -1,7 +1,7 @@
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 
-// Firebase (auth + Firestore) runs only in the browser, so the app is loaded after hydration.
+// The app shell reads the signed-in session from browser storage, so it loads after hydration.
 const GamingIQRoot = lazy(() => import("@/components/GamingIQRoot"));
 
 export const Route = createFileRoute("/")({

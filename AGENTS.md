@@ -31,7 +31,11 @@ use the editor.
 
 ## Project rules
 
-- The Gaming IQ app (imported from GitHub `tkdasofficial/gaming-iq`) uses the user's own Firebase project (Auth + Firestore, config in `firebase-applet-config.json`); keep it, it holds their existing data.
-- The app is loaded client-only (`ClientOnly` + lazy import in `src/routes/index.tsx`) because Firebase Auth/Firestore are browser SDKs.
-- The original Express server was replaced by TanStack server routes (`src/routes/api/...`), which bundle `data/smartphone-db/*.json`; the server runs on Cloudflare Workers, not Node.
+- Backend is the user's own external Supabase project (not Lovable Cloud). All data access lives in `src/backend/` (`services.ts`, `deviceDatabase.ts`, `adminImport.ts`, `BackendContext.tsx`); components never call Supabase directly, so the backend can change in one place.
+- Firebase was fully removed; do not reintroduce it.
+- The app shell is loaded client-only (`ClientOnly` + lazy import in `src/routes/index.tsx`) because it reads the browser session and was written as a browser SPA.
+- Lists refetch through a small in-module change bus in `services.ts` after each write (no Realtime), keeping the old subscribe/unsubscribe API.
+- Phone catalog tables (`brands`, `chipsets`, `devices`, `game_compatibility`) store the original record in a `data` jsonb column plus indexed lookup columns, so the bundled dataset in `data/smartphone-db/` syncs without reshaping.
+- Admin rights come only from `public.user_roles` via `has_role`; the owner's verified email is granted admin by the `handle_new_user` trigger.
+- The email-first sign-in check runs in a server function (`src/backend/auth.functions.ts`) calling the service-role-only `email_has_account` RPC; never expose that RPC to anon.
 - `tsconfig.json` has `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` and `noPropertyAccessFromIndexSignature` off because the imported app code was written without them.

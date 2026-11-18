@@ -1,12 +1,4 @@
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  query,
-  where,
-} from 'firebase/firestore';
+import { supabase } from '@/integrations/supabase/client';
 import { smartphoneRecordToDeviceProfile } from '../engine/devices';
 import type {
   BrandRecord,
@@ -15,8 +7,12 @@ import type {
   GameCompatibilityRecord,
   SmartphoneDeviceRecord,
 } from '../engine/types';
-import { db } from './config';
-import { handleFirestoreError, OperationType } from './errors';
+import { handleBackendError, OperationType } from './errors';
+
+type Row = { id: string; data: unknown };
+const rowData = (row: Row): Record<string, unknown> => ({
+  ...((row.data ?? {}) as Record<string, unknown>),
+});
 
 let brandsCache: BrandRecord[] | null = null;
 const brandDevicesCache = new Map<string, DeviceProfile[]>();
@@ -111,15 +107,15 @@ export async function fetchBrands(forceRefresh = false): Promise<BrandRecord[]> 
   }
   const path = 'brands';
   try {
-    const q = query(collection(db, 'brands'), where('visibility', '==', 'public'));
-    const snap = await getDocs(q);
+    const { data: rows, error } = await supabase.from('brands').select('id, data');
+    if (error) throw error;
     const items: BrandRecord[] = [];
-    snap.forEach((docSnap) => {
-      const d = docSnap.data();
+    (rows ?? []).forEach((row) => {
+      const d = rowData(row);
       items.push({
-        id: String(d.id || docSnap.id),
+        id: String(d.id || row.id),
         visibility: 'public',
-        name: String(d.name || docSnap.id),
+        name: String(d.name || row.id),
         parentCompany: typeof d.parentCompany === 'string' ? d.parentCompany : null,
         country: String(d.country || ''),
         isSubBrand: Boolean(d.isSubBrand),
@@ -131,7 +127,7 @@ export async function fetchBrands(forceRefresh = false): Promise<BrandRecord[]> 
     brandsCache = items;
     return items;
   } catch (error) {
-    handleFirestoreError(error, OperationType.LIST, path);
+    handleBackendError(error, OperationType.LIST, path);
   }
 }
 
@@ -142,14 +138,19 @@ export async function fetchChipsetById(chipsetId: string): Promise<ChipsetRecord
   }
   const path = `chipsets/${chipsetId}`;
   try {
-    const snap = await getDoc(doc(db, 'chipsets', chipsetId));
-    if (!snap.exists()) {
+    const { data: row, error } = await supabase
+      .from('chipsets')
+      .select('id, data')
+      .eq('id', chipsetId)
+      .maybeSingle();
+    if (error) throw error;
+    if (!row) {
       chipsetCache.set(chipsetId, null);
       return null;
     }
-    const d = snap.data();
+    const d = rowData(row);
     const record: ChipsetRecord = {
-      id: String(d.id || snap.id),
+      id: String(d.id || row.id),
       visibility: 'public',
       manufacturer: String(d.manufacturer || ''),
       name: String(d.name || ''),
@@ -169,7 +170,7 @@ export async function fetchChipsetById(chipsetId: string): Promise<ChipsetRecord
     chipsetCache.set(chipsetId, record);
     return record;
   } catch (error) {
-    handleFirestoreError(error, OperationType.GET, path);
+    handleBackendError(error, OperationType.GET, path);
   }
 }
 
@@ -182,17 +183,16 @@ export async function fetchGameCompatibilityForDevice(
   }
   const path = 'game_compatibility';
   try {
-    const q = query(
-      collection(db, 'game_compatibility'),
-      where('visibility', '==', 'public'),
-      where('deviceId', '==', deviceId)
-    );
-    const snap = await getDocs(q);
+    const { data: rows, error } = await supabase
+      .from('game_compatibility')
+      .select('id, data')
+      .eq('device_id', deviceId);
+    if (error) throw error;
     const items: GameCompatibilityRecord[] = [];
-    snap.forEach((docSnap) => {
-      const d = docSnap.data();
+    (rows ?? []).forEach((row) => {
+      const d = rowData(row);
       items.push({
-        id: String(d.id || docSnap.id),
+        id: String(d.id || row.id),
         visibility: 'public',
         deviceId: String(d.deviceId || deviceId),
         gameKey: d.gameKey as GameCompatibilityRecord['gameKey'],
@@ -216,7 +216,7 @@ export async function fetchGameCompatibilityForDevice(
     compatCache.set(deviceId, items);
     return items;
   } catch (error) {
-    handleFirestoreError(error, OperationType.LIST, path);
+    handleBackendError(error, OperationType.LIST, path);
   }
 }
 
@@ -230,16 +230,14 @@ export async function fetchDevicesByBrand(
   }
   const path = 'devices';
   try {
-    const q = query(
-      collection(db, 'devices'),
-      where('visibility', '==', 'public'),
-      where('brandId', '==', brandId)
+    const { data: rows, error } = await supabase
+      .from('devices')
+      .select('id, data')
+      .eq('brand_id', brandId);
+    if (error) throw error;
+    const records: SmartphoneDeviceRecord[] = (rows ?? []).map((row) =>
+      hydrateDeviceDoc(rowData(row), row.id)
     );
-    const snap = await getDocs(q);
-    const records: SmartphoneDeviceRecord[] = [];
-    snap.forEach((docSnap) => {
-      records.push(hydrateDeviceDoc(docSnap.data(), docSnap.id));
-    });
     // Sort newest-first (2026 -> 2025 -> 2024 -> 2023) client-side so no composite index is needed
     records.sort((a, b) => {
       const dateCmp = b.releaseDate.localeCompare(a.releaseDate);
@@ -250,7 +248,7 @@ export async function fetchDevicesByBrand(
     brandDevicesCache.set(brandId, profiles);
     return profiles;
   } catch (error) {
-    handleFirestoreError(error, OperationType.LIST, path);
+    handleBackendError(error, OperationType.LIST, path);
   }
 }
 
@@ -288,16 +286,15 @@ export async function fetchAllPublicDevices(
   }
   const path = 'devices';
   try {
-    const q = query(
-      collection(db, 'devices'),
-      where('visibility', '==', 'public'),
-      limit(maxDocs)
+    const { data: rows, error } = await supabase
+      .from('devices')
+      .select('id, data')
+      .order('release_date', { ascending: false })
+      .limit(maxDocs);
+    if (error) throw error;
+    const records: SmartphoneDeviceRecord[] = (rows ?? []).map((row) =>
+      hydrateDeviceDoc(rowData(row), row.id)
     );
-    const snap = await getDocs(q);
-    const records: SmartphoneDeviceRecord[] = [];
-    snap.forEach((docSnap) => {
-      records.push(hydrateDeviceDoc(docSnap.data(), docSnap.id));
-    });
     records.sort((a, b) => {
       const dateCmp = b.releaseDate.localeCompare(a.releaseDate);
       if (dateCmp !== 0) return dateCmp;
@@ -307,6 +304,6 @@ export async function fetchAllPublicDevices(
     catalogCache = profiles;
     return profiles;
   } catch (error) {
-    handleFirestoreError(error, OperationType.LIST, path);
+    handleBackendError(error, OperationType.LIST, path);
   }
 }

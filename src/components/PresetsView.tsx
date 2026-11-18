@@ -50,7 +50,7 @@ export function PresetsView({
             Community Presets
           </h1>
           <p className="text-xs sm:text-sm text-[#A1A1AA]">
-            Live configurations published by verified Gaming IQ players in Firestore.
+            Live configurations published by verified Gaming IQ players.
           </p>
         </div>
 
@@ -121,7 +121,7 @@ export function PresetsView({
                 onClick={onRequestSignIn}
                 className="min-h-[48px] px-5 rounded-xl bg-[#1B1B20] hover:bg-[#29292F] border border-[#29292F] text-white text-sm font-semibold transition-colors"
               >
-                Sign In with Google
+                Sign In
               </button>
             ) : null}
           </div>
