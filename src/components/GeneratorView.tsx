@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
 import { AlertTriangle, ArrowRight, Gauge, Layers, RotateCcw, ShieldCheck, SlidersHorizontal } from 'lucide-react';
-import { catalogKeys, fetchBrands, fetchDevice, fetchGames, fetchModels } from '../backend/catalog';
+import { catalogKeys, fetchBrands, fetchDevice, fetchGames, fetchModels, TIER_LABELS, TIER_ORDER } from '../backend/catalog';
 import { generateRecommendation } from '../backend/recommend.functions';
 import { saveResult } from '../backend/services';
 import { useBackend } from '../backend/BackendContext';
 import { deviceSupportIssue, type Recommendation } from '../engine/recommend';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { DeviceSpecs } from './DeviceSpecs';
 import { ResultsView } from './ResultsView';
@@ -196,12 +196,21 @@ export function GeneratorView() {
                     <SelectValue placeholder={!brandId ? 'Select a brand first' : models.isLoading ? 'Loading models…' : 'Select model'} />
                   </SelectTrigger>
                   <SelectContent>
-                    {(models.data ?? []).map((m) => (
-                      <SelectItem key={m.id} value={m.id}>
-                        {m.name}
-                        {m.releaseYear ? <span className="ml-1.5 text-xs text-muted-foreground">{m.releaseYear}</span> : null}
-                      </SelectItem>
-                    ))}
+                    {TIER_ORDER.map((tier) => {
+                      const list = (models.data ?? []).filter((m) => m.tier === tier);
+                      if (!list.length) return null;
+                      return (
+                        <SelectGroup key={tier}>
+                          <SelectLabel className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">{TIER_LABELS[tier]}</SelectLabel>
+                          {list.map((m) => (
+                            <SelectItem key={m.id} value={m.id}>
+                              {m.name}
+                              {m.releaseYear ? <span className="ml-1.5 text-xs text-muted-foreground">{m.releaseYear}</span> : null}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
               )}

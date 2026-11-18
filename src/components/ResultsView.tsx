@@ -92,24 +92,35 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
         ) : null}
       </div>
 
-      {/* Full settings per group (BGMI / PUBG Mobile) */}
-      {multiGroup && group ? (
+      {/* Every in-game slider with what it does */}
+      {group ? (
         <section className="surface rounded-xl p-4 sm:p-5" aria-label="All settings">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h3 className="text-sm font-semibold">All in-game settings</h3>
-            <Segmented
-              ariaLabel="Settings group"
-              className="w-full sm:w-auto"
-              value={group.id}
-              onChange={setGroupId}
-              options={rec.groups.map((g) => ({ id: g.id, label: g.label }))}
-            />
+            <div className="min-w-0">
+              <h3 className="text-sm font-semibold">All in-game settings</h3>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">Same names and order as the game’s Sensitivity screen</p>
+            </div>
+            {multiGroup ? (
+              <Segmented
+                ariaLabel="Settings group"
+                className="w-full sm:w-auto"
+                value={group.id}
+                onChange={setGroupId}
+                options={rec.groups.map((g) => ({ id: g.id, label: g.label }))}
+              />
+            ) : null}
           </div>
-          <ul className="mt-3 divide-y divide-border">
+          {group.description ? (
+            <p className="mt-3 rounded-lg bg-secondary px-3 py-2 text-[12px] leading-relaxed text-muted-foreground">{group.description}</p>
+          ) : null}
+          <ul className="mt-2 divide-y divide-border">
             {group.settings.map((s) => (
-              <li key={s.key} className="flex items-center justify-between gap-3 py-2.5">
-                <span className="min-w-0 truncate text-[13px] text-muted-foreground">{s.label}</span>
-                <span className="font-mono text-sm font-medium tabular-nums">
+              <li key={s.key} className="flex items-start justify-between gap-4 py-3">
+                <div className="min-w-0">
+                  <div className="text-[13px] font-medium text-foreground">{s.label}</div>
+                  {s.description ? <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{s.description}</p> : null}
+                </div>
+                <span className="shrink-0 pt-0.5 font-mono text-sm font-medium tabular-nums">
                   {s.value}
                   {unit}
                 </span>
@@ -125,12 +136,12 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
           <h3 className="text-sm font-semibold">Additional {rec.gameShortName} settings</h3>
           <ul className="mt-2 divide-y divide-border">
             {rec.extras.map((e) => (
-              <li key={e.label} className="flex items-center justify-between gap-3 py-2.5">
+              <li key={e.label} className="flex items-start justify-between gap-4 py-3">
                 <div className="min-w-0">
                   <div className="text-[13px] font-medium">{e.label}</div>
-                  <div className="truncate text-[11px] text-muted-foreground">{e.note}</div>
+                  <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{e.note}</p>
                 </div>
-                <span className="font-mono text-sm font-medium">{e.value}</span>
+                <span className="shrink-0 pt-0.5 text-right font-mono text-sm font-medium">{e.value}</span>
               </li>
             ))}
           </ul>

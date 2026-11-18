@@ -8,10 +8,31 @@ export interface BrandOption {
   name: string;
 }
 
+export type ModelTier = 'flagship' | 'gaming' | 'mid-range' | 'budget' | 'other';
+
 export interface ModelOption {
   id: string;
   name: string;
   releaseYear: number | null;
+  tier: ModelTier;
+}
+
+export const TIER_LABELS: Record<ModelTier, string> = {
+  flagship: 'Flagship',
+  gaming: 'Gaming',
+  'mid-range': 'Mid-range',
+  budget: 'Budget',
+  other: 'Other',
+};
+export const TIER_ORDER: ModelTier[] = ['flagship', 'gaming', 'mid-range', 'budget', 'other'];
+
+function toTier(v: unknown): ModelTier {
+  const t = String(v ?? '').toLowerCase();
+  if (t === 'flagship') return 'flagship';
+  if (t === 'esports' || t === 'gaming') return 'gaming';
+  if (t === 'mid-range' || t === 'midrange') return 'mid-range';
+  if (t === 'budget') return 'budget';
+  return 'other';
 }
 
 export interface GameOption {
@@ -45,6 +66,7 @@ export async function fetchModels(brandId: string): Promise<ModelOption[]> {
       id: row.id,
       name: formatDeviceFullName(String(d.brand ?? ''), String(d.model ?? row.id)),
       releaseYear: typeof d.releaseYear === 'number' ? d.releaseYear : null,
+      tier: toTier(d.tier),
     };
   });
 }

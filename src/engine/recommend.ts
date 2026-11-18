@@ -50,14 +50,25 @@ export interface GameSettingConfig {
   max: number;
   factor: 'touch' | 'gyro';
   core?: CoreSettingId;
+  /** One plain sentence on what the slider controls in game. */
+  description?: string;
+}
+
+/** A fixed recommended choice for a non-slider option (e.g. a preset or toggle). */
+export interface GameOptionConfig {
+  label: string;
+  value: string;
+  note: string;
+  requiresGyro?: boolean;
 }
 
 export interface GameConfig {
   scaleMax: number;
   unit: string;
-  groups: { id: string; label: string; requiresGyro?: boolean }[];
+  groups: { id: string; label: string; description?: string; requiresGyro?: boolean }[];
   settings: GameSettingConfig[];
   extras: GameExtra[];
+  options?: GameOptionConfig[];
 }
 
 export interface GameRecord {
@@ -74,6 +85,7 @@ export interface RecommendedSetting {
   label: string;
   value: number;
   max: number;
+  description?: string;
 }
 
 export interface Recommendation {
@@ -84,7 +96,7 @@ export interface Recommendation {
   unit: string;
   scaleMax: number;
   core: { id: CoreSettingId; label: string; value: number; source: string }[];
-  groups: { id: string; label: string; settings: RecommendedSetting[] }[];
+  groups: { id: string; label: string; description?: string; settings: RecommendedSetting[] }[];
   gyro: 'included' | 'not-verified' | 'not-supported' | 'software-only' | 'game-unsupported';
   extras: { label: string; value: string; note: string }[];
   basis: string[];
@@ -250,9 +262,16 @@ export function buildRecommendation(device: VerifiedDevice, game: GameRecord, no
     .map((g) => ({
       id: g.id,
       label: g.label,
+      ...(g.description ? { description: g.description } : {}),
       settings: cfg.settings
         .filter((s) => s.group === g.id)
-        .map((s) => ({ key: s.key, label: s.label, value: values.get(s.key) as number, max: s.max })),
+        .map((s) => ({
+          key: s.key,
+          label: s.label,
+          value: values.get(s.key) as number,
+          max: s.max,
+          ...(s.description ? { description: s.description } : {}),
+        })),
     }))
     .filter((g) => g.settings.length > 0);
 
@@ -280,6 +299,11 @@ export function buildRecommendation(device: VerifiedDevice, game: GameRecord, no
               : { label: 'Gyroscope', value: 'Off', note: 'No gyroscope on this phone' }
       );
     }
+  }
+
+  for (const o of cfg.options ?? []) {
+    if (o.requiresGyro && gyro !== 'included') continue;
+    extras.push({ label: o.label, value: o.value, note: o.note });
   }
 
   const basis = [
