@@ -170,6 +170,45 @@ export type Database = {
         }
         Relationships: []
       }
+      games: {
+        Row: {
+          config: Json
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          publisher: string
+          short_name: string
+          sort_order: number
+          supports_gyro: boolean
+          updated_at: string
+        }
+        Insert: {
+          config?: Json
+          created_at?: string
+          id: string
+          is_active?: boolean
+          name: string
+          publisher?: string
+          short_name: string
+          sort_order?: number
+          supports_gyro?: boolean
+          updated_at?: string
+        }
+        Update: {
+          config?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          publisher?: string
+          short_name?: string
+          sort_order?: number
+          supports_gyro?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       presets: {
         Row: {
           author_id: string

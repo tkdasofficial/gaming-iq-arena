@@ -23,5 +23,5 @@
 - [ ] Recommendation computed on the server per game
 - [ ] Results page with Copy All, Save
 - [ ] Dashboard sections: benefits + supported games
-- [ ] Extra pages per user's answer (Saved / Presets / Aim Lab)
+- [ ] Keep only Saved results; remove Presets and Aim Lab from the app (tables kept)
 - [ ] Verify on phone + desktop, light + dark

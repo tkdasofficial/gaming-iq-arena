@@ -1,0 +1,43 @@
+{
+  "samsung": [
+    "samsung-galaxy-s25-ultra",
+    "samsung-galaxy-s24",
+    "samsung-galaxy-a55-5g",
+    "samsung-galaxy-a35-5g"
+  ],
+  "xiaomi": [
+    "xiaomi-15",
+    "xiaomi-14",
+    "xiaomi-14-ultra"
+  ],
+  "redmi": [
+    "redmi-note-14-pro-plus-5g",
+    "redmi-note-13-pro-5g",
+    "redmi-13-5g"
+  ],
+  "poco": [
+    "poco-f6",
+    "poco-x6-pro",
+    "poco-x7-pro"
+  ],
+  "realme": [
+    "realme-gt-7-pro",
+    "realme-gt-6",
+    "realme-narzo-70-pro-5g"
+  ],
+  "oneplus": [
+    "oneplus-13",
+    "oneplus-12",
+    "oneplus-13r",
+    "oneplus-nord-4"
+  ],
+  "iqoo": [
+    "iqoo-13",
+    "iqoo-neo-10r",
+    "iqoo-z9x-5g"
+  ],
+  "vivo": [
+    "vivo-x200-pro",
+    "vivo-v40-pro"
+  ]
+}

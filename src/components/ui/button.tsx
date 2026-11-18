@@ -5,21 +5,17 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/88 active:bg-primary/80",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+          "border border-input bg-card hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-accent",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        glow: "bg-gradient-primary text-primary-foreground font-semibold shadow-glow hover:brightness-110 active:scale-[0.98] transition-all",
-        surface:
-          "border border-border bg-secondary text-secondary-foreground hover:bg-accent hover:border-border-strong active:scale-[0.98] transition-all",
-        soft: "bg-primary/12 text-primary hover:bg-primary/20 active:scale-[0.98] transition-all",
         google:
           "border border-google-border bg-google text-google-foreground font-google text-[14px] leading-5 hover:bg-google/90 [&_svg]:size-[18px]",
       },
@@ -28,14 +24,10 @@ const buttonVariants = cva(
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
         icon: "h-9 w-9",
-        md: "h-11 rounded-xl px-4",
-        xl: "h-14 rounded-2xl px-6 text-[15px] [&_svg]:size-5",
-        "icon-md": "h-10 w-10 rounded-xl",
-        glow: "bg-gradient-primary text-primary-foreground font-semibold shadow-glow hover:brightness-110 active:scale-[0.98] transition-all",
-        surface:
-          "border border-border bg-secondary text-secondary-foreground hover:bg-accent hover:border-border-strong active:scale-[0.98] transition-all",
-        soft: "bg-primary/12 text-primary hover:bg-primary/20 active:scale-[0.98] transition-all",
-        google: "h-11 pl-3 pr-3 gap-2.5 rounded-xl",
+        md: "h-10 rounded-lg px-4",
+        xl: "h-12 rounded-lg px-5 text-[15px]",
+        "icon-md": "h-10 w-10 rounded-lg",
+        google: "h-11 pl-3 pr-3 gap-2.5 rounded-lg",
       },
     },
     defaultVariants: {

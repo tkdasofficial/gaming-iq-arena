@@ -81,22 +81,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "Gaming IQ — Perfect Sensitivity Calibrator" },
+      { title: "Gaming IQ — Device-specific game sensitivity" },
       {
         name: "description",
         content:
-          "Mobile-first esports sensitivity calibration for Garena Free Fire and Krafton PUBG / BGMI.",
+          "Sensitivity recommendations for Free Fire, BGMI and PUBG Mobile, built from your phone's verified specs.",
       },
       { name: "author", content: "Gaming IQ" },
-      { property: "og:title", content: "Gaming IQ — Perfect Sensitivity Calibrator" },
+      { name: "theme-color", content: "#fafafa", media: "(prefers-color-scheme: light)" },
+      { name: "theme-color", content: "#111113", media: "(prefers-color-scheme: dark)" },
+      { property: "og:title", content: "Gaming IQ — Device-specific game sensitivity" },
       {
         property: "og:description",
         content:
-          "Mobile-first esports sensitivity calibration for Garena Free Fire and Krafton PUBG / BGMI.",
+          "Sensitivity recommendations for Free Fire, BGMI and PUBG Mobile, built from your phone's verified specs.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -108,7 +109,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Google+Sans:wght@500&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Google+Sans:wght@500&display=swap",
       },
     ],
   }),
@@ -120,7 +121,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
