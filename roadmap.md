@@ -8,3 +8,4 @@
 - [ ] Load bundled phone dataset into Supabase (admin sync)
 - [ ] Remove firebase package, firebase config files and firestore rules
 - [ ] Verify sign-in, save setup, publish preset, aim lab run end-to-end
+- Decision: start fresh, no Firebase data copy
