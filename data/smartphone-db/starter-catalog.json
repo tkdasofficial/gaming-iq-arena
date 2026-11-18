@@ -3,41 +3,209 @@
     "samsung-galaxy-s25-ultra",
     "samsung-galaxy-s24",
     "samsung-galaxy-a55-5g",
-    "samsung-galaxy-a35-5g"
+    "samsung-galaxy-a35-5g",
+    "samsung-galaxy-a57",
+    "samsung-galaxy-s26",
+    "samsung-galaxy-s26-plus",
+    "samsung-galaxy-s26-ultra",
+    "samsung-galaxy-s25-fe",
+    "samsung-galaxy-z-fold-7",
+    "samsung-galaxy-z-flip7",
+    "samsung-galaxy-s25-edge",
+    "samsung-galaxy-a56-5g",
+    "samsung-galaxy-a36-5g",
+    "samsung-galaxy-s25",
+    "samsung-galaxy-s25-plus",
+    "samsung-galaxy-z-fold-6",
+    "samsung-galaxy-s24-ultra",
+    "samsung-galaxy-s23-ultra"
   ],
   "xiaomi": [
     "xiaomi-15",
     "xiaomi-14",
-    "xiaomi-14-ultra"
+    "xiaomi-14-ultra",
+    "xiaomi-17-ultra",
+    "xiaomi-17",
+    "xiaomi-17-pro",
+    "xiaomi-15t",
+    "xiaomi-15t-pro",
+    "xiaomi-15-ultra",
+    "xiaomi-13-pro"
   ],
   "redmi": [
     "redmi-note-14-pro-plus-5g",
     "redmi-note-13-pro-5g",
-    "redmi-13-5g"
+    "redmi-13-5g",
+    "redmi-note-15-5g",
+    "redmi-note-15-pro-5g",
+    "redmi-note-15-pro-plus",
+    "redmi-note-14-pro-5g",
+    "redmi-turbo-4",
+    "redmi-k80-pro"
   ],
   "poco": [
     "poco-f6",
     "poco-x6-pro",
-    "poco-x7-pro"
+    "poco-x7-pro",
+    "poco-f8-pro",
+    "poco-f7",
+    "poco-f7-pro",
+    "poco-f7-ultra",
+    "poco-x7",
+    "poco-f6-pro"
   ],
   "realme": [
     "realme-gt-7-pro",
     "realme-gt-6",
-    "realme-narzo-70-pro-5g"
+    "realme-narzo-70-pro-5g",
+    "realme-gt-8-pro",
+    "realme-gt-8",
+    "realme-15-pro",
+    "realme-gt-7",
+    "realme-p3-pro",
+    "realme-14-pro-plus"
   ],
   "oneplus": [
     "oneplus-13",
     "oneplus-12",
     "oneplus-13r",
-    "oneplus-nord-4"
+    "oneplus-nord-4",
+    "oneplus-nord-6",
+    "oneplus-15r",
+    "oneplus-15",
+    "oneplus-nord-5",
+    "oneplus-nord-ce5",
+    "oneplus-13s",
+    "oneplus-11"
   ],
   "iqoo": [
     "iqoo-13",
     "iqoo-neo-10r",
-    "iqoo-z9x-5g"
+    "iqoo-z9x-5g",
+    "iqoo-neo-11",
+    "iqoo-15",
+    "iqoo-z10r",
+    "iqoo-neo-10",
+    "iqoo-neo-10-pro-plus",
+    "iqoo-z10",
+    "iqoo-z9-turbo",
+    "iqoo-12"
   ],
   "vivo": [
     "vivo-x200-pro",
-    "vivo-v40-pro"
+    "vivo-v40-pro",
+    "vivo-x300",
+    "vivo-x300-pro",
+    "vivo-v60",
+    "vivo-x200-fe",
+    "vivo-t4-ultra",
+    "vivo-x200-ultra"
+  ],
+  "google-pixel": [
+    "google-pixel-10a",
+    "google-pixel-10-pro",
+    "google-pixel-10",
+    "google-pixel-10-pro-xl",
+    "google-pixel-9",
+    "google-pixel-9-pro-xl",
+    "google-pixel-8-pro"
+  ],
+  "nothing": [
+    "nothing-phone-4a",
+    "nothing-phone-4a-pro",
+    "nothing-phone-3",
+    "nothing-cmf-phone-2-pro",
+    "nothing-phone-3a-pro",
+    "nothing-phone-3a",
+    "nothing-phone-2a"
+  ],
+  "lava": [
+    "lava-agni-4",
+    "lava-agni-3"
+  ],
+  "honor": [
+    "honor-magic8-pro",
+    "honor-400-pro",
+    "honor-magic-7-pro",
+    "honor-200-pro"
+  ],
+  "oppo": [
+    "oppo-find-x9",
+    "oppo-find-x9-pro",
+    "oppo-k13-turbo-pro",
+    "oppo-reno14-pro-5g",
+    "oppo-find-x8-ultra",
+    "oppo-reno-13-pro",
+    "oppo-find-x8-pro"
+  ],
+  "apple": [
+    "apple-iphone-17",
+    "apple-iphone-17-pro",
+    "apple-iphone-17-pro-max",
+    "apple-iphone-air",
+    "apple-iphone-16e",
+    "apple-iphone-16",
+    "apple-iphone-16-pro",
+    "apple-iphone-16-pro-max",
+    "apple-iphone-15",
+    "apple-iphone-15-pro"
+  ],
+  "sony": [
+    "sony-xperia-10-vii",
+    "sony-xperia-1-vii",
+    "sony-xperia-1-vi"
+  ],
+  "infinix": [
+    "infinix-gt-30",
+    "infinix-gt-30-pro",
+    "infinix-note-50s"
+  ],
+  "tecno": [
+    "tecno-pova-7-pro-5g",
+    "tecno-camon-40-pro-5g"
+  ],
+  "fairphone": [
+    "fairphone-6"
+  ],
+  "huawei": [
+    "huawei-pura-80-ultra",
+    "huawei-mate-70-pro-plus",
+    "huawei-pura-70-ultra"
+  ],
+  "motorola": [
+    "motorola-edge-2025",
+    "motorola-edge-60-pro",
+    "motorola-edge-60-stylus",
+    "motorola-edge-60-fusion",
+    "motorola-thinkphone-25",
+    "motorola-razr-50-ultra",
+    "motorola-edge-50-ultra"
+  ],
+  "nubia": [
+    "nubia-redmagic-10s-pro",
+    "nubia-z70-ultra",
+    "nubia-redmagic-10-pro",
+    "nubia-redmagic-9s-pro"
+  ],
+  "asus": [
+    "asus-zenfone-12-ultra",
+    "asus-rog-phone-9-fe",
+    "asus-rog-phone-9-pro",
+    "asus-rog-phone-8"
+  ],
+  "hmd": [
+    "hmd-skyline"
+  ],
+  "sharp": [
+    "sharp-aquos-r9"
+  ],
+  "htc": [
+    "htc-u24-pro"
+  ],
+  "zte": [
+    "zte-axon-60-ultra"
+  ],
+  "meizu": [
+    "meizu-21"
   ]
 }

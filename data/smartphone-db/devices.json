@@ -1,5 +1,375 @@
 [
   {
+    "id": "samsung-galaxy-a57",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "samsung",
+    "brand": "Samsung",
+    "model": "Galaxy A57",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Samsung",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2026-04-09",
+    "releaseYear": 2026,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "samsung-exynos-1680",
+    "chipsetName": "Exynos 1680",
+    "gpuModel": "Xclipse 550",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": "UFS 3.1",
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "Super AMOLED+",
+      "resolution": "2340 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1900
+    },
+    "batteryMah": 5000,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Galaxy A57 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/samsung_galaxy_a57_5g-14379.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "oneplus-nord-6",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "oneplus",
+    "brand": "OnePlus",
+    "model": "Nord 6",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "OnePlus",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2026-04-07",
+    "releaseYear": 2026,
+    "marketAvailability": "International",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-8s-gen-4",
+    "chipsetName": "Snapdragon 8s Gen 4",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.78,
+      "panelType": "AMOLED",
+      "resolution": "2772 x 1272",
+      "refreshHz": 165,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3600
+    },
+    "batteryMah": 7500,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Nord 6 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/oneplus_nord_6_5g-14558.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "samsung-galaxy-s26",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "samsung",
+    "brand": "Samsung",
+    "model": "Galaxy S26",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Samsung",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2026-03-06",
+    "releaseYear": 2026,
+    "marketAvailability": "USA, China, Japan (Snapdragon variant)",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite-gen-5",
+    "chipsetName": "Snapdragon 8 Elite Gen 5",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.3,
+      "panelType": "Dynamic LTPO AMOLED 2X",
+      "resolution": "2340 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 2600
+    },
+    "batteryMah": 4300,
+    "chargingWatt": 25,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Galaxy S26 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/samsung_galaxy_s26_5g-14456.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "samsung-galaxy-s26-plus",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "samsung",
+    "brand": "Samsung",
+    "model": "Galaxy S26+",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Samsung",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2026-03-06",
+    "releaseYear": 2026,
+    "marketAvailability": "USA, China, Japan (Snapdragon variant)",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite-gen-5",
+    "chipsetName": "Snapdragon 8 Elite Gen 5",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "Dynamic LTPO AMOLED 2X",
+      "resolution": "3120 x 1440",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 2600
+    },
+    "batteryMah": 4900,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": 25,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Galaxy S26+ — GSMArena specifications",
+        "url": "https://www.gsmarena.com/samsung_galaxy_s26+_5g-14457.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "google-pixel-10a",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "google-pixel",
+    "brand": "Google Pixel",
+    "model": "Pixel 10a",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Google",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2026-03-05",
+    "releaseYear": 2026,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "google-tensor-g4",
+    "chipsetName": "Google Tensor G4",
+    "gpuModel": "Mali-G715 MP7",
+    "ramVariantsGb": [
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.3,
+      "panelType": "P-OLED",
+      "resolution": "2424 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3000
+    },
+    "batteryMah": 5100,
+    "chargingWatt": 30,
+    "wirelessChargingWatt": 10,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Pixel 10a — GSMArena specifications",
+        "url": "https://www.gsmarena.com/google_pixel_10a_5g-14474.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "nothing-phone-4a",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "nothing",
+    "brand": "Nothing",
+    "model": "Phone (4a)",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Nothing",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2026-03-05",
+    "releaseYear": 2026,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7s-gen-4",
+    "chipsetName": "Snapdragon 7s Gen 4",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.78,
+      "panelType": "AMOLED",
+      "resolution": "2720 x 1224",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 4500
+    },
+    "batteryMah": 5080,
+    "chargingWatt": 50,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Phone (4a) — GSMArena specifications",
+        "url": "https://www.gsmarena.com/nothing_phone_(4a)_5g-14503.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "nothing-phone-4a-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "nothing",
+    "brand": "Nothing",
+    "model": "Phone (4a) Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Nothing",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2026-03-05",
+    "releaseYear": 2026,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7-gen-4",
+    "chipsetName": "Snapdragon 7 Gen 4",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "AMOLED",
+      "resolution": "2800 x 1260",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 5000
+    },
+    "batteryMah": 5080,
+    "chargingWatt": 50,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Phone (4a) Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/nothing_phone_(4a)_pro_5g-14529.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "xiaomi-17-ultra",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -171,6 +541,324 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "redmi-note-15-5g",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "redmi",
+    "brand": "Redmi",
+    "model": "Redmi Note 15 5G",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2026-01-06",
+    "releaseYear": 2026,
+    "marketAvailability": "Global",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-6-gen-3",
+    "chipsetName": "Snapdragon 6 Gen 3",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      6,
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.77,
+      "panelType": "AMOLED",
+      "resolution": "2392 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3200
+    },
+    "batteryMah": 5520,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Redmi Note 15 5G — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_redmi_note_15_5g_(global)-14328.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "redmi-note-15-pro-5g",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "redmi",
+    "brand": "Redmi",
+    "model": "Redmi Note 15 Pro 5G",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2026-01-06",
+    "releaseYear": 2026,
+    "marketAvailability": "Global",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-7400-ultra",
+    "chipsetName": "Dimensity 7400 Ultra",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "AMOLED",
+      "resolution": "2772 x 1280",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3200
+    },
+    "batteryMah": 6580,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Redmi Note 15 Pro 5G — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_redmi_note_15_pro_5g_(global)-14327.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "redmi-note-15-pro-plus",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "redmi",
+    "brand": "Redmi",
+    "model": "Redmi Note 15 Pro+",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-12-25",
+    "releaseYear": 2025,
+    "marketAvailability": "Global",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7s-gen-4",
+    "chipsetName": "Snapdragon 7s Gen 4",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "AMOLED",
+      "resolution": "2772 x 1280",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3200
+    },
+    "batteryMah": 6500,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Redmi Note 15 Pro+ — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_redmi_note_15_pro+_5g_(global)-14326.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "poco-f8-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "poco",
+    "brand": "POCO",
+    "model": "POCO F8 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-11-26",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite",
+    "chipsetName": "Snapdragon 8 Elite",
+    "gpuModel": "Adreno 830",
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 4.1",
+    "display": {
+      "sizeInches": 6.59,
+      "panelType": "AMOLED",
+      "resolution": "2510 x 1156",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3500
+    },
+    "batteryMah": 6210,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "POCO F8 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_poco_f8_pro_5g-14303.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "lava-agni-4",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "lava",
+    "brand": "Lava",
+    "model": "Agni 4",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Lava",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-11-25",
+    "releaseYear": 2025,
+    "marketAvailability": "India",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-8350",
+    "chipsetName": "Dimensity 8350",
+    "gpuModel": "Mali-G615 MC6",
+    "ramVariantsGb": [
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256
+    ],
+    "storageType": "UFS 4.0",
+    "display": {
+      "sizeInches": 6.67,
+      "panelType": "AMOLED",
+      "resolution": "2712 x 1220",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 2400
+    },
+    "batteryMah": 5000,
+    "chargingWatt": 66,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Lava Agni 4 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/lava_agni_4_5g-14304.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "iqoo-neo-11",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "iqoo",
+    "brand": "iQOO",
+    "model": "iQOO Neo 11",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-10-30",
+    "releaseYear": 2025,
+    "marketAvailability": "China",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite",
+    "chipsetName": "Snapdragon 8 Elite",
+    "gpuModel": "Adreno 830",
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": "UFS 4.1",
+    "display": {
+      "sizeInches": 6.82,
+      "panelType": "LTPO AMOLED",
+      "resolution": "3168 x 1440",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": null
+    },
+    "batteryMah": 7500,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "iQOO Neo 11 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_iqoo_neo11_5g_(china)-14268.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "oneplus-15",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -228,6 +916,222 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "honor-magic8-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "honor",
+    "brand": "Honor",
+    "model": "Magic8 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Honor",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-10-23",
+    "releaseYear": 2025,
+    "marketAvailability": "Global (excluding Europe battery variant)",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite-gen-5",
+    "chipsetName": "Snapdragon 8 Elite Gen 5",
+    "gpuModel": "Adreno 840",
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.71,
+      "panelType": "LTPO OLED",
+      "resolution": "2808 x 1256",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 6000
+    },
+    "batteryMah": 7100,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": 80,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Magic8 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/honor_magic8_pro_5g-14231.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "oppo-find-x9",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "oppo",
+    "brand": "OPPO",
+    "model": "Find X9",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "OPPO",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-10-22",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "mediatek-dimensity-9500",
+    "chipsetName": "Dimensity 9500",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.59,
+      "panelType": "AMOLED",
+      "resolution": "2760 x 1256",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3600
+    },
+    "batteryMah": 7025,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": 50,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Find X9 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/oppo_find_x9_5g-14235.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "realme-gt-8-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "realme",
+    "brand": "Realme",
+    "model": "GT 8 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Realme",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-10-21",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite-gen-5",
+    "chipsetName": "Snapdragon 8 Elite Gen 5",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.79,
+      "panelType": "AMOLED",
+      "resolution": "3136 x 1440",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 7000
+    },
+    "batteryMah": 7000,
+    "chargingWatt": 120,
+    "wirelessChargingWatt": 50,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "GT 8 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/realme_gt8_pro_5g_(china)-14245.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "realme-gt-8",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "realme",
+    "brand": "Realme",
+    "model": "GT 8",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Realme",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-10-21",
+    "releaseYear": 2025,
+    "marketAvailability": "China",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite",
+    "chipsetName": "Snapdragon 8 Elite",
+    "gpuModel": "Adreno 830",
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": "UFS 4.0",
+    "display": {
+      "sizeInches": 6.79,
+      "panelType": "AMOLED",
+      "resolution": "3136 x 1440",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 7000
+    },
+    "batteryMah": 7000,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "GT 8 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/realme_gt8_5g_(china)-14246.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "iqoo-15",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -283,6 +1187,60 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "vivo-x300",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "vivo",
+    "brand": "Vivo",
+    "model": "X300",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-10-17",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "mediatek-dimensity-9500",
+    "chipsetName": "Dimensity 9500",
+    "gpuModel": "Arm G1-Ultra",
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.31,
+      "panelType": "LTPO AMOLED",
+      "resolution": "2640 x 1216",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 4500
+    },
+    "batteryMah": 6040,
+    "chargingWatt": 90,
+    "wirelessChargingWatt": 40,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "X300 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_x300_5g-14224.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "oppo-find-x9-pro",
@@ -397,6 +1355,223 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "xiaomi-17",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "xiaomi",
+    "brand": "Xiaomi",
+    "model": "Xiaomi 17",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-09-27",
+    "releaseYear": 2025,
+    "marketAvailability": "Global battery specification",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite-gen-5",
+    "chipsetName": "Snapdragon 8 Elite Gen 5",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.3,
+      "panelType": "LTPO AMOLED",
+      "resolution": "2656 x 1220",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3500
+    },
+    "batteryMah": 6330,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": 50,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Xiaomi 17 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_17_5g-14134.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "xiaomi-17-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "xiaomi",
+    "brand": "Xiaomi",
+    "model": "Xiaomi 17 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-09-25",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite-gen-5",
+    "chipsetName": "Snapdragon 8 Elite Gen 5",
+    "gpuModel": "Adreno 840",
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.3,
+      "panelType": "LTPO AMOLED",
+      "resolution": "2656 x 1220",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3500
+    },
+    "batteryMah": 6300,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": 50,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Xiaomi 17 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_17_pro_5g-14182.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "xiaomi-15t",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "xiaomi",
+    "brand": "Xiaomi",
+    "model": "Xiaomi 15T",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-09-24",
+    "releaseYear": 2025,
+    "marketAvailability": "Global",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-8400-ultra",
+    "chipsetName": "Dimensity 8400-Ultra",
+    "gpuModel": "Mali-G720 MC7",
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": "LPDDR5X",
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 4.1",
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "AMOLED",
+      "resolution": "2772 x 1280",
+      "refreshHz": 120,
+      "touchSamplingHz": 480,
+      "peakBrightnessNits": 3200
+    },
+    "batteryMah": 5500,
+    "chargingWatt": 67,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Xiaomi 15T — official specifications",
+        "url": "https://www.mi.com/global/product/xiaomi-15t/specs/"
+      },
+      {
+        "title": "Xiaomi 15T — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_15t_5g-14177.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "xiaomi-15t-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "xiaomi",
+    "brand": "Xiaomi",
+    "model": "Xiaomi 15T Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-09-24",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "mediatek-dimensity-9400-plus",
+    "chipsetName": "Dimensity 9400+",
+    "gpuModel": "Immortalis-G925",
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": "UFS 4.1",
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "AMOLED",
+      "resolution": "2772 x 1280",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3200
+    },
+    "batteryMah": 5500,
+    "chargingWatt": 90,
+    "wirelessChargingWatt": 50,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Xiaomi 15T Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_15t_pro_5g-14178.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "apple-iphone-17",
@@ -569,6 +1744,167 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "sony-xperia-10-vii",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "sony",
+    "brand": "Sony",
+    "model": "Xperia 10 VII",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Sony",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-09-19",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-6-gen-3",
+    "chipsetName": "Snapdragon 6 Gen 3",
+    "gpuModel": "Adreno 710",
+    "ramVariantsGb": [
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128
+    ],
+    "storageType": "UFS",
+    "display": {
+      "sizeInches": 6.1,
+      "panelType": "OLED",
+      "resolution": "2340 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": null
+    },
+    "batteryMah": 5000,
+    "chargingWatt": null,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Sony Xperia 10 VII — GSMArena specifications",
+        "url": "https://www.gsmarena.com/sony_xperia_10_vii_5g-14137.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "apple-iphone-air",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "apple",
+    "brand": "Apple",
+    "model": "iPhone Air",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Apple",
+    "os": "iOS",
+    "osVersionLaunch": "iOS 26",
+    "releaseDate": "2025-09-19",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "apple-a19-pro",
+    "chipsetName": "Apple A19 Pro",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.5,
+      "panelType": "LTPO Super Retina XDR OLED",
+      "resolution": "2736 x 1260",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": null
+    },
+    "batteryMah": 3149,
+    "chargingWatt": null,
+    "wirelessChargingWatt": 20,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "iPhone Air — GSMArena specifications",
+        "url": "https://www.gsmarena.com/apple_iphone_17_air-13502.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "samsung-galaxy-s25-fe",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "samsung",
+    "brand": "Samsung",
+    "model": "Galaxy S25 FE",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Samsung",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-09-04",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "samsung-exynos-2400",
+    "chipsetName": "Exynos 2400",
+    "gpuModel": "Xclipse 940",
+    "ramVariantsGb": [
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": "UFS 4.0",
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "Dynamic AMOLED 2X",
+      "resolution": "2340 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1900
+    },
+    "batteryMah": 4900,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Samsung Galaxy S25 FE — GSMArena specifications",
+        "url": "https://www.gsmarena.com/samsung_galaxy_s25_fe_5g-14042.php"
+      },
+      {
+        "title": "Samsung Galaxy S25 FE — official specifications",
+        "url": "https://www.samsung.com/uk/smartphones/galaxy-s/galaxy-s25-fe-navy-128gb-sm-s731bdbdeub/"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "google-pixel-10-pro",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -625,6 +1961,333 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "google-pixel-10",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "google-pixel",
+    "brand": "Google Pixel",
+    "model": "Pixel 10",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Google",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-08-28",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "google-tensor-g5",
+    "chipsetName": "Google Tensor G5",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.3,
+      "panelType": "OLED",
+      "resolution": "2424 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3000
+    },
+    "batteryMah": 4970,
+    "chargingWatt": 30,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": 7,
+    "sources": [
+      {
+        "title": "Google Pixel 10 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/google_pixel_10_5g-13979.php"
+      },
+      {
+        "title": "Google Pixel 10 — official specifications",
+        "url": "https://store.google.com/product/pixel_10_specs"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "google-pixel-10-pro-xl",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "google-pixel",
+    "brand": "Google Pixel",
+    "model": "Pixel 10 Pro XL",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Google",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-08-28",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "google-tensor-g5",
+    "chipsetName": "Google Tensor G5",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.8,
+      "panelType": "LTPO OLED",
+      "resolution": "2992 x 1344",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3300
+    },
+    "batteryMah": 5200,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": 25,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Pixel 10 Pro XL — GSMArena specifications",
+        "url": "https://www.gsmarena.com/google_pixel_10_pro_xl_5g-13988.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "vivo-v60",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "vivo",
+    "brand": "Vivo",
+    "model": "V60",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-08-19",
+    "releaseYear": 2025,
+    "marketAvailability": "India and international",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7-gen-4",
+    "chipsetName": "Snapdragon 7 Gen 4",
+    "gpuModel": "Adreno 722",
+    "ramVariantsGb": [
+      8,
+      12,
+      16
+    ],
+    "ramType": "LPDDR4X",
+    "virtualRamSupport": true,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": "UFS 2.2",
+    "display": {
+      "sizeInches": 6.77,
+      "panelType": "AMOLED",
+      "resolution": "2392 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 5000
+    },
+    "batteryMah": 6500,
+    "chargingWatt": 90,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "vivo V60 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_v60_5g-14021.php"
+      },
+      {
+        "title": "vivo V60 — official specifications",
+        "url": "https://www.vivo.com/ph/products/param/v60"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "infinix-gt-30",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "infinix",
+    "brand": "Infinix",
+    "model": "GT 30",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Infinix",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-08-11",
+    "releaseYear": 2025,
+    "marketAvailability": "India and selected markets",
+    "regionalVariants": [],
+    "tier": "Esports",
+    "chipsetId": "mediatek-dimensity-7400",
+    "chipsetName": "Dimensity 7400",
+    "gpuModel": "Mali-G615 MC2",
+    "ramVariantsGb": [
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": "UFS 2.2",
+    "display": {
+      "sizeInches": 6.78,
+      "panelType": "AMOLED",
+      "resolution": "2720 x 1224",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": null
+    },
+    "batteryMah": 5500,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Infinix GT 30 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/infinix_gt_30_5g-14044.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "realme-15-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "realme",
+    "brand": "Realme",
+    "model": "15 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Realme",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-07-30",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7-gen-4",
+    "chipsetName": "Snapdragon 7 Gen 4",
+    "gpuModel": "Adreno 722",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": "UFS 3.1",
+    "display": {
+      "sizeInches": 6.8,
+      "panelType": "OLED",
+      "resolution": "2800 x 1280",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 6500
+    },
+    "batteryMah": 7000,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "15 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/realme_15_pro_5g-14017.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "iqoo-z10r",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "iqoo",
+    "brand": "iQOO",
+    "model": "iQOO Z10R",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-07-29",
+    "releaseYear": 2025,
+    "marketAvailability": "India",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-7400",
+    "chipsetName": "Dimensity 7400",
+    "gpuModel": "Mali-G615 MC2",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": "UFS 2.2",
+    "display": {
+      "sizeInches": 6.77,
+      "panelType": "AMOLED",
+      "resolution": "2392 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1800
+    },
+    "batteryMah": 5700,
+    "chargingWatt": 44,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "iQOO Z10R — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_iqoo_z10r-14024.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "samsung-galaxy-z-fold-7",
@@ -684,6 +2347,385 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "samsung-galaxy-z-flip7",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "samsung",
+    "brand": "Samsung",
+    "model": "Galaxy Z Flip7",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Samsung",
+    "os": "Android",
+    "osVersionLaunch": "Android 16",
+    "releaseDate": "2025-07-25",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "samsung-exynos-2500",
+    "chipsetName": "Exynos 2500",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.9,
+      "panelType": "Foldable Dynamic LTPO AMOLED 2X",
+      "resolution": "2520 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 2600
+    },
+    "batteryMah": 4300,
+    "chargingWatt": 25,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Galaxy Z Flip7 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/samsung_galaxy_z_flip7-13712.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "oppo-k13-turbo-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "oppo",
+    "brand": "OPPO",
+    "model": "K13 Turbo Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "OPPO",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-07-25",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Esports",
+    "chipsetId": "qualcomm-snapdragon-8s-gen-4",
+    "chipsetName": "Snapdragon 8s Gen 4",
+    "gpuModel": "Adreno 825",
+    "ramVariantsGb": [
+      8,
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 4.0",
+    "display": {
+      "sizeInches": 6.8,
+      "panelType": "AMOLED",
+      "resolution": "2800 x 1280",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1600
+    },
+    "batteryMah": 7000,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "K13 Turbo Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/oppo_k13_turbo_pro_5g-14013.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "nothing-phone-3",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "nothing",
+    "brand": "Nothing",
+    "model": "Phone (3)",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Nothing",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-07-15",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8s-gen-4",
+    "chipsetName": "Snapdragon 8s Gen 4",
+    "gpuModel": "Adreno 825",
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.67,
+      "panelType": "OLED",
+      "resolution": "2800 x 1260",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 4500
+    },
+    "batteryMah": 5150,
+    "chargingWatt": 65,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Nothing Phone (3) — GSMArena specifications",
+        "url": "https://www.gsmarena.com/nothing_phone_(3)_5g-13969.php"
+      },
+      {
+        "title": "Nothing Phone (3) — official specifications",
+        "url": "https://nothing.tech/products/phone-3"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "tecno-pova-7-pro-5g",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "tecno",
+    "brand": "Tecno",
+    "model": "Pova 7 Pro 5G",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Tecno",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-07-10",
+    "releaseYear": 2025,
+    "marketAvailability": "India and selected markets",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-7300-ultimate",
+    "chipsetName": "Dimensity 7300 Ultimate",
+    "gpuModel": "Mali-G615 MC2",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": true,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": "UFS 2.2",
+    "display": {
+      "sizeInches": 6.78,
+      "panelType": "AMOLED",
+      "resolution": "2720 x 1224",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 4500
+    },
+    "batteryMah": 6000,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": 30,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Tecno Pova 7 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/tecno_pova_7_pro_5g-13990.php"
+      },
+      {
+        "title": "Tecno POVA 7 Pro 5G — official specifications",
+        "url": "https://www.tecno-mobile.com/phones/tech-specs/techspecs/pova-7-pro-5g/"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "oneplus-nord-5",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "oneplus",
+    "brand": "OnePlus",
+    "model": "Nord 5",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "OnePlus",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-07-08",
+    "releaseYear": 2025,
+    "marketAvailability": "India",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-8s-gen-3",
+    "chipsetName": "Snapdragon 8s Gen 3",
+    "gpuModel": "Adreno 735",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 3.1",
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "Swift AMOLED",
+      "resolution": "2800 x 1272",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1800
+    },
+    "batteryMah": 6800,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Nord 5 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/oneplus_nord_5_5g-13992.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "oneplus-nord-ce5",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "oneplus",
+    "brand": "OnePlus",
+    "model": "Nord CE5",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "OnePlus",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-07-08",
+    "releaseYear": 2025,
+    "marketAvailability": "International",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-8350-apex",
+    "chipsetName": "Dimensity 8350 Apex",
+    "gpuModel": "Mali G615-MC6",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": "UFS 3.1",
+    "display": {
+      "sizeInches": 6.77,
+      "panelType": "Fluid AMOLED",
+      "resolution": "2392 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1430
+    },
+    "batteryMah": 5200,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Nord CE5 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/oneplus_nord_ce5_5g-13792.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "vivo-x200-fe",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "vivo",
+    "brand": "Vivo",
+    "model": "X200 FE",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-07-05",
+    "releaseYear": 2025,
+    "marketAvailability": "India and international",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "mediatek-dimensity-9300-plus",
+    "chipsetName": "Dimensity 9300+",
+    "gpuModel": "Immortalis-G720 MC12",
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 3.1",
+    "display": {
+      "sizeInches": 6.31,
+      "panelType": "LTPO AMOLED",
+      "resolution": "2640 x 1216",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": null
+    },
+    "batteryMah": 6500,
+    "chargingWatt": 90,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "vivo X200 FE — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_x200_fe_5g-13847.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "fairphone-6",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -737,6 +2779,219 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "poco-f7",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "poco",
+    "brand": "POCO",
+    "model": "POCO F7",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-06-24",
+    "releaseYear": 2025,
+    "marketAvailability": "Global (6500 mAh version)",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8s-gen-4",
+    "chipsetName": "Snapdragon 8s Gen 4",
+    "gpuModel": "Adreno 825",
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": "LPDDR5X",
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 4.1",
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "AMOLED",
+      "resolution": "2772 x 1280",
+      "refreshHz": 120,
+      "touchSamplingHz": 480,
+      "peakBrightnessNits": 3200
+    },
+    "batteryMah": 6500,
+    "chargingWatt": 90,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "POCO F7 — official specifications",
+        "url": "https://www.po.co/global/product/poco-f7/specs/"
+      },
+      {
+        "title": "Xiaomi Poco F7 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_poco_f7_5g-13951.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "vivo-t4-ultra",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "vivo",
+    "brand": "Vivo",
+    "model": "T4 Ultra",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-06-18",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-9300-plus",
+    "chipsetName": "Dimensity 9300+",
+    "gpuModel": "Immortalis-G720 MC12",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 3.1",
+    "display": {
+      "sizeInches": 6.67,
+      "panelType": "AMOLED",
+      "resolution": "2800 x 1260",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 5000
+    },
+    "batteryMah": 5500,
+    "chargingWatt": 90,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "T4 Ultra — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_t4_ultra_5g-13927.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "oneplus-13s",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "oneplus",
+    "brand": "OnePlus",
+    "model": "OnePlus 13s",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "OnePlus",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-06-12",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite",
+    "chipsetName": "Snapdragon 8 Elite",
+    "gpuModel": "Adreno 830",
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 4.0",
+    "display": {
+      "sizeInches": 6.32,
+      "panelType": "LTPO AMOLED",
+      "resolution": "2640 x 1216",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": null
+    },
+    "batteryMah": 5850,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "OnePlus 13s — GSMArena specifications",
+        "url": "https://www.gsmarena.com/oneplus_13s_5g-13818.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "huawei-pura-80-ultra",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "huawei",
+    "brand": "Huawei",
+    "model": "Pura 80 Ultra",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Huawei",
+    "os": "HarmonyOS",
+    "osVersionLaunch": "HarmonyOS 5.1",
+    "releaseDate": "2025-06-11",
+    "releaseYear": 2025,
+    "marketAvailability": "China; international version uses EMUI 15",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "hisilicon-kirin-9020",
+    "chipsetName": "Kirin 9020",
+    "gpuModel": "Maleoon 920",
+    "ramVariantsGb": [
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      512,
+      1024
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.8,
+      "panelType": "LTPO OLED",
+      "resolution": "2848 x 1276",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3000
+    },
+    "batteryMah": null,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": 80,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Huawei Pura 80 Ultra — GSMArena specifications",
+        "url": "https://www.gsmarena.com/huawei_pura_80_ultra_5g-13944.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "motorola-edge-2025",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -788,6 +3043,342 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "iqoo-neo-10",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "iqoo",
+    "brand": "iQOO",
+    "model": "iQOO Neo 10",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-06-02",
+    "releaseYear": 2025,
+    "marketAvailability": "India",
+    "regionalVariants": [],
+    "tier": "Esports",
+    "chipsetId": "qualcomm-snapdragon-8s-gen-4",
+    "chipsetName": "Snapdragon 8s Gen 4",
+    "gpuModel": "Adreno 825",
+    "ramVariantsGb": [
+      8,
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.78,
+      "panelType": "AMOLED",
+      "resolution": "2800 x 1260",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 4400
+    },
+    "batteryMah": 7000,
+    "chargingWatt": 120,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "vivo iQOO Neo 10 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_iqoo_neo_10_5g-13904.php"
+      },
+      {
+        "title": "iQOO Neo 10 — official specifications",
+        "url": "https://www.iqoo.com/in/products/param/neo10"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "samsung-galaxy-s25-edge",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "samsung",
+    "brand": "Samsung",
+    "model": "Galaxy S25 Edge",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Samsung",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-05-29",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite",
+    "chipsetName": "Snapdragon 8 Elite",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "LTPO AMOLED 2X",
+      "resolution": "3120 x 1440",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": null
+    },
+    "batteryMah": 3900,
+    "chargingWatt": 25,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Galaxy S25 Edge — GSMArena specifications",
+        "url": "https://www.gsmarena.com/samsung_galaxy_s25_edge-13506.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "realme-gt-7",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "realme",
+    "brand": "Realme",
+    "model": "GT 7",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Realme",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-05-27",
+    "releaseYear": 2025,
+    "marketAvailability": "India and global",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "mediatek-dimensity-9400e",
+    "chipsetName": "Dimensity 9400e",
+    "gpuModel": "Immortalis-G720 MC12",
+    "ramVariantsGb": [
+      8,
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": true,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 4.0",
+    "display": {
+      "sizeInches": 6.78,
+      "panelType": "LTPO AMOLED",
+      "resolution": "2780 x 1264",
+      "refreshHz": 120,
+      "touchSamplingHz": 360,
+      "peakBrightnessNits": 6000
+    },
+    "batteryMah": 7000,
+    "chargingWatt": 120,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Realme GT 7 — official specifications",
+        "url": "https://www.realme.com/in/realme-gt-7-5g/specs"
+      },
+      {
+        "title": "Realme GT 7 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/realme_gt_7_5g-13863.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "nubia-redmagic-10s-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "nubia",
+    "brand": "Nubia",
+    "model": "RedMagic 10S Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Nubia",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-05-26",
+    "releaseYear": 2025,
+    "marketAvailability": "Global",
+    "regionalVariants": [],
+    "tier": "Esports",
+    "chipsetId": "qualcomm-snapdragon-8-elite",
+    "chipsetName": "Snapdragon 8 Elite Leading Version",
+    "gpuModel": "Adreno 830",
+    "ramVariantsGb": [
+      12,
+      16,
+      24
+    ],
+    "ramType": "LPDDR5T",
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": "UFS 4.1 Pro",
+    "display": {
+      "sizeInches": 6.85,
+      "panelType": "AMOLED",
+      "resolution": "2688 x 1216",
+      "refreshHz": 144,
+      "touchSamplingHz": 2500,
+      "peakBrightnessNits": 2000
+    },
+    "batteryMah": 7050,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Nubia RedMagic 10S Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/zte_nubia_redmagic_10spro_5g-13906.php"
+      },
+      {
+        "title": "REDMAGIC 10S Pro — official specifications",
+        "url": "https://global.redmagic.gg/pages/redmagic-10s-pro-specs"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "oppo-reno14-pro-5g",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "oppo",
+    "brand": "OPPO",
+    "model": "Reno 14 Pro 5G",
+    "modelNumber": "CPH2739",
+    "codename": null,
+    "manufacturer": "OPPO",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-05-23",
+    "releaseYear": 2025,
+    "marketAvailability": "India and global",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-8450",
+    "chipsetName": "Dimensity 8450",
+    "gpuModel": "Mali-G720 MC7",
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": "LPDDR5X",
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 3.1",
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "Flexible AMOLED",
+      "resolution": "2800 x 1272",
+      "refreshHz": 120,
+      "touchSamplingHz": 240,
+      "peakBrightnessNits": null
+    },
+    "batteryMah": 6200,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": 50,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "OPPO Reno14 Pro — official specifications",
+        "url": "https://www.oppo.com/in/smartphones/series-reno/reno14-pro/specs/"
+      },
+      {
+        "title": "Oppo Reno14 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/oppo_reno14_pro_5g-13865.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "honor-400-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "honor",
+    "brand": "Honor",
+    "model": "Honor 400 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Honor",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-05-23",
+    "releaseYear": 2025,
+    "marketAvailability": "International",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-8-gen-3",
+    "chipsetName": "Snapdragon 8 Gen 3",
+    "gpuModel": "Adreno 750",
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "AMOLED",
+      "resolution": "2800 x 1280",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 5000
+    },
+    "batteryMah": 5300,
+    "chargingWatt": 100,
+    "wirelessChargingWatt": 50,
+    "gyroscopeSupport": "unknown",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Honor 400 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/honor_400_pro_5g-13798.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "infinix-gt-30-pro",
@@ -845,6 +3436,60 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "iqoo-neo-10-pro-plus",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "iqoo",
+    "brand": "iQOO",
+    "model": "iQOO Neo 10 Pro+",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-05-20",
+    "releaseYear": 2025,
+    "marketAvailability": "China",
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite",
+    "chipsetName": "Snapdragon 8 Elite",
+    "gpuModel": "Adreno 830",
+    "ramVariantsGb": [
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512,
+      1024
+    ],
+    "storageType": "UFS 4.1",
+    "display": {
+      "sizeInches": 6.82,
+      "panelType": "LTPO AMOLED",
+      "resolution": "3168 x 1440",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 4500
+    },
+    "batteryMah": 6800,
+    "chargingWatt": 120,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "iQOO Neo 10 Pro+ — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_iqoo_neo10_pro+_(china)-13882.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "sony-xperia-1-vii",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -898,6 +3543,116 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "nothing-cmf-phone-2-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "nothing",
+    "brand": "Nothing",
+    "model": "CMF Phone 2 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Nothing",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-05-05",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-7300-pro",
+    "chipsetName": "Dimensity 7300 Pro",
+    "gpuModel": "Mali-G615 MC2",
+    "ramVariantsGb": [
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.77,
+      "panelType": "AMOLED",
+      "resolution": "2392 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3000
+    },
+    "batteryMah": 5000,
+    "chargingWatt": 33,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "CMF Phone 2 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/nothing_cmf_phone_2_pro_5g-13821.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "motorola-edge-60-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "motorola",
+    "brand": "Motorola",
+    "model": "Edge 60 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Motorola",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-04-30",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-8350-extreme",
+    "chipsetName": "Dimensity 8350 Extreme",
+    "gpuModel": "Mali-G615 MC6",
+    "ramVariantsGb": [
+      8,
+      12,
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 4.0",
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "P-OLED",
+      "resolution": "2712 x 1220",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 4500
+    },
+    "batteryMah": 6000,
+    "chargingWatt": 90,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Motorola Edge 60 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/motorola_edge_60_pro-13815.php"
+      },
+      {
+        "title": "Motorola Edge 60 Pro — official specifications",
+        "url": "https://www.motorola.com/we/en/p/phones/motorola-edge/60-pro/pmipmht41mf"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "vivo-x200-ultra",
@@ -956,6 +3711,59 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "infinix-note-50s",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "infinix",
+    "brand": "Infinix",
+    "model": "Note 50s",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Infinix",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-04-24",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-7300-ultimate",
+    "chipsetName": "Dimensity 7300 Ultimate",
+    "gpuModel": "Mali-G615 MC2",
+    "ramVariantsGb": [
+      6,
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.78,
+      "panelType": "AMOLED",
+      "resolution": "2436 x 1080",
+      "refreshHz": 144,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1300
+    },
+    "batteryMah": 5500,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Note 50s — GSMArena specifications",
+        "url": "https://www.gsmarena.com/infinix_note_50s_5g-13793.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "oppo-find-x8-ultra",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -1010,6 +3818,165 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "iqoo-z10",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "iqoo",
+    "brand": "iQOO",
+    "model": "iQOO Z10",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Vivo",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-04-16",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7s-gen-3",
+    "chipsetName": "Snapdragon 7s Gen 3",
+    "gpuModel": "Adreno 810",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": "UFS 2.2",
+    "display": {
+      "sizeInches": 6.77,
+      "panelType": "AMOLED",
+      "resolution": "2392 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 5000
+    },
+    "batteryMah": 7300,
+    "chargingWatt": 90,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "iQOO Z10 — GSMArena specifications",
+        "url": "https://www.gsmarena.com/vivo_iqoo_z10-13755.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "motorola-edge-60-stylus",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "motorola",
+    "brand": "Motorola",
+    "model": "Edge 60 Stylus",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Motorola",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-04-15",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7s-gen-2",
+    "chipsetName": "Snapdragon 7s Gen 2",
+    "gpuModel": "Adreno 710",
+    "ramVariantsGb": [
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256
+    ],
+    "storageType": "UFS 2.2",
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "P-OLED",
+      "resolution": "2712 x 1220",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3000
+    },
+    "batteryMah": 5000,
+    "chargingWatt": 68,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Edge 60 Stylus — GSMArena specifications",
+        "url": "https://www.gsmarena.com/motorola_edge_60_stylus_5g-13785.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "motorola-edge-60-fusion",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "motorola",
+    "brand": "Motorola",
+    "model": "Edge 60 Fusion",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Motorola",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-04-09",
+    "releaseYear": 2025,
+    "marketAvailability": "Global (Dimensity 7300 variant)",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-7300",
+    "chipsetName": "Dimensity 7300",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.67,
+      "panelType": "P-OLED",
+      "resolution": "2712 x 1220",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 4500
+    },
+    "batteryMah": 5200,
+    "chargingWatt": 68,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Edge 60 Fusion — GSMArena specifications",
+        "url": "https://www.gsmarena.com/motorola_edge_60_fusion-13752.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "tecno-camon-40-pro-5g",
@@ -1173,6 +4140,59 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "nothing-phone-3a-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "nothing",
+    "brand": "Nothing",
+    "model": "Phone (3a) Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Nothing",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-03-25",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7s-gen-3",
+    "chipsetName": "Snapdragon 7s Gen 3",
+    "gpuModel": "Adreno 810",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.77,
+      "panelType": "AMOLED",
+      "resolution": "2392 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3000
+    },
+    "batteryMah": 5000,
+    "chargingWatt": 50,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Phone (3a) Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/nothing_phone_(3a)_pro-13649.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "samsung-galaxy-a56-5g",
@@ -1341,6 +4361,60 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "samsung-galaxy-a36-5g",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "samsung",
+    "brand": "Samsung",
+    "model": "Galaxy A36 5G",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Samsung",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-03-10",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-6-gen-3",
+    "chipsetName": "Snapdragon 6 Gen 3",
+    "gpuModel": "Adreno 710",
+    "ramVariantsGb": [
+      6,
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "Super AMOLED",
+      "resolution": "2340 x 1080",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1900
+    },
+    "batteryMah": 5000,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Galaxy A36 5G — GSMArena specifications",
+        "url": "https://www.gsmarena.com/samsung_galaxy_a36-13497.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "xiaomi-15",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -1455,6 +4529,112 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "apple-iphone-16e",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "apple",
+    "brand": "Apple",
+    "model": "iPhone 16e",
+    "modelNumber": "A3409",
+    "codename": null,
+    "manufacturer": "Apple",
+    "os": "iOS",
+    "osVersionLaunch": "iOS 18.3.1",
+    "releaseDate": "2025-02-28",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "apple-a18",
+    "chipsetName": "Apple A18",
+    "gpuModel": "Apple GPU (4-core graphics)",
+    "ramVariantsGb": [
+      8
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256,
+      512
+    ],
+    "storageType": "NVMe",
+    "display": {
+      "sizeInches": 6.1,
+      "panelType": "Super Retina XDR OLED",
+      "resolution": "2532 x 1170",
+      "refreshHz": 60,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1200
+    },
+    "batteryMah": 4005,
+    "chargingWatt": null,
+    "wirelessChargingWatt": 7.5,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Apple iPhone 16e — GSMArena specifications",
+        "url": "https://www.gsmarena.com/apple_iphone_16e-13395.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "realme-p3-pro",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "realme",
+    "brand": "Realme",
+    "model": "P3 Pro",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Realme",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-02-25",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "qualcomm-snapdragon-7s-gen-3",
+    "chipsetName": "Snapdragon 7s Gen 3",
+    "gpuModel": "Adreno 810",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      128,
+      256
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.83,
+      "panelType": "AMOLED",
+      "resolution": "2800 x 1272",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 1500
+    },
+    "batteryMah": 6000,
+    "chargingWatt": 80,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "P3 Pro — GSMArena specifications",
+        "url": "https://www.gsmarena.com/realme_p3_pro-13667.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "samsung-galaxy-s25",
@@ -1626,6 +4806,113 @@
     "completenessStatus": "complete"
   },
   {
+    "id": "asus-rog-phone-9-fe",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "asus",
+    "brand": "ASUS",
+    "model": "ROG Phone 9 FE",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "ASUS",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-02-04",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Esports",
+    "chipsetId": "qualcomm-snapdragon-8-gen-3",
+    "chipsetName": "Snapdragon 8 Gen 3",
+    "gpuModel": "Adreno 750",
+    "ramVariantsGb": [
+      16
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256
+    ],
+    "storageType": "UFS 4.0",
+    "display": {
+      "sizeInches": 6.78,
+      "panelType": "LTPO AMOLED",
+      "resolution": "2400 x 1080",
+      "refreshHz": 185,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 2500
+    },
+    "batteryMah": 5500,
+    "chargingWatt": 65,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "ASUS ROG Phone 9 FE — GSMArena specifications",
+        "url": "https://www.gsmarena.com/asus_rog_phone_9_fe-13641.php"
+      },
+      {
+        "title": "ASUS ROG Phone 9 FE — official specifications",
+        "url": "https://www.asus.com/my/news/0ks2sykjlhp46a9b/"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
+    "id": "samsung-galaxy-s25-plus",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "samsung",
+    "brand": "Samsung",
+    "model": "Galaxy S25+",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Samsung",
+    "os": "Android",
+    "osVersionLaunch": "Android 15",
+    "releaseDate": "2025-02-03",
+    "releaseYear": 2025,
+    "marketAvailability": null,
+    "regionalVariants": [],
+    "tier": "Flagship",
+    "chipsetId": "qualcomm-snapdragon-8-elite",
+    "chipsetName": "Snapdragon 8 Elite",
+    "gpuModel": null,
+    "ramVariantsGb": [
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": null,
+    "display": {
+      "sizeInches": 6.7,
+      "panelType": "Dynamic LTPO AMOLED 2X",
+      "resolution": "3120 x 1440",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 2600
+    },
+    "batteryMah": 4900,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": 15,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Galaxy S25+ — GSMArena specifications",
+        "url": "https://www.gsmarena.com/samsung_galaxy_s25+-13609.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
+  },
+  {
     "id": "realme-14-pro-plus",
     "visibility": "public",
     "deviceType": "smartphone",
@@ -1680,6 +4967,59 @@
     ],
     "verificationStatus": "verified",
     "completenessStatus": "complete"
+  },
+  {
+    "id": "redmi-note-14-pro-5g",
+    "visibility": "public",
+    "deviceType": "smartphone",
+    "brandId": "redmi",
+    "brand": "Redmi",
+    "model": "Redmi Note 14 Pro 5G",
+    "modelNumber": null,
+    "codename": null,
+    "manufacturer": "Xiaomi",
+    "os": "Android",
+    "osVersionLaunch": "Android 14",
+    "releaseDate": "2025-01-15",
+    "releaseYear": 2025,
+    "marketAvailability": "Global",
+    "regionalVariants": [],
+    "tier": "Mid-Range",
+    "chipsetId": "mediatek-dimensity-7300-ultra",
+    "chipsetName": "Dimensity 7300 Ultra",
+    "gpuModel": "Mali-G615 MC2",
+    "ramVariantsGb": [
+      8,
+      12
+    ],
+    "ramType": null,
+    "virtualRamSupport": null,
+    "storageVariantsGb": [
+      256,
+      512
+    ],
+    "storageType": "UFS 2.2",
+    "display": {
+      "sizeInches": 6.67,
+      "panelType": "AMOLED",
+      "resolution": "2712 x 1220",
+      "refreshHz": 120,
+      "touchSamplingHz": null,
+      "peakBrightnessNits": 3000
+    },
+    "batteryMah": 5110,
+    "chargingWatt": 45,
+    "wirelessChargingWatt": null,
+    "gyroscopeSupport": "hardware",
+    "softwareSupportYears": null,
+    "sources": [
+      {
+        "title": "Redmi Note 14 Pro 5G — GSMArena specifications",
+        "url": "https://www.gsmarena.com/xiaomi_redmi_note_14_pro_5g_(global)-13613.php"
+      }
+    ],
+    "verificationStatus": "verified",
+    "completenessStatus": "partial"
   },
   {
     "id": "redmi-note-14-pro-plus-5g",

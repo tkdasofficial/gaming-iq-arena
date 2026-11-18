@@ -33,8 +33,8 @@
 - [x] Pages for Upgrade Plan, Terms of Service, Privacy Policy (placeholder text until owner supplies real copy)
 
 ## Exact game sensitivity lists + bigger phone list (Nov 18)
-- [ ] Research each game's real in-game sensitivity names, groups, ranges and what each one is for
-- [ ] Update Free Fire / BGMI / PUBG Mobile settings with exact names + short "why" for each
-- [ ] Show the "why" for each setting on the results screen
-- [ ] Add all mid-range and flagship phones from the bundled list (all brands)
-- [ ] Research and add newer mid-range / flagship models per brand (verified specs with sources only)
+- [x] Research each game's real in-game sensitivity names, groups, ranges and what each one is for
+- [x] Update Free Fire / BGMI / PUBG Mobile settings with exact names + short "why" for each
+- [x] Show the "why" for each setting on the results screen
+- [x] Add all mid-range and flagship phones from the bundled list (all brands)
+- [x] Research and add newer mid-range / flagship models per brand (verified specs with sources only)

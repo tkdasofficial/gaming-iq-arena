@@ -6,7 +6,7 @@
     "parentCompany": "Apple Inc.",
     "country": "United States",
     "isSubBrand": false,
-    "deviceCount": 8,
+    "deviceCount": 10,
     "latestReleaseYear": 2025
   },
   {
@@ -16,7 +16,7 @@
     "parentCompany": "ASUSTeK Computer Inc.",
     "country": "Taiwan",
     "isSubBrand": false,
-    "deviceCount": 3,
+    "deviceCount": 4,
     "latestReleaseYear": 2025
   },
   {
@@ -36,8 +36,8 @@
     "parentCompany": "Google LLC (Alphabet Inc.)",
     "country": "United States",
     "isSubBrand": false,
-    "deviceCount": 4,
-    "latestReleaseYear": 2025
+    "deviceCount": 7,
+    "latestReleaseYear": 2026
   },
   {
     "id": "hmd",
@@ -56,8 +56,8 @@
     "parentCompany": "Honor Device Co., Ltd.",
     "country": "China",
     "isSubBrand": false,
-    "deviceCount": 2,
-    "latestReleaseYear": 2024
+    "deviceCount": 4,
+    "latestReleaseYear": 2025
   },
   {
     "id": "htc",
@@ -76,8 +76,8 @@
     "parentCompany": "Huawei Technologies Co., Ltd.",
     "country": "China",
     "isSubBrand": false,
-    "deviceCount": 2,
-    "latestReleaseYear": 2024
+    "deviceCount": 3,
+    "latestReleaseYear": 2025
   },
   {
     "id": "infinix",
@@ -86,7 +86,7 @@
     "parentCompany": "Transsion Holdings",
     "country": "Hong Kong / China",
     "isSubBrand": false,
-    "deviceCount": 3,
+    "deviceCount": 5,
     "latestReleaseYear": 2025
   },
   {
@@ -96,7 +96,7 @@
     "parentCompany": "Vivo Mobile Communication Co.",
     "country": "China",
     "isSubBrand": true,
-    "deviceCount": 6,
+    "deviceCount": 11,
     "latestReleaseYear": 2025
   },
   {
@@ -106,8 +106,8 @@
     "parentCompany": "Lava International Ltd.",
     "country": "India",
     "isSubBrand": false,
-    "deviceCount": 2,
-    "latestReleaseYear": 2024
+    "deviceCount": 3,
+    "latestReleaseYear": 2025
   },
   {
     "id": "meizu",
@@ -126,7 +126,7 @@
     "parentCompany": "Lenovo Group Ltd.",
     "country": "United States",
     "isSubBrand": false,
-    "deviceCount": 6,
+    "deviceCount": 9,
     "latestReleaseYear": 2025
   },
   {
@@ -146,8 +146,8 @@
     "parentCompany": "Nothing Technology Limited",
     "country": "United Kingdom",
     "isSubBrand": false,
-    "deviceCount": 3,
-    "latestReleaseYear": 2025
+    "deviceCount": 8,
+    "latestReleaseYear": 2026
   },
   {
     "id": "nubia",
@@ -156,8 +156,8 @@
     "parentCompany": "ZTE Corporation",
     "country": "China",
     "isSubBrand": true,
-    "deviceCount": 3,
-    "latestReleaseYear": 2024
+    "deviceCount": 4,
+    "latestReleaseYear": 2025
   },
   {
     "id": "oneplus",
@@ -166,7 +166,7 @@
     "parentCompany": "BBK / OPPO Electronics",
     "country": "China",
     "isSubBrand": false,
-    "deviceCount": 7,
+    "deviceCount": 11,
     "latestReleaseYear": 2026
   },
   {
@@ -176,7 +176,7 @@
     "parentCompany": "Guangdong OPPO Mobile Telecommunications",
     "country": "China",
     "isSubBrand": false,
-    "deviceCount": 4,
+    "deviceCount": 7,
     "latestReleaseYear": 2025
   },
   {
@@ -186,7 +186,7 @@
     "parentCompany": "Xiaomi Corporation",
     "country": "China",
     "isSubBrand": true,
-    "deviceCount": 7,
+    "deviceCount": 9,
     "latestReleaseYear": 2025
   },
   {
@@ -196,7 +196,7 @@
     "parentCompany": "Realme Chongqing Mobile Telecommunications",
     "country": "China",
     "isSubBrand": false,
-    "deviceCount": 6,
+    "deviceCount": 11,
     "latestReleaseYear": 2025
   },
   {
@@ -206,8 +206,8 @@
     "parentCompany": "Xiaomi Corporation",
     "country": "China",
     "isSubBrand": true,
-    "deviceCount": 6,
-    "latestReleaseYear": 2025
+    "deviceCount": 10,
+    "latestReleaseYear": 2026
   },
   {
     "id": "samsung",
@@ -216,7 +216,7 @@
     "parentCompany": "Samsung Electronics Co., Ltd.",
     "country": "South Korea",
     "isSubBrand": false,
-    "deviceCount": 12,
+    "deviceCount": 20,
     "latestReleaseYear": 2026
   },
   {
@@ -236,7 +236,7 @@
     "parentCompany": "Sony Corporation",
     "country": "Japan",
     "isSubBrand": false,
-    "deviceCount": 2,
+    "deviceCount": 3,
     "latestReleaseYear": 2025
   },
   {
@@ -256,7 +256,7 @@
     "parentCompany": "Transsion Holdings",
     "country": "Hong Kong / China",
     "isSubBrand": false,
-    "deviceCount": 2,
+    "deviceCount": 3,
     "latestReleaseYear": 2025
   },
   {
@@ -266,7 +266,7 @@
     "parentCompany": "Vivo Mobile Communication Co.",
     "country": "China",
     "isSubBrand": false,
-    "deviceCount": 4,
+    "deviceCount": 8,
     "latestReleaseYear": 2025
   },
   {
@@ -276,7 +276,7 @@
     "parentCompany": "Xiaomi Corporation",
     "country": "China",
     "isSubBrand": false,
-    "deviceCount": 6,
+    "deviceCount": 10,
     "latestReleaseYear": 2026
   },
   {

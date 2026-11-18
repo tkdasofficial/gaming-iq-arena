@@ -106,8 +106,8 @@ export interface Recommendation {
 export const CORE_LABELS: Record<CoreSettingId, string> = {
   general: 'General',
   redDot: 'Red Dot',
-  scope2x: '2X Scope',
-  scope4x: '4X Scope',
+  scope2x: '2x Scope',
+  scope4x: '4x Scope',
   sniper: 'Sniper Scope',
   freeLook: 'Free Look',
 };
@@ -291,9 +291,13 @@ export function buildRecommendation(device: VerifiedDevice, game: GameRecord, no
     if (extra === 'gyroMode') {
       extras.push(
         gyro === 'included'
-          ? { label: 'Gyroscope', value: 'Scope on', note: 'Hardware gyroscope verified' }
+          ? {
+              label: 'Gyroscope',
+              value: 'Always On',
+              note: 'Choices are Off, Scope On and Always On. The gyroscope values above are set for Always On; pick Scope On if you only want to tilt while aiming.',
+            }
           : gyro === 'not-verified'
-            ? { label: 'Gyroscope', value: 'Off', note: 'Gyroscope not verified for this phone' }
+            ? { label: 'Gyroscope', value: 'Off', note: 'This phone’s gyroscope isn’t verified, so tilt aiming isn’t recommended.' }
             : gyro === 'software-only'
               ? { label: 'Gyroscope', value: 'Off', note: 'Only a software gyroscope is listed' }
               : { label: 'Gyroscope', value: 'Off', note: 'No gyroscope on this phone' }

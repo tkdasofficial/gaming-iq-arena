@@ -58,7 +58,7 @@ describe('device data is never invented', () => {
 describe('results contain the six core settings', () => {
   test.each(['free-fire', 'bgmi', 'pubg-mobile'])('%s', (id) => {
     const rec = buildRecommendation(s25Ultra, game(id));
-    expect(rec.core.map((c) => c.label)).toEqual(['General', 'Red Dot', '2X Scope', '4X Scope', 'Sniper Scope', 'Free Look']);
+    expect(rec.core.map((c) => c.label)).toEqual(['General', 'Red Dot', '2x Scope', '4x Scope', 'Sniper Scope', 'Free Look']);
   });
 });
 
@@ -110,4 +110,49 @@ test('copy text lists every recommended value', () => {
   const total = rec.groups.reduce((n, g) => n + g.settings.length, 0);
   expect(text.split('\n').filter((l) => /: \d+%$/.test(l))).toHaveLength(total);
   expect(text).toContain('Samsung Galaxy S25 Ultra');
+});
+
+describe('in-game names and sections match each game', () => {
+  test('Free Fire lists its six sensitivity sliders by their in-game names', () => {
+    const rec = buildRecommendation(s25Ultra, game('free-fire'));
+    expect(rec.groups[0].settings.map((s) => s.label)).toEqual([
+      'General',
+      'Red Dot',
+      '2x Scope',
+      '4x Scope',
+      'Sniper Scope',
+      'Free Look',
+    ]);
+  });
+
+  test.each(['bgmi', 'pubg-mobile'])('%s shows Free Look, Camera, ADS, Gyro and ADS Gyro sections', (id) => {
+    const rec = buildRecommendation(s25Ultra, game(id));
+    expect(rec.groups.map((g) => g.label)).toEqual(['Free Look', 'Camera', 'ADS', 'Gyro', 'ADS Gyro']);
+    expect(rec.groups.find((g) => g.id === 'camera')?.settings.map((s) => s.label)).toEqual([
+      '3rd Person No Scope',
+      '1st Person No Scope',
+      'Red Dot, Holographic, Aim Assist',
+      '2x Scope',
+      '3x Scope, Win94',
+      '4x Scope, VSS',
+      '6x Scope',
+      '8x Scope',
+    ]);
+  });
+
+  test.each(['bgmi', 'pubg-mobile'])('%s drops both gyro sections without a verified gyroscope', (id) => {
+    const rec = buildRecommendation(redmi13, game(id));
+    expect(rec.groups.map((g) => g.label)).toEqual(['Free Look', 'Camera', 'ADS']);
+  });
+
+  test('every slider explains what it does', () => {
+    for (const g of games) {
+      for (const s of g.config.settings) expect(s.description?.length ?? 0).toBeGreaterThan(10);
+    }
+  });
+
+  test('gyro mode recommends Always On when the gyroscope is verified', () => {
+    const rec = buildRecommendation(s25Ultra, game('bgmi'));
+    expect(rec.extras.find((e) => e.label === 'Gyroscope')?.value).toBe('Always On');
+  });
 });
