@@ -28,3 +28,9 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- The Gaming IQ app (imported from GitHub `tkdasofficial/gaming-iq`) uses the user's own Firebase project (Auth + Firestore, config in `firebase-applet-config.json`); keep it, it holds their existing data.
+- The app is loaded client-only (`ClientOnly` + lazy import in `src/routes/index.tsx`) because Firebase Auth/Firestore are browser SDKs.
+- The original Express server was replaced by TanStack server routes (`src/routes/api/...`), which bundle `data/smartphone-db/*.json`; the server runs on Cloudflare Workers, not Node.

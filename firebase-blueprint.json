@@ -1,0 +1,886 @@
+{
+  "entities": {
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "Authenticated Gaming IQ player account profile stored privately under the user document.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 160
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "role": {
+          "type": "string",
+          "enum": ["player"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "email", "role", "createdAt", "updatedAt"]
+    },
+    "SavedSetup": {
+      "title": "SavedSetup",
+      "description": "User-saved game sensitivity profile synced to Firestore.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "game": {
+          "type": "string",
+          "enum": ["free-fire", "pubg-bgmi"]
+        },
+        "device": {
+          "type": "object"
+        },
+        "claw": {
+          "type": "string",
+          "enum": ["2-finger", "3-finger", "4-finger", "5-finger", "6-finger"]
+        },
+        "playstyle": {
+          "type": "string",
+          "enum": [
+            "aggressive-rush",
+            "headshot-focus",
+            "balanced",
+            "sniper-focus",
+            "aggressive",
+            "tactical"
+          ]
+        },
+        "gyro": {
+          "type": "string",
+          "enum": ["off", "scope-on", "always-on"]
+        },
+        "preferredFps": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "fireButtonSize": {
+          "type": "number"
+        },
+        "dpiOverride": {
+          "type": "string",
+          "maxLength": 16
+        },
+        "cameraPref": {
+          "type": "string",
+          "enum": ["low", "medium", "high"]
+        },
+        "currentSensitivity": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "sliders": {
+          "type": "object"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "name",
+        "game",
+        "device",
+        "claw",
+        "playstyle",
+        "gyro",
+        "preferredFps",
+        "sliders",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "CustomDevice": {
+      "title": "CustomDevice",
+      "description": "User-saved custom smartphone hardware specification in Firestore.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "os": {
+          "type": "string",
+          "enum": ["Android", "iOS", "HarmonyOS"]
+        },
+        "chipset": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "ramGb": {
+          "type": "number"
+        },
+        "storageGb": {
+          "type": "number"
+        },
+        "screenInches": {
+          "type": "number"
+        },
+        "resolution": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "refreshHz": {
+          "type": "number"
+        },
+        "touchSamplingHz": {
+          "type": "number"
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["Flagship", "Esports", "Mid-Range", "Budget", "Tablet"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "brand",
+        "model",
+        "os",
+        "chipset",
+        "ramGb",
+        "storageGb",
+        "screenInches",
+        "resolution",
+        "refreshHz",
+        "tier",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AimLabRun": {
+      "title": "AimLabRun",
+      "description": "Immutable telemetry record of a completed 15-second Aim Lab drill.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "game": {
+          "type": "string",
+          "enum": ["free-fire", "pubg-bgmi"]
+        },
+        "hits": {
+          "type": "number"
+        },
+        "misses": {
+          "type": "number"
+        },
+        "accuracy": {
+          "type": "number"
+        },
+        "avgReactionMs": {
+          "type": "number"
+        },
+        "bestStreak": {
+          "type": "number"
+        },
+        "scalar": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "ownerId",
+        "game",
+        "hits",
+        "misses",
+        "accuracy",
+        "bestStreak",
+        "scalar",
+        "createdAt"
+      ]
+    },
+    "CommunityPreset": {
+      "title": "CommunityPreset",
+      "description": "Publicly readable player-published sensitivity preset without PII.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "playerArchetype": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "game": {
+          "type": "string",
+          "enum": ["free-fire", "pubg-bgmi"]
+        },
+        "claw": {
+          "type": "string",
+          "enum": ["2-finger", "3-finger", "4-finger", "5-finger", "6-finger"]
+        },
+        "playstyle": {
+          "type": "string",
+          "enum": [
+            "aggressive-rush",
+            "headshot-focus",
+            "balanced",
+            "sniper-focus",
+            "aggressive",
+            "tactical"
+          ]
+        },
+        "gyro": {
+          "type": "string",
+          "enum": ["off", "scope-on", "always-on"]
+        },
+        "deviceBrand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "deviceModel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "deviceChipset": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "deviceOs": {
+          "type": "string",
+          "enum": ["Android", "iOS", "HarmonyOS"]
+        },
+        "deviceScreenInches": {
+          "type": "number"
+        },
+        "deviceRefreshHz": {
+          "type": "number"
+        },
+        "deviceRamGb": {
+          "type": "number"
+        },
+        "deviceStorageGb": {
+          "type": "number"
+        },
+        "deviceResolution": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "headlineMetric": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 240
+        },
+        "sliders": {
+          "type": "object"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "authorId",
+        "authorName",
+        "visibility",
+        "name",
+        "playerArchetype",
+        "game",
+        "claw",
+        "playstyle",
+        "gyro",
+        "deviceBrand",
+        "deviceModel",
+        "deviceChipset",
+        "deviceOs",
+        "deviceScreenInches",
+        "deviceRefreshHz",
+        "deviceRamGb",
+        "deviceStorageGb",
+        "deviceResolution",
+        "headlineMetric",
+        "description",
+        "sliders",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Brand": {
+      "title": "Brand",
+      "description": "Publicly readable international smartphone manufacturer or independent sub-brand.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "parentCompany": {
+          "type": ["string", "null"],
+          "maxLength": 80
+        },
+        "country": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "isSubBrand": {
+          "type": "boolean"
+        },
+        "deviceCount": {
+          "type": "number"
+        },
+        "latestReleaseYear": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "visibility",
+        "name",
+        "parentCompany",
+        "country",
+        "isSubBrand",
+        "deviceCount",
+        "latestReleaseYear",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Chipset": {
+      "title": "Chipset",
+      "description": "Publicly readable mobile SoC and GPU architecture specification.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public"]
+        },
+        "manufacturer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "processorModel": {
+          "type": ["string", "null"],
+          "maxLength": 60
+        },
+        "cpuArchitecture": {
+          "type": ["string", "null"],
+          "maxLength": 60
+        },
+        "cpuCores": {
+          "type": ["number", "null"]
+        },
+        "cpuCoreConfig": {
+          "type": ["string", "null"],
+          "maxLength": 120
+        },
+        "maxClockSpeedGhz": {
+          "type": ["number", "null"]
+        },
+        "processNodeNm": {
+          "type": ["number", "null"]
+        },
+        "gpuManufacturer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "gpuModel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "gpuArchitecture": {
+          "type": ["string", "null"],
+          "maxLength": 60
+        },
+        "gpuClockMhz": {
+          "type": ["number", "null"]
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["Flagship", "Esports", "Mid-Range", "Budget"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "visibility",
+        "manufacturer",
+        "name",
+        "processorModel",
+        "cpuArchitecture",
+        "cpuCores",
+        "cpuCoreConfig",
+        "maxClockSpeedGhz",
+        "processNodeNm",
+        "gpuManufacturer",
+        "gpuModel",
+        "gpuArchitecture",
+        "gpuClockMhz",
+        "tier",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "SmartphoneDevice": {
+      "title": "SmartphoneDevice",
+      "description": "Publicly readable verified 2023–2026 international smartphone record (smartphones only, zero tablets).",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public"]
+        },
+        "deviceType": {
+          "type": "string",
+          "enum": ["smartphone"]
+        },
+        "brandId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "modelNumber": {
+          "type": ["string", "null"],
+          "maxLength": 80
+        },
+        "codename": {
+          "type": ["string", "null"],
+          "maxLength": 60
+        },
+        "manufacturer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "os": {
+          "type": "string",
+          "enum": ["Android", "iOS", "HarmonyOS"]
+        },
+        "osVersionLaunch": {
+          "type": ["string", "null"],
+          "maxLength": 80
+        },
+        "releaseDate": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^202[3-9]-[0-1][0-9]-[0-3][0-9]$"
+        },
+        "releaseYear": {
+          "type": "number"
+        },
+        "marketAvailability": {
+          "type": ["string", "null"],
+          "maxLength": 80
+        },
+        "regionalVariants": {
+          "type": "array"
+        },
+        "tier": {
+          "type": "string",
+          "enum": ["Flagship", "Esports", "Mid-Range", "Budget"]
+        },
+        "chipsetId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "chipsetName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "gpuModel": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "ramVariantsGb": {
+          "type": "array"
+        },
+        "ramType": {
+          "type": ["string", "null"],
+          "maxLength": 40
+        },
+        "virtualRamSupport": {
+          "type": ["boolean", "null"]
+        },
+        "storageVariantsGb": {
+          "type": "array"
+        },
+        "storageType": {
+          "type": ["string", "null"],
+          "maxLength": 40
+        },
+        "display": {
+          "type": "object"
+        },
+        "batteryMah": {
+          "type": ["number", "null"]
+        },
+        "chargingWatt": {
+          "type": ["number", "null"]
+        },
+        "wirelessChargingWatt": {
+          "type": ["number", "null"]
+        },
+        "gyroscopeSupport": {
+          "type": "string",
+          "enum": ["hardware", "software", "none", "unknown"]
+        },
+        "softwareSupportYears": {
+          "type": ["number", "null"]
+        },
+        "sources": {
+          "type": "array"
+        },
+        "verificationStatus": {
+          "type": "string",
+          "enum": ["verified", "partial"]
+        },
+        "completenessStatus": {
+          "type": "string",
+          "enum": ["complete", "partial"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "visibility",
+        "deviceType",
+        "brandId",
+        "brand",
+        "model",
+        "modelNumber",
+        "codename",
+        "manufacturer",
+        "os",
+        "osVersionLaunch",
+        "releaseDate",
+        "releaseYear",
+        "marketAvailability",
+        "regionalVariants",
+        "tier",
+        "chipsetId",
+        "chipsetName",
+        "gpuModel",
+        "ramVariantsGb",
+        "ramType",
+        "virtualRamSupport",
+        "storageVariantsGb",
+        "storageType",
+        "display",
+        "batteryMah",
+        "chargingWatt",
+        "wirelessChargingWatt",
+        "gyroscopeSupport",
+        "softwareSupportYears",
+        "sources",
+        "verificationStatus",
+        "completenessStatus",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "GameCompatibility": {
+      "title": "GameCompatibility",
+      "description": "Per-game verified or explicitly unverified FPS compatibility record for a smartphone.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": ["public"]
+        },
+        "deviceId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "gameKey": {
+          "type": "string",
+          "enum": ["free-fire", "free-fire-max", "bgmi", "pubg-mobile"]
+        },
+        "supportedFps": {
+          "type": "array"
+        },
+        "maxVerifiedFps": {
+          "type": ["number", "null"]
+        },
+        "graphicsSettings": {
+          "type": ["string", "null"],
+          "maxLength": 120
+        },
+        "gyroscopeSupport": {
+          "type": "string",
+          "enum": ["hardware", "software", "none", "unknown"]
+        },
+        "compatibilityRegion": {
+          "type": ["string", "null"],
+          "maxLength": 60
+        },
+        "sourceUrl": {
+          "type": ["string", "null"],
+          "maxLength": 300
+        },
+        "verificationStatus": {
+          "type": "string",
+          "enum": ["verified", "unverified"]
+        },
+        "lastVerifiedAt": {
+          "type": ["string", "null"],
+          "maxLength": 30
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "visibility",
+        "deviceId",
+        "gameKey",
+        "supportedFps",
+        "maxVerifiedFps",
+        "graphicsSettings",
+        "gyroscopeSupport",
+        "compatibilityRegion",
+        "sourceUrl",
+        "verificationStatus",
+        "lastVerifiedAt",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserAccount" },
+      "description": "Private authenticated player account profile."
+    },
+    "/users/{userId}/savedSetups/{setupId}": {
+      "schema": { "$ref": "#/entities/SavedSetup" },
+      "description": "User-owned sensitivity profiles saved to Firestore."
+    },
+    "/users/{userId}/customDevices/{deviceId}": {
+      "schema": { "$ref": "#/entities/CustomDevice" },
+      "description": "User-owned custom smartphone hardware specifications."
+    },
+    "/users/{userId}/aimLabRuns/{runId}": {
+      "schema": { "$ref": "#/entities/AimLabRun" },
+      "description": "User-owned Aim Lab drill session results."
+    },
+    "/presets/{presetId}": {
+      "schema": { "$ref": "#/entities/CommunityPreset" },
+      "description": "Publicly readable non-PII community sensitivity presets authored by verified users."
+    },
+    "/brands/{brandId}": {
+      "schema": { "$ref": "#/entities/Brand" },
+      "description": "Publicly readable smartphone manufacturer and sub-brand catalog."
+    },
+    "/chipsets/{chipsetId}": {
+      "schema": { "$ref": "#/entities/Chipset" },
+      "description": "Publicly readable SoC CPU/GPU architecture catalog."
+    },
+    "/devices/{deviceId}": {
+      "schema": { "$ref": "#/entities/SmartphoneDevice" },
+      "description": "Publicly readable verified 2023–2026 smartphone hardware catalog."
+    },
+    "/game_compatibility/{compatId}": {
+      "schema": { "$ref": "#/entities/GameCompatibility" },
+      "description": "Publicly readable per-game verified FPS compatibility records."
+    }
+  }
+}

@@ -1,0 +1,292 @@
+[
+  {
+    "id": "apple",
+    "visibility": "public",
+    "name": "Apple",
+    "parentCompany": "Apple Inc.",
+    "country": "United States",
+    "isSubBrand": false,
+    "deviceCount": 8,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "asus",
+    "visibility": "public",
+    "name": "ASUS",
+    "parentCompany": "ASUSTeK Computer Inc.",
+    "country": "Taiwan",
+    "isSubBrand": false,
+    "deviceCount": 3,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "fairphone",
+    "visibility": "public",
+    "name": "Fairphone",
+    "parentCompany": "Fairphone B.V.",
+    "country": "Netherlands",
+    "isSubBrand": false,
+    "deviceCount": 1,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "google-pixel",
+    "visibility": "public",
+    "name": "Google Pixel",
+    "parentCompany": "Google LLC (Alphabet Inc.)",
+    "country": "United States",
+    "isSubBrand": false,
+    "deviceCount": 4,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "hmd",
+    "visibility": "public",
+    "name": "HMD",
+    "parentCompany": "HMD Global Oy",
+    "country": "Finland",
+    "isSubBrand": false,
+    "deviceCount": 1,
+    "latestReleaseYear": 2024
+  },
+  {
+    "id": "honor",
+    "visibility": "public",
+    "name": "Honor",
+    "parentCompany": "Honor Device Co., Ltd.",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 2,
+    "latestReleaseYear": 2024
+  },
+  {
+    "id": "htc",
+    "visibility": "public",
+    "name": "HTC",
+    "parentCompany": "HTC Corporation",
+    "country": "Taiwan",
+    "isSubBrand": false,
+    "deviceCount": 1,
+    "latestReleaseYear": 2024
+  },
+  {
+    "id": "huawei",
+    "visibility": "public",
+    "name": "Huawei",
+    "parentCompany": "Huawei Technologies Co., Ltd.",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 2,
+    "latestReleaseYear": 2024
+  },
+  {
+    "id": "infinix",
+    "visibility": "public",
+    "name": "Infinix",
+    "parentCompany": "Transsion Holdings",
+    "country": "Hong Kong / China",
+    "isSubBrand": false,
+    "deviceCount": 3,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "iqoo",
+    "visibility": "public",
+    "name": "iQOO",
+    "parentCompany": "Vivo Mobile Communication Co.",
+    "country": "China",
+    "isSubBrand": true,
+    "deviceCount": 6,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "lava",
+    "visibility": "public",
+    "name": "Lava",
+    "parentCompany": "Lava International Ltd.",
+    "country": "India",
+    "isSubBrand": false,
+    "deviceCount": 2,
+    "latestReleaseYear": 2024
+  },
+  {
+    "id": "meizu",
+    "visibility": "public",
+    "name": "Meizu",
+    "parentCompany": "DreamSmart Group",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 1,
+    "latestReleaseYear": 2023
+  },
+  {
+    "id": "motorola",
+    "visibility": "public",
+    "name": "Motorola",
+    "parentCompany": "Lenovo Group Ltd.",
+    "country": "United States",
+    "isSubBrand": false,
+    "deviceCount": 6,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "nokia",
+    "visibility": "public",
+    "name": "Nokia",
+    "parentCompany": "HMD Global Oy (Licensee)",
+    "country": "Finland",
+    "isSubBrand": false,
+    "deviceCount": 1,
+    "latestReleaseYear": 2023
+  },
+  {
+    "id": "nothing",
+    "visibility": "public",
+    "name": "Nothing",
+    "parentCompany": "Nothing Technology Limited",
+    "country": "United Kingdom",
+    "isSubBrand": false,
+    "deviceCount": 3,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "nubia",
+    "visibility": "public",
+    "name": "Nubia",
+    "parentCompany": "ZTE Corporation",
+    "country": "China",
+    "isSubBrand": true,
+    "deviceCount": 3,
+    "latestReleaseYear": 2024
+  },
+  {
+    "id": "oneplus",
+    "visibility": "public",
+    "name": "OnePlus",
+    "parentCompany": "BBK / OPPO Electronics",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 7,
+    "latestReleaseYear": 2026
+  },
+  {
+    "id": "oppo",
+    "visibility": "public",
+    "name": "OPPO",
+    "parentCompany": "Guangdong OPPO Mobile Telecommunications",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 4,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "poco",
+    "visibility": "public",
+    "name": "POCO",
+    "parentCompany": "Xiaomi Corporation",
+    "country": "China",
+    "isSubBrand": true,
+    "deviceCount": 7,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "realme",
+    "visibility": "public",
+    "name": "Realme",
+    "parentCompany": "Realme Chongqing Mobile Telecommunications",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 6,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "redmi",
+    "visibility": "public",
+    "name": "Redmi",
+    "parentCompany": "Xiaomi Corporation",
+    "country": "China",
+    "isSubBrand": true,
+    "deviceCount": 6,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "samsung",
+    "visibility": "public",
+    "name": "Samsung",
+    "parentCompany": "Samsung Electronics Co., Ltd.",
+    "country": "South Korea",
+    "isSubBrand": false,
+    "deviceCount": 12,
+    "latestReleaseYear": 2026
+  },
+  {
+    "id": "sharp",
+    "visibility": "public",
+    "name": "Sharp",
+    "parentCompany": "Sharp Corporation",
+    "country": "Japan",
+    "isSubBrand": false,
+    "deviceCount": 1,
+    "latestReleaseYear": 2024
+  },
+  {
+    "id": "sony",
+    "visibility": "public",
+    "name": "Sony",
+    "parentCompany": "Sony Corporation",
+    "country": "Japan",
+    "isSubBrand": false,
+    "deviceCount": 2,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "tcl",
+    "visibility": "public",
+    "name": "TCL",
+    "parentCompany": "TCL Communication",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 1,
+    "latestReleaseYear": 2024
+  },
+  {
+    "id": "tecno",
+    "visibility": "public",
+    "name": "Tecno",
+    "parentCompany": "Transsion Holdings",
+    "country": "Hong Kong / China",
+    "isSubBrand": false,
+    "deviceCount": 2,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "vivo",
+    "visibility": "public",
+    "name": "Vivo",
+    "parentCompany": "Vivo Mobile Communication Co.",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 4,
+    "latestReleaseYear": 2025
+  },
+  {
+    "id": "xiaomi",
+    "visibility": "public",
+    "name": "Xiaomi",
+    "parentCompany": "Xiaomi Corporation",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 6,
+    "latestReleaseYear": 2026
+  },
+  {
+    "id": "zte",
+    "visibility": "public",
+    "name": "ZTE",
+    "parentCompany": "ZTE Corporation",
+    "country": "China",
+    "isSubBrand": false,
+    "deviceCount": 1,
+    "latestReleaseYear": 2024
+  }
+]
