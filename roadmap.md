@@ -15,3 +15,13 @@
 - [x] Calibrate (game, phone, play style, results)
 - [x] Presets, Saved, Aim Lab, device picker, admin sync, sign-in page
 - [x] Verify on phone + desktop
+
+## Premium minimalist rebuild (Nov 2026 brief)
+- [ ] New design system: light/dark follows phone, graphite accent, no gradients/glow
+- [ ] Database: games table + small starter catalog (8 brands)
+- [ ] Brand → Model → Game → Generate flow with verified device preview
+- [ ] Recommendation computed on the server per game
+- [ ] Results page with Copy All, Save
+- [ ] Dashboard sections: benefits + supported games
+- [ ] Extra pages per user's answer (Saved / Presets / Aim Lab)
+- [ ] Verify on phone + desktop, light + dark
