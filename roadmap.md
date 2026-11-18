@@ -38,3 +38,9 @@
 - [x] Show the "why" for each setting on the results screen
 - [x] Add all mid-range and flagship phones from the bundled list (all brands)
 - [x] Research and add newer mid-range / flagship models per brand (verified specs with sources only)
+
+## Game-specific sensitivity system (Nov 18 brief)
+- [ ] Database: separate setting structures per game (schemas, sections, settings, per-game starting values) with checks that block mixing games
+- [ ] Free Fire: only its six settings; PUBG Mobile + BGMI: shared Camera / ADS / Gyroscope / ADS Gyroscope / Free Look with exact labels (incl. TPP Aim, FPP Aim)
+- [ ] Results screen renders by the game's structure (collapsible sections for PUBG/BGMI)
+- [ ] Tests for each game's structure + cross-game blocking; check all three games in the browser

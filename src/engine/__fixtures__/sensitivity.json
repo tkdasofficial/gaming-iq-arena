@@ -1,0 +1,1298 @@
+{
+ "schemas": [
+  {
+   "id": "free-fire",
+   "name": "Free Fire sensitivity",
+   "unit": ""
+  },
+  {
+   "id": "pubg-family",
+   "name": "PUBG Mobile / BGMI sensitivity",
+   "unit": "%"
+  }
+ ],
+ "categories": [
+  {
+   "id": "free-fire.sensitivity",
+   "schema_id": "free-fire",
+   "label": "Sensitivity",
+   "description": "In game: Settings → Sensitivity. Every slider runs from 0 to 200 — higher turns the camera faster for the same swipe.",
+   "display_order": 1,
+   "requires_gyro": false
+  },
+  {
+   "id": "pubg-family.camera",
+   "schema_id": "pubg-family",
+   "label": "Camera",
+   "description": "In game: Settings → Sensitivity → Camera Sensitivity. Swipe speed when you are NOT firing — turning, checking corners and lining up a shot.",
+   "display_order": 1,
+   "requires_gyro": false
+  },
+  {
+   "id": "pubg-family.ads",
+   "schema_id": "pubg-family",
+   "label": "ADS",
+   "description": "In game: Settings → Sensitivity → ADS Sensitivity. Swipe speed WHILE firing. This is what you pull down against recoil, so it matters most for sprays.",
+   "display_order": 2,
+   "requires_gyro": false
+  },
+  {
+   "id": "pubg-family.gyro",
+   "schema_id": "pubg-family",
+   "label": "Gyroscope",
+   "description": "In game: Settings → Sensitivity → Gyroscope Sensitivity. How far the view moves when you tilt the phone. Works only with Gyroscope set to Scope On or Always On.",
+   "display_order": 3,
+   "requires_gyro": true
+  },
+  {
+   "id": "pubg-family.ads-gyro",
+   "schema_id": "pubg-family",
+   "label": "ADS Gyroscope",
+   "description": "In game: Settings → Sensitivity → ADS Gyroscope Sensitivity. Tilt speed WHILE firing — gyro players tilt the phone down to control recoil.",
+   "display_order": 4,
+   "requires_gyro": true
+  },
+  {
+   "id": "pubg-family.free-look",
+   "schema_id": "pubg-family",
+   "label": "Free Look",
+   "description": "In game: Settings → Sensitivity → Camera Sensitivity (Free Look). Moves only the camera while you hold the eye button — your aim stays put. Tune it for comfortable looking around.",
+   "display_order": 5,
+   "requires_gyro": false
+  }
+ ],
+ "settings": [
+  {
+   "id": "free-fire.sensitivity.general",
+   "schema_id": "free-fire",
+   "category_id": "free-fire.sensitivity",
+   "key": "general",
+   "label": "General",
+   "description": "Camera and aim speed when you’re not scoped in — turning, looking around and close-range drag shots.",
+   "min_value": 0,
+   "max_value": 200,
+   "display_order": 1,
+   "input_kind": "touch",
+   "core_slot": "general"
+  },
+  {
+   "id": "free-fire.sensitivity.red-dot",
+   "schema_id": "free-fire",
+   "category_id": "free-fire.sensitivity",
+   "key": "red-dot",
+   "label": "Red Dot",
+   "description": "Aim speed with a red dot sight. Higher helps fast close-range tracking; too high overshoots the target.",
+   "min_value": 0,
+   "max_value": 200,
+   "display_order": 2,
+   "input_kind": "touch",
+   "core_slot": "redDot"
+  },
+  {
+   "id": "free-fire.sensitivity.scope-2x",
+   "schema_id": "free-fire",
+   "category_id": "free-fire.sensitivity",
+   "key": "scope-2x",
+   "label": "2X Scope",
+   "description": "Aim speed through a 2x scope, for steady tracking at medium range.",
+   "min_value": 0,
+   "max_value": 200,
+   "display_order": 3,
+   "input_kind": "touch",
+   "core_slot": "scope2x"
+  },
+  {
+   "id": "free-fire.sensitivity.scope-4x",
+   "schema_id": "free-fire",
+   "category_id": "free-fire.sensitivity",
+   "key": "scope-4x",
+   "label": "4X Scope",
+   "description": "Aim speed through a 4x scope. Lower values make small corrections easier at long range.",
+   "min_value": 0,
+   "max_value": 200,
+   "display_order": 4,
+   "input_kind": "touch",
+   "core_slot": "scope4x"
+  },
+  {
+   "id": "free-fire.sensitivity.sniper",
+   "schema_id": "free-fire",
+   "category_id": "free-fire.sensitivity",
+   "key": "sniper",
+   "label": "Sniper Scope",
+   "description": "Aim speed in sniper scopes. Kept lower so you can line up precise long-range shots.",
+   "min_value": 0,
+   "max_value": 200,
+   "display_order": 5,
+   "input_kind": "touch",
+   "core_slot": "sniper"
+  },
+  {
+   "id": "free-fire.sensitivity.free-look",
+   "schema_id": "free-fire",
+   "category_id": "free-fire.sensitivity",
+   "key": "free-look",
+   "label": "Free Look",
+   "description": "Camera speed while you hold the eye button to look around without moving your aim.",
+   "min_value": 0,
+   "max_value": 200,
+   "display_order": 6,
+   "input_kind": "touch",
+   "core_slot": "freeLook"
+  },
+  {
+   "id": "pubg-family.camera.tpp-no-scope",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "tpp-no-scope",
+   "label": "TPP No Scope",
+   "description": "Turning speed in third person without a scope — your main look-around speed.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 1,
+   "input_kind": "touch",
+   "core_slot": "general"
+  },
+  {
+   "id": "pubg-family.camera.fpp-no-scope",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "fpp-no-scope",
+   "label": "FPP No Scope",
+   "description": "Turning speed in first-person mode without a scope.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 2,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.camera.tpp-aim",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "tpp-aim",
+   "label": "TPP Aim",
+   "description": "Swipe speed while aiming without a scope in third person, before you fire.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 3,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.camera.fpp-aim",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "fpp-aim",
+   "label": "FPP Aim",
+   "description": "Swipe speed while aiming without a scope in first person, before you fire.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 4,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.camera.red-dot",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "red-dot",
+   "label": "Red Dot, Holographic, Aim Assist",
+   "description": "Aim speed with close-range sights (red dot, holographic) and iron sights, before you fire.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 5,
+   "input_kind": "touch",
+   "core_slot": "redDot"
+  },
+  {
+   "id": "pubg-family.camera.scope-2x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "scope-2x",
+   "label": "2X Scope",
+   "description": "Aim speed with a 2x scope before you start firing.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 6,
+   "input_kind": "touch",
+   "core_slot": "scope2x"
+  },
+  {
+   "id": "pubg-family.camera.scope-3x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "scope-3x",
+   "label": "3X Scope, Win94",
+   "description": "Aim speed with a 3x scope and the Win94’s built-in scope.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 7,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.camera.scope-4x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "scope-4x",
+   "label": "4X Scope, VSS",
+   "description": "Aim speed with a 4x scope and the VSS’s built-in scope.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 8,
+   "input_kind": "touch",
+   "core_slot": "scope4x"
+  },
+  {
+   "id": "pubg-family.camera.scope-6x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "scope-6x",
+   "label": "6X Scope",
+   "description": "Aim speed with a 6x scope. Lower values keep long-range aim steady.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 9,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.camera.scope-8x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.camera",
+   "key": "scope-8x",
+   "label": "8X Scope",
+   "description": "Aim speed with an 8x scope for sniping. Kept low for precise shots.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 10,
+   "input_kind": "touch",
+   "core_slot": "sniper"
+  },
+  {
+   "id": "pubg-family.ads.tpp-no-scope",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "tpp-no-scope",
+   "label": "TPP No Scope",
+   "description": "Aim speed while hip-firing in third person.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 1,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.fpp-no-scope",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "fpp-no-scope",
+   "label": "FPP No Scope",
+   "description": "Aim speed while hip-firing in first person.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 2,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.tpp-aim",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "tpp-aim",
+   "label": "TPP Aim",
+   "description": "Swipe speed while firing when aiming without a scope in third person.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 3,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.fpp-aim",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "fpp-aim",
+   "label": "FPP Aim",
+   "description": "Swipe speed while firing when aiming without a scope in first person.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 4,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.red-dot",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "red-dot",
+   "label": "Red Dot, Holographic, Aim Assist",
+   "description": "Recoil control while firing with a red dot, holographic or iron sight.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 5,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.scope-2x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "scope-2x",
+   "label": "2X Scope",
+   "description": "Recoil control while firing with a 2x scope.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 6,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.scope-3x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "scope-3x",
+   "label": "3X Scope, Win94",
+   "description": "Recoil control while firing with a 3x scope or Win94.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 7,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.scope-4x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "scope-4x",
+   "label": "4X Scope, VSS",
+   "description": "Recoil control while firing with a 4x scope or VSS. Lower makes sprays easier to hold.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 8,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.scope-6x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "scope-6x",
+   "label": "6X Scope",
+   "description": "Recoil control while firing with a 6x scope.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 9,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads.scope-8x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads",
+   "key": "scope-8x",
+   "label": "8X Scope",
+   "description": "Recoil control while firing with an 8x scope.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 10,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.tpp-no-scope",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "tpp-no-scope",
+   "label": "TPP No Scope",
+   "description": "Tilt-aim speed in third person without a scope (used with Always On).",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 1,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.fpp-no-scope",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "fpp-no-scope",
+   "label": "FPP No Scope",
+   "description": "Tilt-aim speed in first person without a scope (used with Always On).",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 2,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.tpp-aim",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "tpp-aim",
+   "label": "TPP Aim",
+   "description": "Tilt speed while aiming without a scope in third person, before you fire.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 3,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.fpp-aim",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "fpp-aim",
+   "label": "FPP Aim",
+   "description": "Tilt speed while aiming without a scope in first person, before you fire.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 4,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.red-dot",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "red-dot",
+   "label": "Red Dot, Holographic, Aim Assist",
+   "description": "Tilt-aim speed with a red dot, holographic or iron sight.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 5,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.scope-2x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "scope-2x",
+   "label": "2X Scope",
+   "description": "Tilt-aim speed with a 2x scope.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 6,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.scope-3x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "scope-3x",
+   "label": "3X Scope, Win94",
+   "description": "Tilt-aim speed with a 3x scope or Win94.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 7,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.scope-4x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "scope-4x",
+   "label": "4X Scope, VSS",
+   "description": "Tilt-aim speed with a 4x scope or VSS.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 8,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.scope-6x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "scope-6x",
+   "label": "6X Scope",
+   "description": "Tilt-aim speed with a 6x scope.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 9,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.gyro.scope-8x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.gyro",
+   "key": "scope-8x",
+   "label": "8X Scope",
+   "description": "Tilt-aim speed with an 8x scope.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 10,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.tpp-no-scope",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "tpp-no-scope",
+   "label": "TPP No Scope",
+   "description": "Tilt recoil control while hip-firing in third person.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 1,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.fpp-no-scope",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "fpp-no-scope",
+   "label": "FPP No Scope",
+   "description": "Tilt recoil control while hip-firing in first person.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 2,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.tpp-aim",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "tpp-aim",
+   "label": "TPP Aim",
+   "description": "Tilt speed while firing when aiming without a scope in third person.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 3,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.fpp-aim",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "fpp-aim",
+   "label": "FPP Aim",
+   "description": "Tilt speed while firing when aiming without a scope in first person.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 4,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.red-dot",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "red-dot",
+   "label": "Red Dot, Holographic, Aim Assist",
+   "description": "Tilt recoil control while firing with a red dot, holographic or iron sight.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 5,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.scope-2x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "scope-2x",
+   "label": "2X Scope",
+   "description": "Tilt recoil control while firing with a 2x scope.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 6,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.scope-3x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "scope-3x",
+   "label": "3X Scope, Win94",
+   "description": "Tilt recoil control while firing with a 3x scope or Win94.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 7,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.scope-4x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "scope-4x",
+   "label": "4X Scope, VSS",
+   "description": "Tilt recoil control while firing with a 4x scope or VSS.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 8,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.scope-6x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "scope-6x",
+   "label": "6X Scope",
+   "description": "Tilt recoil control while firing with a 6x scope.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 9,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.ads-gyro.scope-8x",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.ads-gyro",
+   "key": "scope-8x",
+   "label": "8X Scope",
+   "description": "Tilt recoil control while firing with an 8x scope.",
+   "min_value": 1,
+   "max_value": 400,
+   "display_order": 10,
+   "input_kind": "gyro",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.free-look.tpp",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.free-look",
+   "key": "tpp",
+   "label": "TPP Camera (Character, Vehicle)",
+   "description": "Eye-button camera speed in third person, on foot or in a vehicle.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 1,
+   "input_kind": "touch",
+   "core_slot": "freeLook"
+  },
+  {
+   "id": "pubg-family.free-look.fpp",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.free-look",
+   "key": "fpp",
+   "label": "FPP Camera (Character)",
+   "description": "Eye-button camera speed in first-person mode.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 2,
+   "input_kind": "touch",
+   "core_slot": null
+  },
+  {
+   "id": "pubg-family.free-look.parachuting",
+   "schema_id": "pubg-family",
+   "category_id": "pubg-family.free-look",
+   "key": "parachuting",
+   "label": "Camera (Parachuting)",
+   "description": "Camera speed while skydiving and parachuting, to scan for landing spots and enemies.",
+   "min_value": 1,
+   "max_value": 300,
+   "display_order": 3,
+   "input_kind": "touch",
+   "core_slot": null
+  }
+ ],
+ "games": [
+  {
+   "id": "free-fire",
+   "name": "Garena Free Fire",
+   "short_name": "Free Fire",
+   "publisher": "Garena",
+   "supports_gyro": false,
+   "sensitivity_schema_id": "free-fire",
+   "config": {
+    "extras": [
+     "fireButton"
+    ]
+   }
+  },
+  {
+   "id": "bgmi",
+   "name": "Battlegrounds Mobile India",
+   "short_name": "BGMI",
+   "publisher": "Krafton",
+   "supports_gyro": true,
+   "sensitivity_schema_id": "pubg-family",
+   "config": {
+    "extras": [
+     "gyroMode"
+    ]
+   }
+  },
+  {
+   "id": "pubg-mobile",
+   "name": "PUBG Mobile",
+   "short_name": "PUBG Mobile",
+   "publisher": "Krafton / Tencent",
+   "supports_gyro": true,
+   "sensitivity_schema_id": "pubg-family",
+   "config": {
+    "extras": [
+     "gyroMode"
+    ]
+   }
+  }
+ ],
+ "profiles": [
+  {
+   "game_id": "free-fire",
+   "schema_id": "free-fire",
+   "setting_id": "free-fire.sensitivity.general",
+   "recommended_value": 178
+  },
+  {
+   "game_id": "free-fire",
+   "schema_id": "free-fire",
+   "setting_id": "free-fire.sensitivity.red-dot",
+   "recommended_value": 182
+  },
+  {
+   "game_id": "free-fire",
+   "schema_id": "free-fire",
+   "setting_id": "free-fire.sensitivity.scope-2x",
+   "recommended_value": 164
+  },
+  {
+   "game_id": "free-fire",
+   "schema_id": "free-fire",
+   "setting_id": "free-fire.sensitivity.scope-4x",
+   "recommended_value": 146
+  },
+  {
+   "game_id": "free-fire",
+   "schema_id": "free-fire",
+   "setting_id": "free-fire.sensitivity.sniper",
+   "recommended_value": 102
+  },
+  {
+   "game_id": "free-fire",
+   "schema_id": "free-fire",
+   "setting_id": "free-fire.sensitivity.free-look",
+   "recommended_value": 96
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.tpp-no-scope",
+   "recommended_value": 118
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.tpp-no-scope",
+   "recommended_value": 124
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.fpp-no-scope",
+   "recommended_value": 106
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.fpp-no-scope",
+   "recommended_value": 110
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.tpp-aim",
+   "recommended_value": 109
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.tpp-aim",
+   "recommended_value": 114
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.fpp-aim",
+   "recommended_value": 94
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.fpp-aim",
+   "recommended_value": 98
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.red-dot",
+   "recommended_value": 55
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.red-dot",
+   "recommended_value": 58
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-2x",
+   "recommended_value": 36
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-2x",
+   "recommended_value": 38
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-3x",
+   "recommended_value": 28
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-3x",
+   "recommended_value": 28
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-4x",
+   "recommended_value": 17
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-4x",
+   "recommended_value": 18
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-6x",
+   "recommended_value": 13
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-6x",
+   "recommended_value": 14
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-8x",
+   "recommended_value": 10
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.camera.scope-8x",
+   "recommended_value": 11
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.tpp-no-scope",
+   "recommended_value": 118
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.tpp-no-scope",
+   "recommended_value": 122
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.fpp-no-scope",
+   "recommended_value": 106
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.fpp-no-scope",
+   "recommended_value": 108
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.tpp-aim",
+   "recommended_value": 109
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.tpp-aim",
+   "recommended_value": 112
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.fpp-aim",
+   "recommended_value": 94
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.fpp-aim",
+   "recommended_value": 96
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.red-dot",
+   "recommended_value": 58
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.red-dot",
+   "recommended_value": 58
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-2x",
+   "recommended_value": 36
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-2x",
+   "recommended_value": 39
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-3x",
+   "recommended_value": 28
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-3x",
+   "recommended_value": 29
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-4x",
+   "recommended_value": 17
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-4x",
+   "recommended_value": 19
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-6x",
+   "recommended_value": 13
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-6x",
+   "recommended_value": 14
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-8x",
+   "recommended_value": 10
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads.scope-8x",
+   "recommended_value": 11
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.tpp-no-scope",
+   "recommended_value": 250
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.tpp-no-scope",
+   "recommended_value": 250
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.fpp-no-scope",
+   "recommended_value": 235
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.fpp-no-scope",
+   "recommended_value": 235
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.tpp-aim",
+   "recommended_value": 230
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.tpp-aim",
+   "recommended_value": 230
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.fpp-aim",
+   "recommended_value": 209
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.fpp-aim",
+   "recommended_value": 209
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.red-dot",
+   "recommended_value": 248
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.red-dot",
+   "recommended_value": 248
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-2x",
+   "recommended_value": 212
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-2x",
+   "recommended_value": 212
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-3x",
+   "recommended_value": 178
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-3x",
+   "recommended_value": 178
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-4x",
+   "recommended_value": 152
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-4x",
+   "recommended_value": 152
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-6x",
+   "recommended_value": 88
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-6x",
+   "recommended_value": 88
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-8x",
+   "recommended_value": 62
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.gyro.scope-8x",
+   "recommended_value": 62
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.tpp-no-scope",
+   "recommended_value": 250
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.tpp-no-scope",
+   "recommended_value": 250
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.fpp-no-scope",
+   "recommended_value": 235
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.fpp-no-scope",
+   "recommended_value": 235
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.tpp-aim",
+   "recommended_value": 230
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.tpp-aim",
+   "recommended_value": 230
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.fpp-aim",
+   "recommended_value": 209
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.fpp-aim",
+   "recommended_value": 209
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.red-dot",
+   "recommended_value": 248
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.red-dot",
+   "recommended_value": 248
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-2x",
+   "recommended_value": 212
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-2x",
+   "recommended_value": 212
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-3x",
+   "recommended_value": 178
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-3x",
+   "recommended_value": 178
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-4x",
+   "recommended_value": 152
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-4x",
+   "recommended_value": 152
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-6x",
+   "recommended_value": 88
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-6x",
+   "recommended_value": 88
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-8x",
+   "recommended_value": 62
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.ads-gyro.scope-8x",
+   "recommended_value": 62
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.free-look.tpp",
+   "recommended_value": 122
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.free-look.tpp",
+   "recommended_value": 125
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.free-look.fpp",
+   "recommended_value": 84
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.free-look.fpp",
+   "recommended_value": 88
+  },
+  {
+   "game_id": "bgmi",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.free-look.parachuting",
+   "recommended_value": 122
+  },
+  {
+   "game_id": "pubg-mobile",
+   "schema_id": "pubg-family",
+   "setting_id": "pubg-family.free-look.parachuting",
+   "recommended_value": 120
+  }
+ ]
+}
