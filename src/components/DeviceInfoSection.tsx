@@ -1,30 +1,37 @@
-import { useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   AlertTriangle,
+  BookmarkCheck,
   BookmarkPlus,
   Calendar,
-  Check,
   Cpu,
   Database,
   HardDrive,
+  Keyboard,
   Monitor,
   RefreshCw,
   Search,
   ShieldCheck,
   Smartphone,
 } from 'lucide-react';
-import {
-  calculateDeviceAge,
-  formatDeviceFullName,
-  getGameCompatibilitySummary,
-} from '../engine/devices';
-import type {
-  BrandRecord,
-  DeviceOs,
-  DeviceProfile,
-  GameId,
-} from '../engine/types';
+import { calculateDeviceAge, formatDeviceFullName, getGameCompatibilitySummary } from '../engine/devices';
+import type { BrandRecord, DeviceOs, DeviceProfile, GameId } from '../engine/types';
 import { FIELD_LIMITS } from '../backend/validation';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import {
+  Chip,
+  Disclosure,
+  FieldError,
+  FieldLabel,
+  IconAction,
+  Notice,
+  Panel,
+  Segmented,
+  SelectField,
+  SpecTile,
+  TextField,
+} from './giq/primitives';
 
 interface DeviceInfoSectionProps {
   game: GameId;
@@ -44,10 +51,7 @@ interface DeviceInfoSectionProps {
   onSelectBrandId: (brandId: string) => void;
   onSelectModelId: (modelId: string) => void;
   onToggleManualMode: (manual: boolean) => void;
-  onUpdateDeviceField: <K extends keyof DeviceProfile>(
-    key: K,
-    value: DeviceProfile[K]
-  ) => void;
+  onUpdateDeviceField: <K extends keyof DeviceProfile>(key: K, value: DeviceProfile[K]) => void;
   onOpenCatalogModal: () => void;
   onSaveDeviceToCloud: () => void;
   onRetryDatabase: () => void;
@@ -57,6 +61,8 @@ interface DeviceInfoSectionProps {
 const RAM_OPTIONS = [4, 6, 8, 12, 16, 24];
 const STORAGE_OPTIONS = [64, 128, 256, 512, 1024, 2048];
 const REFRESH_RATES = [60, 90, 120, 144, 165, 185, 240];
+
+const formatStorage = (gb: number) => (gb >= 1024 ? `${gb / 1024} TB` : `${gb} GB`);
 
 export function DeviceInfoSection({
   game,
@@ -82,699 +88,378 @@ export function DeviceInfoSection({
   onRetryDatabase,
   onOpenAdminSync,
 }: DeviceInfoSectionProps) {
-  const [brandQuery, setBrandQuery] = useState('');
-  const [modelQuery, setModelQuery] = useState('');
-  const [modelLimit, setModelLimit] = useState(24);
-
-  const filteredBrands = useMemo(() => {
-    const q = brandQuery.trim().toLowerCase();
-    if (!q) return brands;
-    return brands.filter(
-      (b) =>
-        b.name.toLowerCase().includes(q) ||
-        (b.parentCompany && b.parentCompany.toLowerCase().includes(q))
-    );
-  }, [brands, brandQuery]);
-
-  const filteredModels = useMemo(() => {
-    const q = modelQuery.trim().toLowerCase();
-    if (!q) return brandModels;
-    return brandModels.filter((m) =>
-      `${m.model} ${m.modelNumber ?? ''} ${m.chipset} ${m.releaseYear ?? ''}`
-        .toLowerCase()
-        .includes(q)
-    );
-  }, [brandModels, modelQuery]);
-
-  const visibleModels = filteredModels.slice(0, modelLimit);
   const compatSummary = getGameCompatibilitySummary(device, game);
   const deviceAge = calculateDeviceAge(device.releaseDate);
   const isDatabaseMode = !isManualMode && brands.length > 0;
-  const isModelsLoading =
-    Boolean(selectedBrandId) && devicesLoadingBrand === selectedBrandId;
+  const isModelsLoading = Boolean(selectedBrandId) && devicesLoadingBrand === selectedBrandId;
 
   const ramOptions =
-    isDatabaseMode && device.ramVariantsGb && device.ramVariantsGb.length > 0
-      ? device.ramVariantsGb
-      : RAM_OPTIONS;
+    isDatabaseMode && device.ramVariantsGb && device.ramVariantsGb.length > 0 ? device.ramVariantsGb : RAM_OPTIONS;
   const storageOptions =
     isDatabaseMode && device.storageVariantsGb && device.storageVariantsGb.length > 0
       ? device.storageVariantsGb
       : STORAGE_OPTIONS;
 
+  const gyroLabel =
+    device.gyroscopeSupport === 'hardware'
+      ? 'Hardware'
+      : device.gyroscopeSupport === 'software'
+        ? 'Software'
+        : device.gyroscopeSupport === 'none'
+          ? 'None'
+          : 'Unknown';
+
   return (
-    <section
-      aria-labelledby="device-info-heading"
-      className="bg-[#141417] border border-[#29292F] rounded-xl p-4 sm:p-6 space-y-5"
-    >
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <Smartphone className="w-4 h-4 text-[#F0263C]" />
-          <h2
-            id="device-info-heading"
-            className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight"
-          >
-            Device Information
-          </h2>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={onOpenCatalogModal}
-            className="min-h-[38px] px-3 rounded-lg bg-[#1B1B20] hover:bg-[#29292F] border border-[#29292F] text-xs font-semibold text-white inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
-          >
-            <Search className="w-3.5 h-3.5 text-[#A1A1AA]" />
-            <span>Browse All Devices</span>
-          </button>
-
-          {brands.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => onToggleManualMode(!isManualMode)}
-              className={`min-h-[38px] px-3 rounded-lg border text-xs font-semibold transition-colors whitespace-nowrap ${
-                isManualMode
-                  ? 'bg-[#F0263C] border-[#F0263C] text-white'
-                  : 'bg-[#111114] border-[#29292F] text-[#A1A1AA] hover:text-white'
-              }`}
-            >
-              {isManualMode ? 'Cloud Database' : 'Manual Entry'}
-            </button>
-          ) : null}
-
-          {isAdmin ? (
-            <button
-              type="button"
-              onClick={onOpenAdminSync}
-              className="min-h-[38px] px-3 rounded-lg bg-[#111114] hover:bg-[#1B1B20] border border-[#29292F] hover:border-[#F0263C] text-xs font-semibold text-white inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
-            >
-              <Database className="w-3.5 h-3.5 text-[#F0263C]" />
-              <span>Admin DB Sync</span>
-            </button>
-          ) : null}
-
-          <button
-            type="button"
+    <Panel
+      step="02"
+      title="Your phone"
+      meta={device.model ? formatDeviceFullName(device.brand, device.model) : 'Pick your device'}
+      action={
+        <>
+          <IconAction icon={Search} label="Search all phones" onClick={onOpenCatalogModal} />
+          {isAdmin ? <IconAction icon={Database} label="Sync phone catalog" onClick={onOpenAdminSync} /> : null}
+          <IconAction
+            icon={deviceSavedToast ? BookmarkCheck : BookmarkPlus}
+            label={deviceSavedToast ? 'Saved' : isSignedIn ? 'Save device' : 'Sign in to save'}
             onClick={onSaveDeviceToCloud}
-            className="min-h-[38px] px-3 rounded-lg bg-[#111114] hover:bg-[#1B1B20] border border-[#29292F] hover:border-[#F0263C] text-xs font-semibold text-white inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
+            active={deviceSavedToast}
+          />
+        </>
+      }
+    >
+      <div className="space-y-4">
+        {brands.length > 0 ? (
+          <Segmented
+            layoutId="device-mode"
+            ariaLabel="Device entry mode"
+            size="sm"
+            value={isManualMode ? 'manual' : 'catalog'}
+            onChange={(v) => onToggleManualMode(v === 'manual')}
+            options={[
+              { id: 'catalog', label: 'From catalog', icon: Smartphone },
+              { id: 'manual', label: 'Enter manually', icon: Keyboard },
+            ]}
+          />
+        ) : null}
+
+        {brandsLoading ? (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2" aria-live="polite">
+            <div className="skeleton h-12 rounded-xl" />
+            <div className="skeleton h-12 rounded-xl" />
+          </div>
+        ) : brandsError || devicesError ? (
+          <Notice
+            tone="danger"
+            icon={AlertTriangle}
+            action={
+              <>
+                <Button variant="surface" size="sm" onClick={onRetryDatabase} className="h-9 rounded-lg">
+                  <RefreshCw /> Retry
+                </Button>
+              </>
+            }
           >
-            {deviceSavedToast ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-[#F0263C]" />
-                <span>Saved to Cloud</span>
-              </>
-            ) : (
-              <>
-                <BookmarkPlus className="w-3.5 h-3.5 text-[#F0263C]" />
-                <span>{isSignedIn ? 'Save Device' : 'Sign In to Save'}</span>
-              </>
-            )}
-          </button>
-        </div>
-      </div>
+            Couldn't load the phone catalog. Retry or enter your specs manually.
+          </Notice>
+        ) : brands.length === 0 ? (
+          <Notice
+            icon={Database}
+            action={
+              isAdmin ? (
+                <Button variant="glow" size="sm" onClick={onOpenAdminSync} className="h-9 rounded-lg">
+                  Sync catalog
+                </Button>
+              ) : null
+            }
+          >
+            The phone catalog is empty for now — enter your specs below.
+          </Notice>
+        ) : null}
 
-      {/* Loading / Error / Empty Database Banners */}
-      {brandsLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" aria-live="polite">
-          <div className="h-11 rounded-lg bg-[#1B1B20] border border-[#29292F] animate-pulse" />
-          <div className="h-11 rounded-lg bg-[#1B1B20] border border-[#29292F] animate-pulse" />
-        </div>
-      ) : brandsError || devicesError ? (
-        <div className="p-3.5 rounded-xl bg-[#111114] border border-[#F0263C]/60 flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2 text-[#A1A1AA]">
-            <AlertTriangle className="w-4 h-4 text-[#F0263C] shrink-0" />
-            <span>
-              Unable to load cloud smartphone catalog. You can retry or enter specs manually.
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={onRetryDatabase}
-              className="min-h-[34px] px-3 rounded-lg bg-[#1B1B20] border border-[#29292F] text-white font-semibold inline-flex items-center gap-1.5"
+        <AnimatePresence mode="wait" initial={false}>
+          {isDatabaseMode ? (
+            <motion.div
+              key="catalog"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+              className="space-y-4"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
-              <span>Retry</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => onToggleManualMode(true)}
-              className="min-h-[34px] px-3 rounded-lg bg-[#F0263C] text-white font-semibold"
-            >
-              Manual Entry
-            </button>
-          </div>
-        </div>
-      ) : brands.length === 0 ? (
-        <div className="p-3.5 rounded-xl bg-[#111114] border border-[#29292F] flex flex-wrap items-center justify-between gap-3 text-xs">
-          <div className="text-[#A1A1AA]">
-            Cloud device catalog has no synced models yet. Enter your device specs manually below
-            {isAdmin ? ' or sync the backend dataset.' : '.'}
-          </div>
-          {isAdmin ? (
-            <button
-              type="button"
-              onClick={onOpenAdminSync}
-              className="min-h-[34px] px-3 rounded-lg bg-[#F0263C] text-white font-semibold inline-flex items-center gap-1.5"
-            >
-              <Database className="w-3.5 h-3.5" />
-              <span>Sync Cloud Catalog</span>
-            </button>
-          ) : null}
-        </div>
-      ) : null}
-
-      {/* Cloud Database Selectors OR Manual Entry Inputs */}
-      {isDatabaseMode ? (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Searchable Brand Selector */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="device-brand-search"
-                  className="text-xs font-medium text-[#A1A1AA]"
-                >
-                  Brand ({brands.length})
-                </label>
-                {brandQuery ? (
-                  <button
-                    type="button"
-                    onClick={() => setBrandQuery('')}
-                    className="text-[11px] text-[#71717A] hover:text-white"
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-brand-field" hint={brands.length}>
+                    Brand
+                  </FieldLabel>
+                  <SelectField
+                    id="device-brand-field"
+                    value={selectedBrandId}
+                    onChange={(e) => onSelectBrandId(e.target.value)}
                   >
-                    Clear filter
-                  </button>
-                ) : null}
-              </div>
-              <input
-                id="device-brand-search"
-                type="text"
-                value={brandQuery}
-                onChange={(e) => setBrandQuery(e.target.value)}
-                placeholder="Filter brands (Samsung, Apple, POCO, iQOO...)"
-                className="w-full min-h-[38px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-xs text-white placeholder-[#71717A] outline-none transition-colors"
-              />
-              <select
-                id="device-brand-field"
-                value={selectedBrandId}
-                onChange={(e) => {
-                  setModelQuery('');
-                  setModelLimit(24);
-                  onSelectBrandId(e.target.value);
-                }}
-                className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-sm text-white outline-none transition-colors"
-              >
-                {filteredBrands.length === 0 ? (
-                  <option value={selectedBrandId}>No matching brand</option>
-                ) : (
-                  filteredBrands.map((b) => (
-                    <option key={b.id} value={b.id}>
-                      {b.name} ({b.deviceCount})
-                    </option>
-                  ))
-                )}
-              </select>
-            </div>
-
-            {/* Searchable Model Selector (Newest-First) */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="device-model-search"
-                  className="text-xs font-medium text-[#A1A1AA]"
-                >
-                  Smartphone Model ({brandModels.length})
-                </label>
-                {modelQuery ? (
-                  <button
-                    type="button"
-                    onClick={() => setModelQuery('')}
-                    className="text-[11px] text-[#71717A] hover:text-white"
-                  >
-                    Clear filter
-                  </button>
-                ) : null}
-              </div>
-              <input
-                id="device-model-search"
-                type="text"
-                value={modelQuery}
-                onChange={(e) => setModelQuery(e.target.value)}
-                placeholder="Filter model, chipset, or year (2026, 2025...)"
-                className="w-full min-h-[38px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-xs text-white placeholder-[#71717A] outline-none transition-colors"
-              />
-              {isModelsLoading ? (
-                <div className="h-[44px] rounded-lg bg-[#1B1B20] border border-[#29292F] animate-pulse" />
-              ) : (
-                <select
-                  id="device-model-field"
-                  value={device.id}
-                  onChange={(e) => onSelectModelId(e.target.value)}
-                  className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-sm text-white outline-none transition-colors"
-                >
-                  {visibleModels.length === 0 ? (
-                    <option value="">No models found</option>
-                  ) : (
-                    visibleModels.map((m) => (
-                      <option key={m.id} value={m.id}>
-                        {m.model} ({m.releaseYear ?? '—'}) · {m.tier}
+                    {brands.map((b) => (
+                      <option key={b.id} value={b.id}>
+                        {b.name} ({b.deviceCount})
                       </option>
-                    ))
+                    ))}
+                  </SelectField>
+                </div>
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-model-field" hint={brandModels.length}>
+                    Model
+                  </FieldLabel>
+                  {isModelsLoading ? (
+                    <div className="skeleton h-12 rounded-xl" />
+                  ) : (
+                    <SelectField
+                      id="device-model-field"
+                      value={device.id}
+                      onChange={(e) => onSelectModelId(e.target.value)}
+                    >
+                      {brandModels.length === 0 ? (
+                        <option value="">No models found</option>
+                      ) : (
+                        brandModels.map((m) => (
+                          <option key={m.id} value={m.id}>
+                            {m.model} · {m.releaseYear ?? '—'}
+                          </option>
+                        ))
+                      )}
+                    </SelectField>
                   )}
-                </select>
-              )}
-              {filteredModels.length > modelLimit ? (
-                <button
-                  type="button"
-                  onClick={() => setModelLimit((prev) => prev + 24)}
-                  className="text-[11px] font-semibold text-[#F0263C] hover:underline"
-                >
-                  Show more models ({filteredModels.length - modelLimit} more)
-                </button>
-              ) : null}
-            </div>
-          </div>
+                </div>
+              </div>
 
-          {/* Variant Selectors: RAM + Storage */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <span className="block text-xs font-medium text-[#A1A1AA] mb-1.5">
-                RAM Variant {device.ramType ? `(${device.ramType})` : ''}
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {ramOptions.map((ram) => {
-                  const active = device.ramGb === ram;
-                  return (
-                    <button
-                      key={ram}
-                      type="button"
-                      onClick={() => onUpdateDeviceField('ramGb', ram)}
-                      aria-pressed={active}
-                      className={`min-h-[38px] px-3 rounded-lg border font-mono text-xs font-semibold transition-colors ${
-                        active
-                          ? 'bg-[#F0263C] border-[#F0263C] text-white'
-                          : 'bg-[#111114] border-[#29292F] text-[#A1A1AA] hover:text-white'
-                      }`}
+              {/* Device hero card */}
+              <div className="relative overflow-hidden rounded-2xl border border-border bg-secondary/60 p-4">
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-hero opacity-60" />
+                <div className="relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3.5">
+                  <div className="grid h-14 w-10 place-items-center rounded-xl border-2 border-border-strong bg-background">
+                    <span className="h-1 w-3 rounded-full bg-surface-3" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="truncate text-[15px] font-bold">{formatDeviceFullName(device.brand, device.model)}</div>
+                    <div className="mt-0.5 truncate text-xs text-muted-foreground">
+                      {device.osVersionLaunch || device.os} · {device.tier}
+                    </div>
+                    <div
+                      className={cn(
+                        'mt-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider',
+                        compatSummary.isVerified ? 'bg-success/12 text-success' : 'bg-surface-3 text-muted-foreground'
+                      )}
                     >
-                      {ram} GB
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div>
-              <span className="block text-xs font-medium text-[#A1A1AA] mb-1.5">
-                Storage Variant {device.storageType ? `(${device.storageType})` : ''}
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {storageOptions.map((gb) => {
-                  const active = device.storageGb === gb;
-                  return (
-                    <button
-                      key={gb}
-                      type="button"
-                      onClick={() => onUpdateDeviceField('storageGb', gb)}
-                      aria-pressed={active}
-                      className={`min-h-[38px] px-3 rounded-lg border font-mono text-xs font-semibold transition-colors ${
-                        active
-                          ? 'bg-white border-white text-black'
-                          : 'bg-[#111114] border-[#29292F] text-[#A1A1AA] hover:text-white'
-                      }`}
-                    >
-                      {gb >= 1024 ? `${gb / 1024} TB` : `${gb} GB`}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Verified Hardware Specification Summary Card */}
-          <div className="p-4 rounded-xl bg-[#111114] border border-[#29292F] space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[#29292F]">
-              <div className="min-w-0">
-                <div className="text-sm font-bold text-white truncate">
-                  {formatDeviceFullName(device.brand, device.model)}
-                  {device.modelNumber ? (
-                    <span className="ml-2 font-mono text-xs font-normal text-[#71717A]">
-                      {device.modelNumber}
-                    </span>
-                  ) : null}
+                      <ShieldCheck className="size-3" />
+                      {compatSummary.statusLabel}
+                    </div>
+                  </div>
                 </div>
-                <div className="text-xs text-[#A1A1AA] mt-0.5">
-                  {device.osVersionLaunch || device.os} · {device.tier}
+                <div className="relative mt-4 grid grid-cols-3 gap-2 text-center">
+                  {[
+                    { k: 'Refresh', v: `${device.refreshHz}Hz` },
+                    { k: 'Screen', v: `${device.screenInches.toFixed(1)}"` },
+                    { k: 'Touch', v: device.touchSamplingHz ? `${device.touchSamplingHz}Hz` : '—' },
+                  ].map((s) => (
+                    <div key={s.k} className="rounded-xl border border-border bg-background/50 px-2 py-2">
+                      <div className="font-mono text-sm font-bold tabular-nums">{s.v}</div>
+                      <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-subtle">{s.k}</div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 text-xs font-mono">
-                <ShieldCheck
-                  className={`w-3.5 h-3.5 ${
-                    compatSummary.isVerified ? 'text-[#F0263C]' : 'text-[#71717A]'
-                  }`}
-                />
-                <span
-                  className={
-                    compatSummary.isVerified ? 'text-white font-semibold' : 'text-[#A1A1AA]'
-                  }
-                >
-                  {compatSummary.statusLabel}
-                </span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-              <div className="space-y-0.5">
-                <div className="text-[#71717A] flex items-center gap-1">
-                  <Cpu className="w-3.5 h-3.5" />
-                  <span>Processor &amp; GPU</span>
+              <div className="space-y-3">
+                <div>
+                  <FieldLabel hint={device.ramType || undefined}>RAM</FieldLabel>
+                  <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+                    {ramOptions.map((ram) => (
+                      <Chip key={ram} active={device.ramGb === ram} onClick={() => onUpdateDeviceField('ramGb', ram)}>
+                        {ram} GB
+                      </Chip>
+                    ))}
+                  </div>
                 </div>
-                <div className="text-white font-medium truncate" title={device.chipset}>
-                  {device.chipset || '—'}
-                </div>
-                <div className="text-[#A1A1AA] font-mono text-[11px] truncate">
-                  {device.gpuModel || '—'}
+                <div>
+                  <FieldLabel hint={device.storageType || undefined}>Storage</FieldLabel>
+                  <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+                    {storageOptions.map((gb) => (
+                      <Chip key={gb} active={device.storageGb === gb} onClick={() => onUpdateDeviceField('storageGb', gb)}>
+                        {formatStorage(gb)}
+                      </Chip>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-0.5">
-                <div className="text-[#71717A] flex items-center gap-1">
-                  <Monitor className="w-3.5 h-3.5" />
-                  <span>Display</span>
+              <Disclosure title="Full specifications" icon={Cpu}>
+                <div className="grid grid-cols-2 gap-2">
+                  <SpecTile icon={Cpu} label="Chipset" value={device.chipset || '—'} sub={device.gpuModel || '—'} />
+                  <SpecTile
+                    icon={Monitor}
+                    label="Display"
+                    value={`${device.screenInches.toFixed(2).replace(/\.?0+$/, '')}" · ${device.refreshHz}Hz`}
+                    sub={device.resolution}
+                  />
+                  <SpecTile
+                    icon={Calendar}
+                    label="Launch"
+                    value={device.releaseDate || '—'}
+                    sub={deviceAge || 'Age unavailable'}
+                  />
+                  <SpecTile
+                    icon={HardDrive}
+                    label="Sensors"
+                    value={`Gyro · ${gyroLabel}`}
+                    sub={`${device.batteryMah ? `${device.batteryMah} mAh` : 'Battery N/A'}${device.chargingWatt ? ` · ${device.chargingWatt}W` : ''}`}
+                  />
                 </div>
-                <div className="text-white font-mono">
-                  {device.screenInches.toFixed(2).replace(/\.?0+$/, '')}&quot; ·{' '}
-                  {device.refreshHz}Hz
+              </Disclosure>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="manual"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+              className="space-y-4"
+            >
+              <div className="grid grid-cols-2 gap-3">
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-brand-field">Brand</FieldLabel>
+                  <TextField
+                    id="device-brand-field"
+                    maxLength={FIELD_LIMITS.deviceBrandMaxLength}
+                    value={device.brand}
+                    onChange={(e) => onUpdateDeviceField('brand', e.target.value)}
+                    placeholder="Samsung"
+                    invalid={Boolean(validationErrors.brand)}
+                  />
+                  <FieldError>{validationErrors.brand}</FieldError>
                 </div>
-                <div className="text-[#A1A1AA] font-mono text-[11px] truncate">
-                  {device.resolution} · Touch:{' '}
-                  {device.touchSamplingHz ? `${device.touchSamplingHz}Hz` : 'N/A'}
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-model-field">Model</FieldLabel>
+                  <TextField
+                    id="device-model-field"
+                    maxLength={FIELD_LIMITS.deviceModelMaxLength}
+                    value={device.model}
+                    onChange={(e) => onUpdateDeviceField('model', e.target.value)}
+                    placeholder="Galaxy S25 Ultra"
+                    invalid={Boolean(validationErrors.model)}
+                  />
+                  <FieldError>{validationErrors.model}</FieldError>
                 </div>
-              </div>
-
-              <div className="space-y-0.5">
-                <div className="text-[#71717A] flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>Launch &amp; Age</span>
-                </div>
-                <div className="text-white font-mono">
-                  {device.releaseDate || '—'}
-                </div>
-                <div className="text-[#A1A1AA] text-[11px]">
-                  {deviceAge || 'Age unavailable'}
-                </div>
-              </div>
-
-              <div className="space-y-0.5">
-                <div className="text-[#71717A] flex items-center gap-1">
-                  <HardDrive className="w-3.5 h-3.5" />
-                  <span>Sensors &amp; Power</span>
-                </div>
-                <div className="text-white">
-                  Gyro:{' '}
-                  {device.gyroscopeSupport === 'hardware'
-                    ? 'Hardware'
-                    : device.gyroscopeSupport === 'software'
-                      ? 'Software'
-                      : device.gyroscopeSupport === 'none'
-                        ? 'None'
-                        : 'Unknown'}
-                </div>
-                <div className="text-[#A1A1AA] font-mono text-[11px]">
-                  {device.batteryMah ? `${device.batteryMah} mAh` : 'Battery N/A'}
-                  {device.chargingWatt ? ` · ${device.chargingWatt}W` : ''}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* Manual Entry Mode */
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Group 1: Device Identification */}
-          <div className="space-y-3">
-            <div className="text-xs font-semibold text-[#A1A1AA] tracking-wide">
-              Device Identification
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label
-                  htmlFor="device-brand-field"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Device Brand
-                </label>
-                <input
-                  id="device-brand-field"
-                  type="text"
-                  maxLength={FIELD_LIMITS.deviceBrandMaxLength}
-                  value={device.brand}
-                  onChange={(e) => onUpdateDeviceField('brand', e.target.value)}
-                  placeholder="e.g. Samsung, Apple"
-                  className={`w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border text-sm text-white placeholder-[#71717A] outline-none transition-colors ${
-                    validationErrors.brand
-                      ? 'border-[#F0263C]'
-                      : 'border-[#29292F] focus:border-[#F0263C]'
-                  }`}
-                />
-                {validationErrors.brand ? (
-                  <p className="text-xs text-[#F0263C] mt-1">
-                    {validationErrors.brand}
-                  </p>
-                ) : null}
               </div>
 
               <div>
-                <label
-                  htmlFor="device-model-field"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Device Model
-                </label>
-                <input
-                  id="device-model-field"
-                  type="text"
-                  maxLength={FIELD_LIMITS.deviceModelMaxLength}
-                  value={device.model}
-                  onChange={(e) => onUpdateDeviceField('model', e.target.value)}
-                  placeholder="e.g. Galaxy S25 Ultra"
-                  className={`w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border text-sm text-white placeholder-[#71717A] outline-none transition-colors ${
-                    validationErrors.model
-                      ? 'border-[#F0263C]'
-                      : 'border-[#29292F] focus:border-[#F0263C]'
-                  }`}
-                />
-                {validationErrors.model ? (
-                  <p className="text-xs text-[#F0263C] mt-1">
-                    {validationErrors.model}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-          </div>
-
-          {/* Group 2: Hardware Specifications */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#A1A1AA] tracking-wide">
-              <Cpu className="w-3.5 h-3.5 text-[#71717A]" />
-              <span>Hardware Specifications</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="device-chipset"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Processor / Chipset
-                </label>
-                <input
+                <FieldLabel htmlFor="device-chipset">Chipset</FieldLabel>
+                <TextField
                   id="device-chipset"
-                  type="text"
                   maxLength={FIELD_LIMITS.deviceChipsetMaxLength}
                   value={device.chipset}
                   onChange={(e) => onUpdateDeviceField('chipset', e.target.value)}
                   placeholder="Snapdragon 8 Elite"
-                  className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-sm text-white placeholder-[#71717A] outline-none transition-colors"
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="device-ram"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  RAM
-                </label>
-                <select
-                  id="device-ram"
-                  value={device.ramGb}
-                  onChange={(e) =>
-                    onUpdateDeviceField('ramGb', Number(e.target.value))
-                  }
-                  className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-sm font-mono text-white outline-none transition-colors"
-                >
-                  {RAM_OPTIONS.map((ram) => (
-                    <option key={ram} value={ram}>
-                      {ram} GB
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="device-storage"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Internal Storage
-                </label>
-                <select
-                  id="device-storage"
-                  value={device.storageGb}
-                  onChange={(e) =>
-                    onUpdateDeviceField('storageGb', Number(e.target.value))
-                  }
-                  className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-sm font-mono text-white outline-none transition-colors"
-                >
-                  {STORAGE_OPTIONS.map((gb) => (
-                    <option key={gb} value={gb}>
-                      {gb >= 1024 ? `${gb / 1024} TB` : `${gb} GB`}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Group 3: Display Specifications */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#A1A1AA] tracking-wide">
-              <Monitor className="w-3.5 h-3.5 text-[#71717A]" />
-              <span>Display Specifications</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
-              <div className="sm:col-span-3">
-                <label
-                  htmlFor="device-screen-size"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Screen Size (in)
-                </label>
-                <input
-                  id="device-screen-size"
-                  type="number"
-                  step="0.1"
-                  min={4.5}
-                  max={14.0}
-                  value={device.screenInches || ''}
-                  onChange={(e) =>
-                    onUpdateDeviceField('screenInches', Number(e.target.value))
-                  }
-                  placeholder="6.7"
-                  className={`w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border text-sm font-mono text-white placeholder-[#71717A] outline-none transition-colors ${
-                    validationErrors.screenInches
-                      ? 'border-[#F0263C]'
-                      : 'border-[#29292F] focus:border-[#F0263C]'
-                  }`}
-                />
-                {validationErrors.screenInches ? (
-                  <p className="text-xs text-[#F0263C] mt-1">
-                    {validationErrors.screenInches}
-                  </p>
-                ) : null}
-              </div>
-
-              <div className="sm:col-span-5">
-                <label
-                  htmlFor="device-resolution"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Screen Resolution
-                </label>
-                <input
-                  id="device-resolution"
-                  type="text"
-                  maxLength={FIELD_LIMITS.deviceResolutionMaxLength}
-                  value={device.resolution}
-                  onChange={(e) =>
-                    onUpdateDeviceField('resolution', e.target.value)
-                  }
-                  placeholder="2400 × 1080"
-                  className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-sm font-mono text-white placeholder-[#71717A] outline-none transition-colors"
-                />
-              </div>
-
-              <div className="sm:col-span-4">
-                <label
-                  htmlFor="device-refresh-rate"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Refresh Rate
-                </label>
-                <select
-                  id="device-refresh-rate"
-                  value={device.refreshHz}
-                  onChange={(e) =>
-                    onUpdateDeviceField('refreshHz', Number(e.target.value))
-                  }
-                  className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-sm font-mono text-white outline-none transition-colors"
-                >
-                  {REFRESH_RATES.map((hz) => (
-                    <option key={hz} value={hz}>
-                      {hz}Hz
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Group 4: Performance Specifications */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#A1A1AA] tracking-wide">
-              <HardDrive className="w-3.5 h-3.5 text-[#71717A]" />
-              <span>Performance Specifications</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label
-                  htmlFor="device-os"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Operating System
-                </label>
-                <select
-                  id="device-os"
-                  value={device.os}
-                  onChange={(e) =>
-                    onUpdateDeviceField('os', e.target.value as DeviceOs)
-                  }
-                  className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] focus:border-[#F0263C] text-sm text-white outline-none transition-colors"
-                >
-                  <option value="Android">Android</option>
-                  <option value="iOS">iOS</option>
-                  <option value="HarmonyOS">HarmonyOS</option>
-                </select>
-              </div>
-
-              <div>
-                <span className="block text-xs font-medium text-[#A1A1AA] mb-1.5">
-                  Target Game FPS
-                </span>
-                <div
-                  id="device-supported-fps"
-                  className="w-full min-h-[44px] px-3 rounded-lg bg-[#111114] border border-[#29292F] flex items-center text-xs font-mono text-white truncate"
-                >
-                  {compatSummary.options
-                    .map((f) => f.replace(/ \(.*\)/, ''))
-                    .join(' · ')}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-screen-size">Screen (in)</FieldLabel>
+                  <TextField
+                    id="device-screen-size"
+                    type="number"
+                    inputMode="decimal"
+                    step="0.1"
+                    min={4.5}
+                    max={14.0}
+                    value={device.screenInches || ''}
+                    onChange={(e) => onUpdateDeviceField('screenInches', Number(e.target.value))}
+                    placeholder="6.7"
+                    invalid={Boolean(validationErrors.screenInches)}
+                    className="font-mono"
+                  />
+                  <FieldError>{validationErrors.screenInches}</FieldError>
+                </div>
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-resolution">Resolution</FieldLabel>
+                  <TextField
+                    id="device-resolution"
+                    maxLength={FIELD_LIMITS.deviceResolutionMaxLength}
+                    value={device.resolution}
+                    onChange={(e) => onUpdateDeviceField('resolution', e.target.value)}
+                    placeholder="2400 × 1080"
+                    className="font-mono"
+                  />
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
+
+              <div>
+                <FieldLabel>Refresh rate</FieldLabel>
+                <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+                  {REFRESH_RATES.map((hz) => (
+                    <Chip key={hz} active={device.refreshHz === hz} onClick={() => onUpdateDeviceField('refreshHz', hz)}>
+                      {hz}Hz
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-ram">RAM</FieldLabel>
+                  <SelectField
+                    id="device-ram"
+                    value={device.ramGb}
+                    onChange={(e) => onUpdateDeviceField('ramGb', Number(e.target.value))}
+                    className="px-3 font-mono"
+                  >
+                    {RAM_OPTIONS.map((ram) => (
+                      <option key={ram} value={ram}>
+                        {ram} GB
+                      </option>
+                    ))}
+                  </SelectField>
+                </div>
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-storage">Storage</FieldLabel>
+                  <SelectField
+                    id="device-storage"
+                    value={device.storageGb}
+                    onChange={(e) => onUpdateDeviceField('storageGb', Number(e.target.value))}
+                    className="px-3 font-mono"
+                  >
+                    {STORAGE_OPTIONS.map((gb) => (
+                      <option key={gb} value={gb}>
+                        {formatStorage(gb)}
+                      </option>
+                    ))}
+                  </SelectField>
+                </div>
+                <div className="min-w-0">
+                  <FieldLabel htmlFor="device-os">System</FieldLabel>
+                  <SelectField
+                    id="device-os"
+                    value={device.os}
+                    onChange={(e) => onUpdateDeviceField('os', e.target.value as DeviceOs)}
+                    className="px-3"
+                  >
+                    <option value="Android">Android</option>
+                    <option value="iOS">iOS</option>
+                    <option value="HarmonyOS">HarmonyOS</option>
+                  </SelectField>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background/40 px-3.5 py-3">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                  Supported FPS
+                </span>
+                <span id="device-supported-fps" className="truncate font-mono text-xs font-semibold">
+                  {compatSummary.options.map((f) => f.replace(/ \(.*\)/, '')).join(' · ')}
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </Panel>
   );
 }

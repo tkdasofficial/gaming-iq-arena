@@ -1,4 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { AlertTriangle } from 'lucide-react';
+import { Notice } from './giq/primitives';
 import { AdminDbSyncModal } from './AdminDbSyncModal';
 import { AimLabView } from './AimLabView';
 import { BottomNav } from './BottomNav';
@@ -10,7 +13,6 @@ import { TopNav, type NavTab } from './TopNav';
 import { calculateSensitivity, formatSummaryForClipboard } from '../engine/calculator';
 import {
   createBlankDeviceProfile,
-  formatDeviceFullName,
   getSupportedFpsOptions,
 } from '../engine/devices';
 import type {
@@ -429,14 +431,14 @@ export default function App() {
     });
     setOverrides(preset.sliderOverrides ? { ...preset.sliderOverrides } : {});
     setHasGenerated(true);
-    setActiveTab('calibrate');
+    selectTab('calibrate');
   };
 
   const handleLoadSetup = (setup: SavedSetup) => {
     setInput(setup.input);
     setOverrides({ ...setup.sliders });
     setHasGenerated(true);
-    setActiveTab('calibrate');
+    selectTab('calibrate');
   };
 
   const handleDeleteSetup = async (id: string) => {
@@ -449,11 +451,19 @@ export default function App() {
     copyTextToClipboard(formatSummaryForClipboard(computed, setup.input));
   };
 
+  const selectTab = (tab: NavTab) => {
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <div className="min-h-screen bg-[#0B0B0D] text-white flex flex-col">
+    <div className="relative flex min-h-dvh flex-col bg-background text-foreground">
+      <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 h-[420px] bg-gradient-hero opacity-80" />
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 bg-dots opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent_55%)]" />
+
       <TopNav
         activeTab={activeTab}
-        onSelectTab={setActiveTab}
+        onSelectTab={selectTab}
         onCopySetup={() => copyTextToClipboard(result.summaryText)}
         copied={copied}
         savedCount={savedSetups.length}
@@ -465,21 +475,30 @@ export default function App() {
       />
 
       {authError ? (
-        <div className="max-w-5xl w-full mx-auto px-4 md:px-6 pt-3">
-          <div className="p-3 rounded-xl bg-[#1B1B20] border border-[#F0263C] text-xs text-white flex items-center justify-between gap-3">
-            <span>{authError}</span>
-            <button
-              type="button"
-              onClick={clearAuthError}
-              className="text-[#F0263C] font-semibold shrink-0"
-            >
-              Dismiss
-            </button>
-          </div>
+        <div className="relative mx-auto w-full max-w-6xl px-4 pt-3 sm:px-6">
+          <Notice
+            tone="danger"
+            icon={AlertTriangle}
+            action={
+              <button type="button" onClick={clearAuthError} className="text-xs font-semibold text-primary">
+                Dismiss
+              </button>
+            }
+          >
+            {authError}
+          </Notice>
         </div>
       ) : null}
 
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-6 pt-5 md:pt-7 pb-24 md:pb-12">
+      <main className="relative mx-auto w-full max-w-6xl flex-1 px-4 pb-32 pt-5 sm:px-6 md:pb-16 md:pt-8">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          >
         {activeTab === 'calibrate' ? (
           <CalibrateView
             input={input}
@@ -557,7 +576,7 @@ export default function App() {
             isAdmin={isAdmin}
             onApplyPreset={handleApplyPreset}
             onDeletePreset={removePreset}
-            onGoToCalibrate={() => setActiveTab('calibrate')}
+            onGoToCalibrate={() => selectTab('calibrate')}
             onRequestSignIn={requestSignIn}
           />
         ) : null}
@@ -588,26 +607,16 @@ export default function App() {
             onLoadSetup={handleLoadSetup}
             onDeleteSetup={handleDeleteSetup}
             onCopySetupObject={handleCopySavedSetup}
-            onGoToCalibrate={() => setActiveTab('calibrate')}
+            onGoToCalibrate={() => selectTab('calibrate')}
           />
         ) : null}
+          </motion.div>
+        </AnimatePresence>
       </main>
-
-      <footer className="hidden md:block border-t border-[#29292F] py-5">
-        <div className="max-w-5xl mx-auto px-6 flex items-center justify-between text-xs text-[#71717A]">
-          <span>Gaming IQ · Sensitivity Calibration Platform</span>
-          <span>
-            {input.device.model
-              ? `${formatDeviceFullName(input.device.brand, input.device.model)} · `
-              : ''}
-            Garena Free Fire · BGMI
-          </span>
-        </div>
-      </footer>
 
       <BottomNav
         activeTab={activeTab}
-        onSelectTab={setActiveTab}
+        onSelectTab={selectTab}
         savedCount={savedSetups.length}
       />
 

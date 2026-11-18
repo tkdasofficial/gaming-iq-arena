@@ -1,5 +1,9 @@
 import { useState } from 'react';
+import { motion } from 'motion/react';
 import { Check, Crosshair, RotateCcw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { PageHeader } from './giq/primitives';
 import type {
   BrandRecord,
   CalibrationInput,
@@ -74,19 +78,21 @@ interface CalibrateViewProps {
 interface GameCatalogItem {
   id: GameId;
   name: string;
+  publisher: string;
   imageSrc: string;
-  comingSoon?: boolean;
 }
 
 const GAME_CATALOG: GameCatalogItem[] = [
   {
     id: 'free-fire',
-    name: 'Garena Free Fire',
+    name: 'Free Fire',
+    publisher: 'Garena',
     imageSrc: freeFireImage,
   },
   {
     id: 'pubg-bgmi',
-    name: 'BGMI (Battlegrounds Mobile India)',
+    name: 'BGMI',
+    publisher: 'Krafton',
     imageSrc: pubgImage,
   },
 ];
@@ -139,162 +145,161 @@ export function CalibrateView({
 }: CalibrateViewProps) {
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
+  const handleGenerateClick = () => {
+    onGenerate();
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      window.setTimeout(() => {
+        document.getElementById('generated-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 260);
+    }
+  };
+
   return (
-    <div className="space-y-5 md:space-y-6">
-      {/* 1. Compact Header & Horizontal Game Selection */}
-      <section aria-labelledby="game-select-heading" className="space-y-3">
-        <h1
-          id="game-select-heading"
-          className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-white"
-        >
-          Select Game
-        </h1>
+    <div className="space-y-6">
+      <PageHeader
+        kicker="Sensitivity calibrator"
+        title={
+          <>
+            Dial in your <span className="text-gradient-primary">aim</span>
+          </>
+        }
+        subtitle="Pick your game, confirm your phone and play style — get pro-tuned values in seconds."
+      />
 
-        <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3">
-          {GAME_CATALOG.map((card) => {
-            const isActive = input.game === card.id;
-            const imgFailed = failedImages[card.id];
-            return (
-              <button
-                key={card.id}
-                type="button"
-                onClick={() => onChangeGame(card.id)}
-                aria-pressed={isActive}
-                className={`group relative overflow-hidden rounded-xl border text-left w-full min-w-0 h-[80px] sm:h-[92px] p-3.5 sm:p-4 flex items-end justify-between gap-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0263C] ${
-                  isActive
-                    ? 'border-[#F0263C] bg-[#1B1B20]'
-                    : 'border-[#29292F] bg-[#141417] hover:border-[#3F3F46]'
-                }`}
-              >
-                {!imgFailed ? (
-                  <img
-                    src={card.imageSrc}
-                    alt={card.name}
-                    referrerPolicy="no-referrer"
-                    onError={() =>
-                      setFailedImages((prev) => ({ ...prev, [card.id]: true }))
-                    }
-                    className={`absolute inset-0 w-full h-full object-cover transition-opacity ${
-                      isActive ? 'opacity-45' : 'opacity-20 group-hover:opacity-35'
-                    }`}
-                  />
-                ) : (
-                  <div
-                    aria-hidden="true"
-                    className="absolute inset-0 bg-gradient-to-br from-[#1B1B20] to-[#0B0B0D]"
-                  />
-                )}
-                <div
-                  aria-hidden="true"
-                  className={`absolute inset-0 ${
-                    isActive
-                      ? 'bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/70 to-[#F0263C]/10'
-                      : 'bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/80 to-transparent'
-                  }`}
-                />
-
-                <div className="relative z-10 min-w-0">
-                  <div className="font-display text-lg sm:text-xl font-bold text-white tracking-tight truncate">
-                    {card.name}
-                  </div>
-                </div>
-
-                <div
-                  aria-hidden="true"
-                  className={`relative z-10 w-5 h-5 rounded-md flex items-center justify-center shrink-0 border transition-colors ${
-                    isActive
-                      ? 'bg-[#F0263C] border-[#F0263C] text-white'
-                      : 'bg-[#111114]/80 border-[#29292F] text-transparent'
-                  }`}
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-start">
+        <div className="min-w-0 space-y-5">
+          {/* 01 Game */}
+          <section aria-label="Select game" className="grid grid-cols-2 gap-3">
+            {GAME_CATALOG.map((card) => {
+              const isActive = input.game === card.id;
+              const imgFailed = failedImages[card.id];
+              return (
+                <motion.button
+                  key={card.id}
+                  type="button"
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => onChangeGame(card.id)}
+                  aria-pressed={isActive}
+                  className={cn(
+                    'group relative h-36 overflow-hidden rounded-3xl border text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-44',
+                    isActive ? 'border-primary shadow-glow' : 'border-border hover:border-border-strong'
+                  )}
                 >
-                  <Check className="w-3.5 h-3.5" />
-                </div>
-              </button>
-            );
-          })}
+                  {!imgFailed ? (
+                    <img
+                      src={card.imageSrc}
+                      alt=""
+                      onError={() => setFailedImages((prev) => ({ ...prev, [card.id]: true }))}
+                      className={cn(
+                        'absolute inset-0 size-full object-cover transition-all duration-500',
+                        isActive ? 'scale-105 opacity-90' : 'opacity-40 grayscale group-hover:opacity-60'
+                      )}
+                    />
+                  ) : (
+                    <div aria-hidden="true" className="absolute inset-0 bg-secondary" />
+                  )}
+                  <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                  {isActive ? <div aria-hidden="true" className="absolute inset-0 bg-gradient-hero" /> : null}
+
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'absolute right-3 top-3 grid size-7 place-items-center rounded-full border transition-all duration-300',
+                      isActive
+                        ? 'scale-100 border-primary bg-primary text-primary-foreground'
+                        : 'scale-90 border-border-strong bg-background/60 text-transparent'
+                    )}
+                  >
+                    <Check className="size-4" strokeWidth={3} />
+                  </span>
+
+                  <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-4">
+                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                      {card.publisher}
+                    </div>
+                    <div className="truncate font-display text-[26px] font-extrabold leading-none tracking-tight sm:text-3xl">
+                      {card.name}
+                    </div>
+                  </div>
+                </motion.button>
+              );
+            })}
+          </section>
+
+          <DeviceInfoSection
+            game={input.game}
+            device={input.device}
+            brands={brands}
+            brandsLoading={brandsLoading}
+            brandsError={brandsError}
+            selectedBrandId={selectedBrandId}
+            brandModels={brandModels}
+            devicesLoadingBrand={devicesLoadingBrand}
+            devicesError={devicesError}
+            isManualMode={isManualMode}
+            isSignedIn={isSignedIn}
+            isAdmin={isAdmin}
+            deviceSavedToast={deviceSavedToast}
+            validationErrors={validationErrors}
+            onSelectBrandId={onSelectBrandId}
+            onSelectModelId={onSelectModelId}
+            onToggleManualMode={onToggleManualMode}
+            onUpdateDeviceField={onUpdateDeviceField}
+            onOpenCatalogModal={onOpenCatalogModal}
+            onSaveDeviceToCloud={onSaveDeviceToCloud}
+            onRetryDatabase={onRetryDatabase}
+            onOpenAdminSync={onOpenAdminSync}
+          />
+
+          <GameplayPreferencesSection
+            input={input}
+            onChangeClaw={onChangeClaw}
+            onChangePlaystyle={onChangePlaystyle}
+            onChangeGyro={onChangeGyro}
+            onChangePreferredFps={onChangePreferredFps}
+            onChangeFireButtonSize={onChangeFireButtonSize}
+            onChangeDpiOverride={onChangeDpiOverride}
+            onChangeCameraPref={onChangeCameraPref}
+            onChangeCurrentSensitivity={onChangeCurrentSensitivity}
+          />
+
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2.5">
+            <Button variant="glow" size="xl" onClick={handleGenerateClick} disabled={isGenerating} className="w-full">
+              <Crosshair className={cn(isGenerating && 'animate-spin')} />
+              {isGenerating ? 'Calibrating…' : hasGenerated ? 'Recalibrate' : 'Generate sensitivity'}
+            </Button>
+            <Button
+              variant="surface"
+              size="xl"
+              onClick={onResetAll}
+              aria-label="Reset to defaults"
+              title="Reset to defaults"
+              className="w-14 px-0"
+            >
+              <RotateCcw />
+            </Button>
+          </div>
         </div>
-      </section>
 
-      {/* 2. Device Information */}
-      <DeviceInfoSection
-        game={input.game}
-        device={input.device}
-        brands={brands}
-        brandsLoading={brandsLoading}
-        brandsError={brandsError}
-        selectedBrandId={selectedBrandId}
-        brandModels={brandModels}
-        devicesLoadingBrand={devicesLoadingBrand}
-        devicesError={devicesError}
-        isManualMode={isManualMode}
-        isSignedIn={isSignedIn}
-        isAdmin={isAdmin}
-        deviceSavedToast={deviceSavedToast}
-        validationErrors={validationErrors}
-        onSelectBrandId={onSelectBrandId}
-        onSelectModelId={onSelectModelId}
-        onToggleManualMode={onToggleManualMode}
-        onUpdateDeviceField={onUpdateDeviceField}
-        onOpenCatalogModal={onOpenCatalogModal}
-        onSaveDeviceToCloud={onSaveDeviceToCloud}
-        onRetryDatabase={onRetryDatabase}
-        onOpenAdminSync={onOpenAdminSync}
-      />
-
-      {/* 3. Gameplay Preferences */}
-      <GameplayPreferencesSection
-        input={input}
-        onChangeClaw={onChangeClaw}
-        onChangePlaystyle={onChangePlaystyle}
-        onChangeGyro={onChangeGyro}
-        onChangePreferredFps={onChangePreferredFps}
-        onChangeFireButtonSize={onChangeFireButtonSize}
-        onChangeDpiOverride={onChangeDpiOverride}
-        onChangeCameraPref={onChangeCameraPref}
-        onChangeCurrentSensitivity={onChangeCurrentSensitivity}
-      />
-
-      {/* 4. Primary Action */}
-      <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 pt-1">
-        <button
-          type="button"
-          onClick={onGenerate}
-          disabled={isGenerating}
-          className="w-full md:w-auto md:min-w-[300px] min-h-[52px] px-7 rounded-xl bg-[#F0263C] hover:bg-[#D81E34] active:bg-[#B8172A] active:scale-[0.99] disabled:opacity-70 text-white text-sm font-bold tracking-wider inline-flex items-center justify-center gap-2.5 transition-all whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-        >
-          <Crosshair className="w-4 h-4" />
-          <span>
-            {isGenerating ? 'GENERATING PROFILE...' : 'GENERATE MY SENSITIVITY'}
-          </span>
-        </button>
-
-        <button
-          type="button"
-          onClick={onResetAll}
-          className="w-full sm:w-auto min-h-[48px] px-4 rounded-xl bg-transparent hover:bg-[#141417] text-[#71717A] hover:text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset Defaults</span>
-        </button>
+        <div className="min-w-0 scroll-mt-20 lg:sticky lg:top-24">
+          <SensitivityResultsSection
+            input={input}
+            result={result}
+            hasGenerated={hasGenerated}
+            isGenerating={isGenerating}
+            hasOverrides={hasOverrides}
+            copiedAll={copiedAll}
+            isSignedIn={isSignedIn}
+            onSliderChange={onSliderChange}
+            onCopyAll={onCopyAll}
+            onCopyText={onCopyText}
+            onRegenerate={onRegenerate}
+            onSaveProfile={onSaveProfile}
+            onPublishPreset={onPublishPreset}
+            onRequestSignIn={onRequestSignIn}
+          />
+        </div>
       </div>
-
-      {/* 5. Sensitivity Results */}
-      <SensitivityResultsSection
-        input={input}
-        result={result}
-        hasGenerated={hasGenerated}
-        isGenerating={isGenerating}
-        hasOverrides={hasOverrides}
-        copiedAll={copiedAll}
-        isSignedIn={isSignedIn}
-        onSliderChange={onSliderChange}
-        onCopyAll={onCopyAll}
-        onCopyText={onCopyText}
-        onRegenerate={onRegenerate}
-        onSaveProfile={onSaveProfile}
-        onPublishPreset={onPublishPreset}
-        onRequestSignIn={onRequestSignIn}
-      />
     </div>
   );
 }
