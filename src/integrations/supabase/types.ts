@@ -14,16 +14,316 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      aim_lab_runs: {
+        Row: {
+          accuracy: number
+          avg_reaction_ms: number | null
+          best_streak: number
+          created_at: string
+          game: string
+          hits: number
+          id: string
+          misses: number
+          owner_id: string
+          scalar: number
+        }
+        Insert: {
+          accuracy?: number
+          avg_reaction_ms?: number | null
+          best_streak?: number
+          created_at?: string
+          game: string
+          hits?: number
+          id?: string
+          misses?: number
+          owner_id: string
+          scalar?: number
+        }
+        Update: {
+          accuracy?: number
+          avg_reaction_ms?: number | null
+          best_streak?: number
+          created_at?: string
+          game?: string
+          hits?: number
+          id?: string
+          misses?: number
+          owner_id?: string
+          scalar?: number
+        }
+        Relationships: []
+      }
+      brands: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chipsets: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      custom_devices: {
+        Row: {
+          created_at: string
+          device: Json
+          id: string
+          owner_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          device?: Json
+          id: string
+          owner_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          device?: Json
+          id?: string
+          owner_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      devices: {
+        Row: {
+          brand_id: string
+          created_at: string
+          data: Json
+          id: string
+          release_date: string
+          updated_at: string
+        }
+        Insert: {
+          brand_id?: string
+          created_at?: string
+          data?: Json
+          id: string
+          release_date?: string
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          data?: Json
+          id?: string
+          release_date?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      game_compatibility: {
+        Row: {
+          created_at: string
+          data: Json
+          device_id: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          device_id?: string
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          device_id?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      presets: {
+        Row: {
+          author_id: string
+          author_name: string
+          claw: string
+          created_at: string
+          description: string
+          device: Json
+          game: string
+          gyro: string
+          headline_metric: string
+          id: string
+          name: string
+          player_archetype: string
+          playstyle: string
+          sliders: Json
+          updated_at: string
+          visibility: string
+        }
+        Insert: {
+          author_id: string
+          author_name?: string
+          claw: string
+          created_at?: string
+          description?: string
+          device?: Json
+          game: string
+          gyro: string
+          headline_metric?: string
+          id?: string
+          name: string
+          player_archetype?: string
+          playstyle: string
+          sliders?: Json
+          updated_at?: string
+          visibility?: string
+        }
+        Update: {
+          author_id?: string
+          author_name?: string
+          claw?: string
+          created_at?: string
+          description?: string
+          device?: Json
+          game?: string
+          gyro?: string
+          headline_metric?: string
+          id?: string
+          name?: string
+          player_archetype?: string
+          playstyle?: string
+          sliders?: Json
+          updated_at?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string
+          email: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          email?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string
+          email?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      saved_setups: {
+        Row: {
+          created_at: string
+          game: string
+          id: string
+          input: Json
+          name: string
+          owner_id: string
+          sliders: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          game: string
+          id?: string
+          input?: Json
+          name: string
+          owner_id: string
+          sliders?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          game?: string
+          id?: string
+          input?: Json
+          name?: string
+          owner_id?: string
+          sliders?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      email_has_account: { Args: { _email: string }; Returns: boolean }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +450,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
