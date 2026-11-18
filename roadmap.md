@@ -25,3 +25,9 @@
 - [x] Dashboard sections: benefits + supported games
 - [x] Keep only Saved results; remove Presets and Aim Lab from the app (tables kept)
 - [x] Verify on phone + desktop, light + dark
+
+## Top bar & account menu (Nov 18)
+- [x] Remove Generate / Saved tabs from the top bar
+- [x] Signed out: "Get Started" button; signed in: profile picture in top right
+- [x] Profile menu: History, Upgrade Plan, Terms of Service, Privacy Policy, Sign out
+- [x] Pages for Upgrade Plan, Terms of Service, Privacy Policy (placeholder text until owner supplies real copy)

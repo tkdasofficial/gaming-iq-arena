@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { useBackend } from '../backend/BackendContext';
-import { AppHeader, type NavTab } from './AppHeader';
+import { Link } from '@tanstack/react-router';
+import { AppHeader } from './AppHeader';
 import { GeneratorView } from './GeneratorView';
 import { SavedView } from './SavedView';
 import { BrandMark, Notice } from './giq/primitives';
 
+type View = 'generate' | 'history';
+
 export default function GamingIQApp() {
   const { user, authReady, authError, savedResults, requestSignIn, signOutUser, clearAuthError } = useBackend();
-  const [tab, setTab] = useState<NavTab>('generate');
+  const [tab, setTab] = useState<View>('generate');
 
-  const selectTab = (next: NavTab) => {
+  const selectTab = (next: View) => {
     setTab(next);
     window.scrollTo({ top: 0 });
   };
@@ -18,13 +21,16 @@ export default function GamingIQApp() {
   return (
     <div className="flex min-h-dvh flex-col bg-background text-foreground">
       <AppHeader
-        activeTab={tab}
-        onSelectTab={selectTab}
-        savedCount={savedResults.length}
         user={user}
         authReady={authReady}
-        onSignIn={requestSignIn}
-        onSignOut={() => void signOutUser()}
+        savedCount={savedResults.length}
+        onHome={() => selectTab('generate')}
+        onOpenHistory={() => selectTab('history')}
+        onGetStarted={requestSignIn}
+        onSignOut={() => {
+          selectTab('generate');
+          void signOutUser();
+        }}
       />
 
       {authError ? (
@@ -48,13 +54,17 @@ export default function GamingIQApp() {
         <div hidden={tab !== 'generate'}>
           <GeneratorView />
         </div>
-        {tab === 'saved' ? <SavedView onGoToGenerate={() => selectTab('generate')} /> : null}
+        {tab === 'history' ? <SavedView onGoToGenerate={() => selectTab('generate')} /> : null}
       </main>
 
       <footer className="border-t border-border">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-5 text-xs text-muted-foreground sm:px-6">
           <BrandMark compact />
           <span>Recommendations are starting points based on verified device data.</span>
+          <nav aria-label="Legal" className="flex w-full items-center gap-4 sm:w-auto">
+            <Link to="/terms" className="transition-colors hover:text-foreground">Terms of Service</Link>
+            <Link to="/privacy" className="transition-colors hover:text-foreground">Privacy Policy</Link>
+          </nav>
         </div>
       </footer>
     </div>

@@ -55,7 +55,7 @@ export function SavedView({ onGoToGenerate }: { onGoToGenerate: () => void }) {
     return (
       <div className="mx-auto max-w-3xl space-y-4">
         <Button variant="ghost" size="sm" onClick={() => setOpenId(null)} className="-ml-2 text-muted-foreground">
-          <ArrowLeft /> All saved results
+          <ArrowLeft /> Back to history
         </Button>
         <ResultsView rec={open.recommendation} />
       </div>
@@ -64,7 +64,10 @@ export function SavedView({ onGoToGenerate }: { onGoToGenerate: () => void }) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <PageHeader eyebrow="Your library" title="Saved results" subtitle="Settings you saved, available on any device you sign in to." />
+      <Button variant="ghost" size="sm" onClick={onGoToGenerate} className="-ml-2 -mb-2 text-muted-foreground">
+        <ArrowLeft /> Back to generator
+      </Button>
+      <PageHeader eyebrow="Your library" title="History" subtitle="Sensitivity settings you saved, available on any device you sign in to." />
 
       {!authReady || (user && !savedLoaded) ? (
         <div className="space-y-2">
