@@ -170,6 +170,48 @@ export type Database = {
         }
         Relationships: []
       }
+      game_sensitivity_profiles: {
+        Row: {
+          created_at: string
+          game_id: string
+          recommended_value: number
+          schema_id: string
+          setting_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          game_id: string
+          recommended_value: number
+          schema_id: string
+          setting_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          game_id?: string
+          recommended_value?: number
+          schema_id?: string
+          setting_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "game_sensitivity_profiles_game_id_schema_id_fkey"
+            columns: ["game_id", "schema_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id", "sensitivity_schema_id"]
+          },
+          {
+            foreignKeyName: "game_sensitivity_profiles_schema_id_setting_id_fkey"
+            columns: ["schema_id", "setting_id"]
+            isOneToOne: false
+            referencedRelation: "sensitivity_settings"
+            referencedColumns: ["schema_id", "id"]
+          },
+        ]
+      }
       games: {
         Row: {
           config: Json
@@ -178,6 +220,7 @@ export type Database = {
           is_active: boolean
           name: string
           publisher: string
+          sensitivity_schema_id: string | null
           short_name: string
           sort_order: number
           supports_gyro: boolean
@@ -190,6 +233,7 @@ export type Database = {
           is_active?: boolean
           name: string
           publisher?: string
+          sensitivity_schema_id?: string | null
           short_name: string
           sort_order?: number
           supports_gyro?: boolean
@@ -202,12 +246,21 @@ export type Database = {
           is_active?: boolean
           name?: string
           publisher?: string
+          sensitivity_schema_id?: string | null
           short_name?: string
           sort_order?: number
           supports_gyro?: boolean
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "games_sensitivity_schema_id_fkey"
+            columns: ["sensitivity_schema_id"]
+            isOneToOne: false
+            referencedRelation: "sensitivity_schemas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       presets: {
         Row: {
@@ -325,6 +378,127 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      sensitivity_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          label: string
+          requires_gyro: boolean
+          schema_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id: string
+          label: string
+          requires_gyro?: boolean
+          schema_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          label?: string
+          requires_gyro?: boolean
+          schema_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sensitivity_categories_schema_id_fkey"
+            columns: ["schema_id"]
+            isOneToOne: false
+            referencedRelation: "sensitivity_schemas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sensitivity_schemas: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          name: string
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sensitivity_settings: {
+        Row: {
+          category_id: string
+          core_slot: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          id: string
+          input_kind: string
+          key: string
+          label: string
+          max_value: number
+          min_value: number
+          schema_id: string
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          core_slot?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id: string
+          input_kind?: string
+          key: string
+          label: string
+          max_value: number
+          min_value: number
+          schema_id: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          core_slot?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          id?: string
+          input_kind?: string
+          key?: string
+          label?: string
+          max_value?: number
+          min_value?: number
+          schema_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sensitivity_settings_schema_id_category_id_fkey"
+            columns: ["schema_id", "category_id"]
+            isOneToOne: false
+            referencedRelation: "sensitivity_categories"
+            referencedColumns: ["schema_id", "id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
