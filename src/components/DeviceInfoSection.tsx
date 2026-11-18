@@ -111,6 +111,7 @@ export function DeviceInfoSection({
 
   return (
     <Panel
+      id="device-panel"
       step="02"
       title="Your phone"
       meta={device.model ? formatDeviceFullName(device.brand, device.model) : 'Pick your device'}
@@ -409,7 +410,7 @@ export function DeviceInfoSection({
                     id="device-ram"
                     value={device.ramGb}
                     onChange={(e) => onUpdateDeviceField('ramGb', Number(e.target.value))}
-                    className="px-3 font-mono"
+                    className="pl-3 pr-8 font-mono"
                   >
                     {RAM_OPTIONS.map((ram) => (
                       <option key={ram} value={ram}>
@@ -424,7 +425,7 @@ export function DeviceInfoSection({
                     id="device-storage"
                     value={device.storageGb}
                     onChange={(e) => onUpdateDeviceField('storageGb', Number(e.target.value))}
-                    className="px-3 font-mono"
+                    className="pl-3 pr-8 font-mono"
                   >
                     {STORAGE_OPTIONS.map((gb) => (
                       <option key={gb} value={gb}>
@@ -439,7 +440,7 @@ export function DeviceInfoSection({
                     id="device-os"
                     value={device.os}
                     onChange={(e) => onUpdateDeviceField('os', e.target.value as DeviceOs)}
-                    className="px-3"
+                    className="pl-3 pr-8"
                   >
                     <option value="Android">Android</option>
                     <option value="iOS">iOS</option>
@@ -449,11 +450,11 @@ export function DeviceInfoSection({
               </div>
 
               <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background/40 px-3.5 py-3">
-                <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                <span className="shrink-0 whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                   Supported FPS
                 </span>
-                <span id="device-supported-fps" className="truncate font-mono text-xs font-semibold">
-                  {compatSummary.options.map((f) => f.replace(/ \(.*\)/, '')).join(' · ')}
+                <span id="device-supported-fps" className="min-w-0 truncate font-mono text-xs font-semibold">
+                  {compatSummary.options.map((f) => f.replace(/ FPS.*$/, '')).join(' · ')}
                 </span>
               </div>
             </motion.div>

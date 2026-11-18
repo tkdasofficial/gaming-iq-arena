@@ -1,5 +1,9 @@
 import { useMemo, useState } from 'react';
-import { Search, Smartphone, Sliders, Trash2, X } from 'lucide-react';
+import { Check, Search, Smartphone, Sliders, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { Sheet } from './giq/Sheet';
+import { Chip, FieldLabel, RangeSlider, Segmented, SelectField, TextField } from './giq/primitives';
 import {
   calculateDeviceAge,
   formatDeviceFullName,
@@ -88,8 +92,6 @@ export function DevicePickerModal({
 
   const displayedDevices = filteredDevices.slice(0, visibleCount);
 
-  if (!isOpen) return null;
-
   const handleApplyCustom = async () => {
     const cleanBrand = customBrand.trim();
     const cleanModel = customModel.trim();
@@ -134,434 +136,283 @@ export function DevicePickerModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/75 backdrop-blur-sm"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="device-modal-title"
+    <Sheet
+      open={isOpen}
+      onClose={onClose}
+      labelId="device-modal-title"
+      title="Find your phone"
+      subtitle="Search the catalog or add your own specs."
+      footer={
+        mode === 'custom' ? (
+          <Button variant="glow" size="xl" className="w-full" disabled={saving} onClick={() => void handleApplyCustom()}>
+            {saving ? 'Saving…' : isSignedIn ? 'Save & use this phone' : 'Use this phone'}
+          </Button>
+        ) : undefined
+      }
     >
-      <div className="w-full md:max-w-2xl bg-[#141417] border-t md:border border-[#29292F] rounded-t-3xl md:rounded-2xl max-h-[86vh] flex flex-col overflow-hidden">
-        <div className="md:hidden pt-3 pb-1 flex justify-center">
-          <div className="w-10 h-1.5 rounded-full bg-[#3F3F46]" />
-        </div>
+      <div className="px-5 pb-3">
+        <Segmented
+          layoutId="picker-mode"
+          ariaLabel="Picker mode"
+          size="sm"
+          value={mode}
+          onChange={setMode}
+          options={[
+            { id: 'catalog', label: `Catalog (${combinedDevices.length})`, icon: Smartphone },
+            { id: 'custom', label: 'Custom', icon: Sliders },
+          ]}
+        />
+      </div>
 
-        <div className="px-5 py-4 border-b border-[#29292F] flex items-center justify-between gap-4">
-          <div>
-            <h2
-              id="device-modal-title"
-              className="font-display text-2xl font-bold tracking-tight text-white"
-            >
-              Cloud Smartphone Database
-            </h2>
-            <p className="text-xs text-[#A1A1AA] mt-0.5">
-              Search verified smartphones in the cloud catalog or save custom hardware specs.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close device picker"
-            className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-[#A1A1AA] hover:text-white hover:bg-[#1B1B20] transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <div className="px-5 pt-3 pb-2">
-          <div className="grid grid-cols-2 gap-1 p-1 bg-[#111114] border border-[#29292F] rounded-xl">
-            <button
-              type="button"
-              onClick={() => setMode('catalog')}
-              className={`min-h-[40px] px-3 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
-                mode === 'catalog'
-                  ? 'bg-white text-black'
-                  : 'text-[#A1A1AA] hover:text-white'
-              }`}
-            >
-              <Smartphone className="w-4 h-4" />
-              <span>Cloud Catalog ({combinedDevices.length})</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode('custom')}
-              className={`min-h-[40px] px-3 rounded-lg text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap ${
-                mode === 'custom'
-                  ? 'bg-white text-black'
-                  : 'text-[#A1A1AA] hover:text-white'
-              }`}
-            >
-              <Sliders className="w-4 h-4" />
-              <span>Add Custom Device</span>
-            </button>
-          </div>
-        </div>
-
-        {mode === 'catalog' ? (
-          <div className="flex-1 flex flex-col overflow-hidden">
-            <div className="px-5 py-2 flex flex-col sm:flex-row gap-2">
-              <div className="relative flex-1">
-                <label htmlFor="device-search-input" className="sr-only">
-                  Search saved cloud devices
-                </label>
-                <Search className="w-4 h-4 text-[#A1A1AA] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  id="device-search-input"
-                  type="text"
-                  value={query}
-                  onChange={(e) => {
-                    setQuery(e.target.value);
-                    setVisibleCount(30);
-                  }}
-                  placeholder="Search brand, model, chipset, GPU, or year..."
-                  className="w-full min-h-[44px] pl-10 pr-4 bg-[#111114] border border-[#29292F] focus:border-[#F0263C] rounded-xl text-sm text-white placeholder-[#71717A] outline-none transition-colors"
-                />
-              </div>
-
-              <select
-                aria-label="Filter by smartphone brand"
-                value={brandFilter}
+      {mode === 'catalog' ? (
+        <div className="flex min-h-0 flex-1 flex-col">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 px-5 pb-3">
+            <div className="relative">
+              <label htmlFor="device-search-input" className="sr-only">
+                Search phones
+              </label>
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-subtle" />
+              <TextField
+                id="device-search-input"
+                value={query}
                 onChange={(e) => {
-                  setBrandFilter(e.target.value);
+                  setQuery(e.target.value);
                   setVisibleCount(30);
                 }}
-                className="min-h-[44px] px-3 bg-[#111114] border border-[#29292F] focus:border-[#F0263C] rounded-xl text-xs font-semibold text-white outline-none"
-              >
-                <option value="all">All Brands ({brands.length})</option>
-                {brands.map((b) => (
-                  <option key={b.id} value={b.id}>
-                    {b.name} ({b.deviceCount})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex-1 overflow-y-auto px-5 pb-6 divide-y divide-[#29292F]">
-              {catalogLoading && combinedDevices.length === 0 ? (
-                <div className="py-6 space-y-2.5">
-                  {[1, 2, 3, 4].map((n) => (
-                    <div
-                      key={n}
-                      className="h-14 rounded-xl bg-[#1B1B20] border border-[#29292F] animate-pulse"
-                    />
-                  ))}
-                </div>
-              ) : filteredDevices.length === 0 ? (
-                <div className="py-10 text-center space-y-3">
-                  <p className="text-sm text-[#A1A1AA]">
-                    {combinedDevices.length === 0
-                      ? 'No smartphones synced to the cloud yet. Add custom device specs to get started.'
-                      : 'No matching smartphone found.'}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setMode('custom')}
-                    className="min-h-[44px] px-4 py-2 rounded-lg bg-[#F0263C] hover:bg-[#B8172A] text-white text-xs font-semibold transition-colors"
-                  >
-                    Add Custom Device
-                  </button>
-                </div>
-              ) : (
-                <>
-                  {displayedDevices.map((dev) => {
-                    const isSelected = selectedDevice.id === dev.id;
-                    const canDelete = customDeviceIds.has(dev.id);
-                    const age = calculateDeviceAge(dev.releaseDate);
-                    return (
-                      <div
-                        key={dev.id}
-                        className={`py-2.5 flex items-center justify-between gap-2 ${
-                          isSelected ? 'bg-[#1B1B20] -mx-3 px-3 rounded-xl' : ''
-                        }`}
-                      >
-                        <button
-                          type="button"
-                          onClick={() => {
-                            onSelect(dev);
-                            onClose();
-                          }}
-                          className="flex-1 min-w-0 min-h-[48px] text-left flex items-center justify-between gap-3"
-                        >
-                          <div className="min-w-0">
-                            <div className="text-sm font-semibold text-white truncate">
-                              {formatDeviceFullName(dev.brand, dev.model)}
-                              {dev.releaseYear ? (
-                                <span className="ml-2 font-mono text-[11px] font-normal text-[#71717A]">
-                                  {dev.releaseYear}
-                                </span>
-                              ) : null}
-                            </div>
-                            <div className="text-xs text-[#A1A1AA] mt-0.5 font-mono tabular-nums truncate">
-                              {dev.chipset} · {dev.screenInches.toFixed(1)}&quot; ·{' '}
-                              {dev.refreshHz}Hz · {dev.ramGb}GB
-                              {age ? ` · ${age}` : ''}
-                            </div>
-                          </div>
-                          <span
-                            className={`text-xs font-semibold shrink-0 whitespace-nowrap ${
-                              isSelected ? 'text-[#F0263C]' : 'text-[#A1A1AA]'
-                            }`}
-                          >
-                            {isSelected ? 'Active' : 'Select'}
-                          </span>
-                        </button>
-
-                        {canDelete ? (
-                          <button
-                            type="button"
-                            onClick={() => void onDeleteCustomDevice(dev.id)}
-                            aria-label={`Delete ${dev.brand} ${dev.model}`}
-                            className="min-h-[40px] min-w-[40px] flex items-center justify-center rounded-lg text-[#71717A] hover:text-[#F0263C] hover:bg-[#111114] transition-colors shrink-0"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        ) : null}
-                      </div>
-                    );
-                  })}
-                  {filteredDevices.length > visibleCount ? (
-                    <div className="pt-3 text-center">
-                      <button
-                        type="button"
-                        onClick={() => setVisibleCount((c) => c + 30)}
-                        className="min-h-[40px] px-4 rounded-lg bg-[#1B1B20] border border-[#29292F] text-xs font-semibold text-white hover:border-[#F0263C]"
-                      >
-                        Load more ({filteredDevices.length - visibleCount} remaining)
-                      </button>
-                    </div>
-                  ) : null}
-                </>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
-            {formError ? (
-              <div className="p-3 rounded-lg bg-[#F0263C]/10 border border-[#F0263C] text-xs text-[#F0263C]">
-                {formError}
-              </div>
-            ) : null}
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label
-                  htmlFor="custom-brand-name"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Device Brand
-                </label>
-                <input
-                  id="custom-brand-name"
-                  type="text"
-                  maxLength={FIELD_LIMITS.deviceBrandMaxLength}
-                  value={customBrand}
-                  onChange={(e) => setCustomBrand(e.target.value)}
-                  placeholder="e.g. Samsung"
-                  className="w-full min-h-[44px] px-3.5 bg-[#111114] border border-[#29292F] focus:border-[#F0263C] rounded-xl text-sm text-white placeholder-[#71717A] outline-none"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="custom-model-name"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Device Model
-                </label>
-                <input
-                  id="custom-model-name"
-                  type="text"
-                  maxLength={FIELD_LIMITS.deviceModelMaxLength}
-                  value={customModel}
-                  onChange={(e) => setCustomModel(e.target.value)}
-                  placeholder="e.g. Galaxy S25 Ultra"
-                  className="w-full min-h-[44px] px-3.5 bg-[#111114] border border-[#29292F] focus:border-[#F0263C] rounded-xl text-sm text-white placeholder-[#71717A] outline-none"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label
-                  htmlFor="custom-chipset-name"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Chipset
-                </label>
-                <input
-                  id="custom-chipset-name"
-                  type="text"
-                  maxLength={FIELD_LIMITS.deviceChipsetMaxLength}
-                  value={customChipset}
-                  onChange={(e) => setCustomChipset(e.target.value)}
-                  placeholder="e.g. Snapdragon 8 Elite"
-                  className="w-full min-h-[44px] px-3.5 bg-[#111114] border border-[#29292F] focus:border-[#F0263C] rounded-xl text-sm text-white placeholder-[#71717A] outline-none"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="custom-resolution-name"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Resolution
-                </label>
-                <input
-                  id="custom-resolution-name"
-                  type="text"
-                  maxLength={FIELD_LIMITS.deviceResolutionMaxLength}
-                  value={customResolution}
-                  onChange={(e) => setCustomResolution(e.target.value)}
-                  placeholder="e.g. 2400 × 1080"
-                  className="w-full min-h-[44px] px-3.5 bg-[#111114] border border-[#29292F] focus:border-[#F0263C] rounded-xl text-sm font-mono text-white placeholder-[#71717A] outline-none"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <span className="block text-xs font-medium text-[#A1A1AA] mb-1.5">
-                  Operating System
-                </span>
-                <div className="grid grid-cols-2 gap-1 p-1 bg-[#111114] border border-[#29292F] rounded-xl">
-                  {(['Android', 'iOS'] as const).map((os) => (
-                    <button
-                      key={os}
-                      type="button"
-                      onClick={() => setCustomOs(os)}
-                      className={`min-h-[38px] rounded-lg text-xs font-semibold transition-colors ${
-                        customOs === os
-                          ? 'bg-white text-black'
-                          : 'text-[#A1A1AA] hover:text-white'
-                      }`}
-                    >
-                      {os}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <span className="block text-xs font-medium text-[#A1A1AA] mb-1.5">
-                  Refresh Rate
-                </span>
-                <div className="grid grid-cols-4 gap-1 p-1 bg-[#111114] border border-[#29292F] rounded-xl">
-                  {([60, 90, 120, 144] as const).map((hz) => (
-                    <button
-                      key={hz}
-                      type="button"
-                      onClick={() => setCustomHz(hz)}
-                      className={`min-h-[38px] rounded-lg text-xs font-mono font-semibold transition-colors ${
-                        customHz === hz
-                          ? 'bg-[#F0263C] text-white'
-                          : 'text-[#A1A1AA] hover:text-white'
-                      }`}
-                    >
-                      {hz}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between text-xs mb-1.5">
-                <label htmlFor="custom-screen-inches" className="font-medium text-[#A1A1AA]">
-                  Display Size
-                </label>
-                <span className="font-mono font-semibold text-white tabular-nums">
-                  {customInches.toFixed(1)} in
-                </span>
-              </div>
-              <input
-                id="custom-screen-inches"
-                type="range"
-                min={5.4}
-                max={12.9}
-                step={0.1}
-                value={customInches}
-                onChange={(e) => setCustomInches(Number(e.target.value))}
-                className="giq-slider bg-[#29292F]"
+                placeholder="Model, chipset, year…"
+                className="pl-10"
               />
             </div>
+            <SelectField
+              aria-label="Filter by brand"
+              value={brandFilter}
+              onChange={(e) => {
+                setBrandFilter(e.target.value);
+                setVisibleCount(30);
+              }}
+              className="w-32 text-xs font-semibold sm:w-40"
+            >
+              <option value="all">All brands</option>
+              {brands.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name} ({b.deviceCount})
+                </option>
+              ))}
+            </SelectField>
+          </div>
 
-            <div className="grid grid-cols-3 gap-3">
-              <div>
-                <label
-                  htmlFor="custom-ram-select"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  RAM
-                </label>
-                <select
-                  id="custom-ram-select"
-                  value={customRam}
-                  onChange={(e) => setCustomRam(Number(e.target.value))}
-                  className="w-full min-h-[44px] px-3 bg-[#111114] border border-[#29292F] rounded-xl text-sm text-white font-mono outline-none"
-                >
-                  {[4, 6, 8, 12, 16, 24].map((r) => (
-                    <option key={r} value={r}>
-                      {r} GB
-                    </option>
-                  ))}
-                </select>
+          <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-6 pb-safe">
+            {catalogLoading && combinedDevices.length === 0 ? (
+              <div className="space-y-2 px-2">
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <div key={n} className="skeleton h-16 rounded-2xl" />
+                ))}
               </div>
-              <div>
-                <label
-                  htmlFor="custom-storage-select"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Storage
-                </label>
-                <select
-                  id="custom-storage-select"
-                  value={customStorage}
-                  onChange={(e) => setCustomStorage(Number(e.target.value))}
-                  className="w-full min-h-[44px] px-3 bg-[#111114] border border-[#29292F] rounded-xl text-sm text-white font-mono outline-none"
-                >
-                  {[64, 128, 256, 512, 1024].map((s) => (
-                    <option key={s} value={s}>
-                      {s === 1024 ? '1 TB' : `${s} GB`}
-                    </option>
-                  ))}
-                </select>
+            ) : filteredDevices.length === 0 ? (
+              <div className="space-y-4 px-2 py-10 text-center">
+                <p className="text-sm text-muted-foreground">
+                  {combinedDevices.length === 0
+                    ? 'No phones in the catalog yet. Add your own specs instead.'
+                    : 'No matching phone found.'}
+                </p>
+                <Button variant="glow" size="md" onClick={() => setMode('custom')}>
+                  Add custom phone
+                </Button>
               </div>
-              <div>
-                <label
-                  htmlFor="custom-touch-select"
-                  className="block text-xs font-medium text-[#A1A1AA] mb-1.5"
-                >
-                  Touch Hz
-                </label>
-                <select
-                  id="custom-touch-select"
-                  value={customTouchHz}
-                  onChange={(e) => setCustomTouchHz(Number(e.target.value))}
-                  className="w-full min-h-[44px] px-3 bg-[#111114] border border-[#29292F] rounded-xl text-sm text-white font-mono outline-none"
-                >
-                  {[120, 180, 240, 360, 480, 720, 960].map((t) => (
-                    <option key={t} value={t}>
-                      {t} Hz
-                    </option>
-                  ))}
-                </select>
-              </div>
+            ) : (
+              <ul className="space-y-1">
+                {displayedDevices.map((dev) => {
+                  const isSelected = selectedDevice.id === dev.id;
+                  const canDelete = customDeviceIds.has(dev.id);
+                  const age = calculateDeviceAge(dev.releaseDate);
+                  return (
+                    <li
+                      key={dev.id}
+                      className={cn(
+                        'grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1 rounded-2xl border transition-colors',
+                        isSelected ? 'border-primary/50 bg-primary/10' : 'border-transparent hover:bg-secondary'
+                      )}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onSelect(dev);
+                          onClose();
+                        }}
+                        className="grid min-h-16 min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-2.5 py-2 text-left"
+                      >
+                        <span
+                          className={cn(
+                            'grid size-10 place-items-center rounded-xl border',
+                            isSelected ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-secondary text-muted-foreground'
+                          )}
+                        >
+                          {isSelected ? <Check className="size-4" strokeWidth={3} /> : <Smartphone className="size-4" />}
+                        </span>
+                        <span className="min-w-0">
+                          <span className="block truncate text-sm font-semibold">
+                            {formatDeviceFullName(dev.brand, dev.model)}
+                          </span>
+                          <span className="block truncate font-mono text-[11px] text-muted-foreground tabular-nums">
+                            {dev.chipset} · {dev.refreshHz}Hz · {dev.ramGb}GB{age ? ` · ${age}` : ''}
+                          </span>
+                        </span>
+                        {dev.releaseYear ? (
+                          <span className="font-mono text-[11px] font-semibold text-subtle">{dev.releaseYear}</span>
+                        ) : null}
+                      </button>
+                      {canDelete ? (
+                        <button
+                          type="button"
+                          onClick={() => void onDeleteCustomDevice(dev.id)}
+                          aria-label={`Delete ${dev.brand} ${dev.model}`}
+                          className="mr-1.5 grid size-9 place-items-center rounded-xl text-subtle transition-colors hover:bg-primary/10 hover:text-primary"
+                        >
+                          <Trash2 className="size-4" />
+                        </button>
+                      ) : null}
+                    </li>
+                  );
+                })}
+                {filteredDevices.length > visibleCount ? (
+                  <li className="pt-3 text-center">
+                    <Button variant="surface" size="md" onClick={() => setVisibleCount((c) => c + 30)}>
+                      Show more ({filteredDevices.length - visibleCount})
+                    </Button>
+                  </li>
+                ) : null}
+              </ul>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-5 pb-5">
+          {formError ? (
+            <div className="rounded-xl border border-primary/50 bg-primary/10 p-3 text-xs font-medium text-primary">{formError}</div>
+          ) : null}
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="min-w-0">
+              <FieldLabel htmlFor="custom-brand-name">Brand</FieldLabel>
+              <TextField
+                id="custom-brand-name"
+                maxLength={FIELD_LIMITS.deviceBrandMaxLength}
+                value={customBrand}
+                onChange={(e) => setCustomBrand(e.target.value)}
+                placeholder="Samsung"
+              />
             </div>
-
-            <div className="pt-2 pb-2">
-              <button
-                type="button"
-                disabled={saving}
-                onClick={() => void handleApplyCustom()}
-                className="w-full min-h-[48px] rounded-xl bg-[#F0263C] hover:bg-[#B8172A] disabled:opacity-60 text-white text-sm font-semibold transition-colors"
-              >
-                {saving
-                  ? 'Saving to cloud...'
-                  : isSignedIn
-                    ? 'Save to Cloud & Apply Device'
-                    : 'Apply Device Specs'}
-              </button>
+            <div className="min-w-0">
+              <FieldLabel htmlFor="custom-model-name">Model</FieldLabel>
+              <TextField
+                id="custom-model-name"
+                maxLength={FIELD_LIMITS.deviceModelMaxLength}
+                value={customModel}
+                onChange={(e) => setCustomModel(e.target.value)}
+                placeholder="Galaxy S25 Ultra"
+              />
+            </div>
+            <div className="min-w-0">
+              <FieldLabel htmlFor="custom-chipset-name">Chipset</FieldLabel>
+              <TextField
+                id="custom-chipset-name"
+                maxLength={FIELD_LIMITS.deviceChipsetMaxLength}
+                value={customChipset}
+                onChange={(e) => setCustomChipset(e.target.value)}
+                placeholder="Snapdragon 8 Elite"
+              />
+            </div>
+            <div className="min-w-0">
+              <FieldLabel htmlFor="custom-resolution-name">Resolution</FieldLabel>
+              <TextField
+                id="custom-resolution-name"
+                maxLength={FIELD_LIMITS.deviceResolutionMaxLength}
+                value={customResolution}
+                onChange={(e) => setCustomResolution(e.target.value)}
+                placeholder="2400 × 1080"
+                className="font-mono"
+              />
             </div>
           </div>
-        )}
-      </div>
-    </div>
+
+          <div>
+            <FieldLabel>System</FieldLabel>
+            <Segmented
+              layoutId="custom-os"
+              size="sm"
+              value={customOs}
+              onChange={setCustomOs}
+              options={[
+                { id: 'Android' as DeviceOs, label: 'Android' },
+                { id: 'iOS' as DeviceOs, label: 'iOS' },
+              ]}
+            />
+          </div>
+
+          <div>
+            <FieldLabel>Refresh rate</FieldLabel>
+            <div className="flex flex-wrap gap-2">
+              {([60, 90, 120, 144] as const).map((hz) => (
+                <Chip key={hz} active={customHz === hz} onClick={() => setCustomHz(hz)}>
+                  {hz}Hz
+                </Chip>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <FieldLabel htmlFor="custom-screen-inches" hint={`${customInches.toFixed(1)} in`}>
+              Screen size
+            </FieldLabel>
+            <div className="flex h-12 items-center rounded-xl border border-border bg-secondary px-4">
+              <RangeSlider id="custom-screen-inches" min={5.4} max={12.9} step={0.1} value={customInches} onChange={setCustomInches} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div className="min-w-0">
+              <FieldLabel htmlFor="custom-ram-select">RAM</FieldLabel>
+              <SelectField id="custom-ram-select" value={customRam} onChange={(e) => setCustomRam(Number(e.target.value))} className="pl-3 pr-8 font-mono">
+                {[4, 6, 8, 12, 16, 24].map((r) => (
+                  <option key={r} value={r}>
+                    {r} GB
+                  </option>
+                ))}
+              </SelectField>
+            </div>
+            <div className="min-w-0">
+              <FieldLabel htmlFor="custom-storage-select">Storage</FieldLabel>
+              <SelectField
+                id="custom-storage-select"
+                value={customStorage}
+                onChange={(e) => setCustomStorage(Number(e.target.value))}
+                className="pl-3 pr-8 font-mono"
+              >
+                {[64, 128, 256, 512, 1024].map((st) => (
+                  <option key={st} value={st}>
+                    {st === 1024 ? '1 TB' : `${st} GB`}
+                  </option>
+                ))}
+              </SelectField>
+            </div>
+            <div className="min-w-0">
+              <FieldLabel htmlFor="custom-touch-select">Touch</FieldLabel>
+              <SelectField
+                id="custom-touch-select"
+                value={customTouchHz}
+                onChange={(e) => setCustomTouchHz(Number(e.target.value))}
+                className="pl-3 pr-8 font-mono"
+              >
+                {[120, 180, 240, 360, 480, 720, 960].map((t) => (
+                  <option key={t} value={t}>
+                    {t}Hz
+                  </option>
+                ))}
+              </SelectField>
+            </div>
+          </div>
+        </div>
+      )}
+    </Sheet>
   );
 }

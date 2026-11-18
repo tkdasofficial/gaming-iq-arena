@@ -1,7 +1,10 @@
-import { Bookmark, Check, Copy, LogIn, SlidersHorizontal, Trash2, Upload } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'motion/react';
+import { Bookmark, Check, Copy, LogIn, Smartphone, SlidersHorizontal, Trash2, Upload } from 'lucide-react';
 import { formatDeviceFullName } from '../engine/devices';
 import type { SavedSetup } from '../engine/types';
+import { Button } from '@/components/ui/button';
+import { EmptyState, PageHeader } from './giq/primitives';
 
 interface SavedViewProps {
   savedSetups: SavedSetup[];
@@ -44,157 +47,105 @@ export function SavedView({
 
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-          Saved Profiles
-        </h1>
-        <p className="text-xs sm:text-sm text-[#A1A1AA]">
-          Cloud-synced sensitivity setups stored securely in your Gaming IQ account.
-        </p>
-      </div>
+      <PageHeader
+        kicker="Your library"
+        title="Saved profiles"
+        subtitle="Your setups, synced to your account on every device."
+        action={
+          isSignedIn && savedSetups.length > 0 ? (
+            <span className="rounded-xl border border-border bg-secondary px-3 py-2 font-mono text-sm font-bold tabular-nums">
+              {savedSetups.length}
+            </span>
+          ) : undefined
+        }
+      />
 
       {authReady && !isSignedIn ? (
-        <div className="bg-[#141417] border border-[#29292F] rounded-xl p-8 sm:p-12 text-center space-y-4">
-          <div className="w-12 h-12 rounded-xl bg-[#111114] border border-[#29292F] flex items-center justify-center mx-auto">
-            <LogIn className="w-6 h-6 text-[#F0263C]" />
-          </div>
-          <div className="space-y-1">
-            <h2 className="font-display text-2xl font-bold text-white">
-              Sign In to Sync Saved Profiles
-            </h2>
-            <p className="text-sm text-[#A1A1AA] max-w-md mx-auto">
-              All saved sensitivity profiles are stored in the cloud so your configurations stay available across every device.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onSignIn}
-            className="min-h-[48px] px-5 rounded-xl bg-[#F0263C] hover:bg-[#B8172A] text-white text-sm font-semibold inline-flex items-center gap-2 transition-colors"
-          >
-            <LogIn className="w-4 h-4" />
-            <span>Sign In</span>
-          </button>
-        </div>
+        <EmptyState
+          icon={LogIn}
+          title="Sign in to see your saves"
+          body="Saved profiles live in your account, so they follow you to any phone."
+          actions={
+            <Button variant="glow" size="md" onClick={onSignIn}>
+              <LogIn /> Sign in
+            </Button>
+          }
+        />
       ) : savedSetups.length === 0 ? (
-        <div className="bg-[#141417] border border-[#29292F] rounded-xl p-8 sm:p-12 text-center space-y-4">
-          <div className="w-12 h-12 rounded-xl bg-[#111114] border border-[#29292F] flex items-center justify-center mx-auto">
-            <Bookmark className="w-6 h-6 text-[#F0263C]" />
-          </div>
-          <div className="space-y-1">
-            <h2 className="font-display text-2xl font-bold text-white">
-              No Saved Setups Yet
-            </h2>
-            <p className="text-sm text-[#A1A1AA] max-w-md mx-auto">
-              Generate a sensitivity configuration and click Save to Cloud to store it in your account.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={onGoToCalibrate}
-            className="min-h-[48px] px-5 rounded-xl bg-[#F0263C] hover:bg-[#B8172A] text-white text-sm font-semibold inline-flex items-center gap-2 transition-colors"
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            <span>Open Calibrator</span>
-          </button>
-        </div>
+        <EmptyState
+          icon={Bookmark}
+          title="Nothing saved yet"
+          body="Generate a profile and tap Save — it'll show up here."
+          actions={
+            <Button variant="glow" size="md" onClick={onGoToCalibrate}>
+              <SlidersHorizontal /> Open calibrator
+            </Button>
+          }
+        />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {savedSetups.map((setup) => {
-            const gameLabel =
-              setup.input.game === 'free-fire'
-                ? 'Garena Free Fire'
-                : 'BGMI (Battlegrounds Mobile India)';
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {savedSetups.map((setup, i) => {
+            const isFF = setup.input.game === 'free-fire';
             const previewEntries = Object.entries(setup.sliders).slice(0, 3);
             const isCopied = copiedId === setup.id;
-
             return (
-              <article
+              <motion.article
                 key={setup.id}
-                className="bg-[#141417] border border-[#29292F] rounded-xl p-5 flex flex-col justify-between gap-4"
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: Math.min(i, 8) * 0.05, duration: 0.35 }}
+                className="surface relative overflow-hidden rounded-3xl p-4"
               >
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="text-xs text-[#F0263C] font-semibold">
-                        {gameLabel}
-                      </div>
-                      <h2 className="font-display text-2xl font-bold text-white truncate mt-0.5">
-                        {setup.name}
-                      </h2>
-                    </div>
-                    <button
-                      type="button"
-                      disabled={deletingId === setup.id}
-                      onClick={() => void handleDelete(setup.id)}
-                      aria-label={`Delete ${setup.name}`}
-                      className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-[#A1A1AA] hover:text-[#F0263C] hover:bg-[#111114] transition-colors shrink-0 disabled:opacity-50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  <div className="text-xs text-[#A1A1AA]">
-                    {formatDeviceFullName(setup.input.device.brand, setup.input.device.model)}
-                    <span aria-hidden="true"> · </span>
-                    {setup.input.claw}
-                    <span aria-hidden="true"> · </span>
-                    <span className="capitalize">
-                      {setup.input.playstyle.replace('-', ' ')}
+                <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-hero opacity-50" />
+                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                  <div className="min-w-0">
+                    <span className="rounded-full bg-primary/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+                      {isFF ? 'Free Fire' : 'BGMI'}
                     </span>
-                    {setup.input.game === 'pubg-bgmi' ? (
-                      <>
-                        <span aria-hidden="true"> · </span>
-                        <span>Gyro {setup.input.gyro}</span>
-                      </>
-                    ) : null}
+                    <h2 className="mt-2.5 truncate font-display text-2xl font-bold leading-tight tracking-tight">{setup.name}</h2>
+                    <p className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-muted-foreground">
+                      <Smartphone className="size-3.5 shrink-0" />
+                      <span className="truncate">
+                        {formatDeviceFullName(setup.input.device.brand, setup.input.device.model)} ·{' '}
+                        {setup.input.claw.replace('-finger', 'F')} · {setup.input.playstyle.replace('-', ' ')}
+                      </span>
+                    </p>
                   </div>
+                  <button
+                    type="button"
+                    disabled={deletingId === setup.id}
+                    onClick={() => void handleDelete(setup.id)}
+                    aria-label={`Delete ${setup.name}`}
+                    className="grid size-9 place-items-center rounded-xl text-subtle transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                </div>
 
-                  <div className="grid grid-cols-3 gap-2">
-                    {previewEntries.map(([key, val]) => (
-                      <div
-                        key={key}
-                        className="p-2.5 rounded-lg bg-[#111114] border border-[#29292F]"
-                      >
-                        <div className="text-[11px] text-[#A1A1AA] truncate">
-                          {key.replace(/^(ff-|cam-|ads-|gyro-|fl-)/, '').toUpperCase()}
-                        </div>
-                        <div className="font-mono text-base font-bold text-white tabular-nums">
-                          {val}
-                          {setup.input.game === 'pubg-bgmi' ? '%' : ''}
-                        </div>
+                <div className="relative mt-4 grid grid-cols-3 gap-2">
+                  {previewEntries.map(([key, val]) => (
+                    <div key={key} className="min-w-0 rounded-2xl border border-border bg-background/50 px-3 py-2.5">
+                      <div className="truncate text-[10px] font-semibold uppercase tracking-wider text-subtle">
+                        {key.replace(/^(ff-|cam-|ads-|gyro-|fl-)/, '').replace(/-/g, ' ')}
                       </div>
-                    ))}
-                  </div>
+                      <div className="mt-0.5 font-mono text-lg font-bold tabular-nums">
+                        {val}
+                        {!isFF ? <span className="text-xs text-primary">%</span> : null}
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-[#29292F]">
-                  <button
-                    type="button"
-                    onClick={() => onLoadSetup(setup)}
-                    className="min-h-[44px] px-4 rounded-xl bg-white hover:bg-[#E4E4E7] text-black text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap"
-                  >
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>Load Profile</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleCopy(setup)}
-                    className="min-h-[44px] px-4 rounded-xl bg-[#1B1B20] border border-[#29292F] hover:border-[#F0263C] text-white text-xs font-semibold inline-flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap"
-                  >
-                    {isCopied ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-[#F0263C]" />
-                        <span>Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>Copy Setup</span>
-                      </>
-                    )}
-                  </button>
+                <div className="relative mt-4 grid grid-cols-2 gap-2">
+                  <Button variant="glow" size="md" onClick={() => onLoadSetup(setup)}>
+                    <Upload /> Load
+                  </Button>
+                  <Button variant="surface" size="md" onClick={() => handleCopy(setup)} className={isCopied ? 'text-success' : ''}>
+                    {isCopied ? <Check /> : <Copy />}
+                    {isCopied ? 'Copied' : 'Copy'}
+                  </Button>
                 </div>
-              </article>
+              </motion.article>
             );
           })}
         </div>

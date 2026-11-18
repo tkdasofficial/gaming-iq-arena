@@ -146,7 +146,21 @@ export function CalibrateView({
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
 
   const handleGenerateClick = () => {
+    const d = input.device;
+    const invalidField = !d.brand.trim()
+      ? 'device-brand-field'
+      : !d.model.trim()
+        ? 'device-model-field'
+        : !d.screenInches || d.screenInches < 4.5 || d.screenInches > 14
+          ? 'device-screen-size'
+          : null;
     onGenerate();
+    if (invalidField) {
+      const el = document.getElementById(invalidField);
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      window.setTimeout(() => el?.focus({ preventScroll: true }), 350);
+      return;
+    }
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       window.setTimeout(() => {
         document.getElementById('generated-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });

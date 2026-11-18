@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { BrandMark } from "@/components/giq/primitives";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -152,21 +153,30 @@ function AuthPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="px-5 py-4 md:px-8">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+    <main className="relative flex min-h-dvh flex-col overflow-hidden bg-background text-foreground">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[460px] bg-gradient-hero" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-dots opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent_60%)]" />
+      <header className="relative grid grid-cols-[auto_1fr] items-center gap-3 px-5 py-4 md:px-8">
+        <Link
+          to="/"
+          aria-label="Back to app"
+          className="grid size-10 place-items-center rounded-xl border border-border bg-secondary text-muted-foreground transition-colors hover:text-foreground"
+        >
           <ArrowLeft className="size-4" aria-hidden="true" />
-          Back to app
         </Link>
+        <div className="flex justify-end">
+          <BrandMark />
+        </div>
       </header>
 
-      <div className="flex-1 flex items-start md:items-center justify-center px-5 pb-12 pt-4">
+      <div className="relative flex flex-1 items-start justify-center px-5 pb-12 pt-6 md:items-center">
         <div className="w-full max-w-sm">
-          <div className="mb-8">
-            <span className="font-display text-3xl font-bold uppercase tracking-wide">
-              Gaming <span className="text-primary">IQ</span>
-            </span>
-            <h1 className="mt-4 font-display text-4xl font-bold leading-none">
+          <div className="mb-7">
+            <div className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+              <span className="size-1.5 rounded-full bg-primary shadow-glow" />
+              {step === "check-email" ? "Almost there" : step === "password" ? (mode === "login" ? "Log in" : "Sign up") : "Account"}
+            </div>
+            <h1 className="font-display text-[42px] font-extrabold leading-[0.95] tracking-tight">
               {step === "check-email"
                 ? "Check your inbox"
                 : step === "password"
@@ -183,12 +193,12 @@ function AuthPage() {
           </div>
 
           {step === "check-email" ? (
-            <div className="rounded-2xl border border-border bg-card p-5">
+            <div className="surface rounded-3xl p-5">
               <MailCheck className="size-8 text-primary" aria-hidden="true" />
               <p className="mt-3 text-sm text-card-foreground">
                 After confirming, come back here and log in with your email and password.
               </p>
-              <Button variant="outline" className="mt-5 w-full h-11 rounded-xl" onClick={resetToEmail}>
+              <Button variant="surface" size="md" className="mt-5 w-full" onClick={resetToEmail}>
                 Back to sign in
               </Button>
             </div>
@@ -196,7 +206,7 @@ function AuthPage() {
             <>
               <form
                 onSubmit={step === "email" ? handleEmailSubmit : handlePasswordSubmit}
-                className="space-y-4"
+                className="surface space-y-4 rounded-3xl p-5"
                 noValidate
               >
                 <div className="space-y-2">
@@ -211,10 +221,10 @@ function AuthPage() {
                       placeholder="you@example.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="h-11 rounded-xl bg-card"
+                      className="h-12 rounded-xl border-border bg-secondary focus-visible:ring-primary/40"
                     />
                   ) : (
-                    <div className="flex h-11 items-center justify-between gap-3 rounded-xl border border-border bg-card px-3">
+                    <div className="flex h-12 items-center justify-between gap-3 rounded-xl border border-border bg-secondary px-3.5">
                       <span className="truncate text-sm">{email}</span>
                       <button
                         type="button"
@@ -232,7 +242,7 @@ function AuthPage() {
                     <div
                       role="tablist"
                       aria-label="Account action"
-                      className="grid grid-cols-2 gap-1 rounded-xl border border-border bg-card p-1"
+                      className="grid grid-cols-2 gap-1 rounded-2xl border border-border bg-background/60 p-1"
                     >
                       {(["login", "signup"] as const).map((m) => (
                         <button
@@ -245,9 +255,9 @@ function AuthPage() {
                             setError(null);
                           }}
                           className={cn(
-                            "h-9 rounded-lg text-sm font-semibold transition-colors",
+                            "h-10 rounded-xl text-sm font-semibold transition-all",
                             mode === m
-                              ? "bg-primary text-primary-foreground"
+                              ? "bg-gradient-primary text-primary-foreground shadow-glow"
                               : "text-muted-foreground hover:text-foreground",
                           )}
                         >
@@ -273,7 +283,7 @@ function AuthPage() {
                         placeholder={mode === "login" ? "Your password" : "At least 6 characters"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="h-11 rounded-xl bg-card"
+                        className="h-12 rounded-xl border-border bg-secondary focus-visible:ring-primary/40"
                       />
                     </div>
                   </div>
@@ -285,7 +295,7 @@ function AuthPage() {
                   </p>
                 ) : null}
 
-                <Button type="submit" disabled={busy} className="w-full h-11 rounded-xl font-semibold">
+                <Button type="submit" variant="glow" size="md" disabled={busy} className="w-full h-12">
                   {busy ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
                   {step === "email" ? (
                     <>
@@ -310,7 +320,7 @@ function AuthPage() {
                 type="button"
                 variant="google"
                 size="google"
-                className="w-full"
+                className="w-full h-12"
                 disabled={googleBusy}
                 onClick={() => void handleGoogle()}
               >

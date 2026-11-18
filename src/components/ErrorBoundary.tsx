@@ -41,26 +41,22 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   override render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-[#0B0B0D] text-white flex items-center justify-center p-6">
-          <div className="max-w-md w-full bg-[#141417] border border-[#29292F] rounded-2xl p-6 space-y-4">
-            <div className="w-10 h-10 rounded-xl bg-[#1B1B20] border border-[#F0263C]/40 flex items-center justify-center">
-              <AlertTriangle className="w-5 h-5 text-[#F0263C]" />
+        <div className="flex min-h-dvh items-center justify-center bg-background p-6 text-foreground">
+          <div className="surface w-full max-w-md space-y-5 rounded-3xl p-6">
+            <div className="grid size-12 place-items-center rounded-2xl border border-primary/40 bg-primary/10">
+              <AlertTriangle className="size-5 text-primary" />
             </div>
             <div className="space-y-1.5">
-              <h1 className="font-display text-2xl font-bold text-white">
-                Connection or Permission Error
-              </h1>
-              <p className="text-sm text-[#A1A1AA] break-words">
-                {this.state.message}
-              </p>
+              <h1 className="font-display text-3xl font-bold tracking-tight">Something went wrong</h1>
+              <p className="break-words text-sm text-muted-foreground">{this.state.message}</p>
             </div>
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="min-h-[44px] px-5 rounded-xl bg-[#F0263C] hover:bg-[#B8172A] text-white text-sm font-semibold inline-flex items-center gap-2 transition-colors"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-primary text-sm font-semibold text-primary-foreground shadow-glow"
             >
-              <RotateCcw className="w-4 h-4" />
-              <span>Reload Gaming IQ</span>
+              <RotateCcw className="size-4" />
+              Reload Gaming IQ
             </button>
           </div>
         </div>

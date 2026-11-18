@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Crosshair, LogIn, Play, RotateCcw, Trash2 } from 'lucide-react';
+import { Crosshair, History, LogIn, Play, RotateCcw, Square, Target as TargetIcon, Timer, Trash2, Zap } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { PageHeader, RangeSlider } from './giq/primitives';
 import type { AimLabRun, CalibrationResult, GameId } from '../engine/types';
 
 interface AimLabViewProps {
@@ -100,15 +104,25 @@ export function AimLabView({
       canvas.height = targetH;
     }
 
+    const css = getComputedStyle(canvas);
+    const token = (name: string, fallback: string) => css.getPropertyValue(name).trim() || fallback;
+    const c = {
+      bg: token('--background', '#0B0B0D'),
+      grid: token('--secondary', '#1B1B20'),
+      axis: token('--surface-3', '#29292F'),
+      fg: token('--foreground', '#FFFFFF'),
+      primary: token('--primary', '#F0263C'),
+    };
+
     ctx.save();
     ctx.scale(dpr, dpr);
     const w = rect.width;
     const h = rect.height;
 
-    ctx.fillStyle = '#0B0B0D';
+    ctx.fillStyle = c.bg;
     ctx.fillRect(0, 0, w, h);
 
-    ctx.strokeStyle = '#1B1B20';
+    ctx.strokeStyle = c.grid;
     ctx.lineWidth = 1;
     const step = 36;
     for (let x = step; x < w; x += step) {
@@ -124,7 +138,7 @@ export function AimLabView({
       ctx.stroke();
     }
 
-    ctx.strokeStyle = '#29292F';
+    ctx.strokeStyle = c.axis;
     ctx.beginPath();
     ctx.moveTo(w / 2, 0);
     ctx.lineTo(w / 2, h);
@@ -134,39 +148,41 @@ export function AimLabView({
 
     const now = performance.now();
     if (stateRef.current.flashColor && now < stateRef.current.flashUntil) {
-      ctx.fillStyle =
-        stateRef.current.flashColor === 'hit'
-          ? 'rgba(255, 255, 255, 0.08)'
-          : 'rgba(240, 38, 60, 0.14)';
+      ctx.globalAlpha = stateRef.current.flashColor === 'hit' ? 0.08 : 0.16;
+      ctx.fillStyle = stateRef.current.flashColor === 'hit' ? c.fg : c.primary;
       ctx.fillRect(0, 0, w, h);
+      ctx.globalAlpha = 1;
     }
 
     const target = stateRef.current.target;
     if (target && stateRef.current.status === 'running') {
       ctx.beginPath();
       ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
-      ctx.fillStyle = '#FFFFFF';
+      ctx.shadowColor = c.primary;
+      ctx.shadowBlur = 24;
+      ctx.fillStyle = c.fg;
       ctx.fill();
+      ctx.shadowBlur = 0;
 
       ctx.beginPath();
       ctx.arc(target.x, target.y, target.radius * 0.58, 0, Math.PI * 2);
-      ctx.fillStyle = '#F0263C';
+      ctx.fillStyle = c.primary;
       ctx.fill();
 
       ctx.beginPath();
       ctx.arc(target.x, target.y, target.radius * 0.22, 0, Math.PI * 2);
-      ctx.fillStyle = '#0B0B0D';
+      ctx.fillStyle = c.bg;
       ctx.fill();
     }
 
     const ch = stateRef.current.crosshair;
-    ctx.strokeStyle = '#F0263C';
+    ctx.strokeStyle = c.primary;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(ch.x, ch.y, 12, 0, Math.PI * 2);
     ctx.stroke();
 
-    ctx.strokeStyle = '#FFFFFF';
+    ctx.strokeStyle = c.fg;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(ch.x - 18, ch.y);
@@ -336,202 +352,193 @@ export function AimLabView({
     }
 
     drawCanvas();
+    window.setTimeout(drawCanvas, 140);
   };
 
   const totalShots = hits + misses;
   const accuracy = totalShots > 0 ? Math.round((hits / totalShots) * 100) : 100;
+  const timePct = (timeLeft / 15) * 100;
+
+  const hud = [
+    { label: 'Time', value: `${timeLeft}s`, icon: Timer },
+    { label: 'Hits', value: hits, icon: TargetIcon },
+    { label: 'Acc', value: `${accuracy}%`, icon: Crosshair, accent: true },
+    { label: 'React', value: avgReactionMs !== null ? `${avgReactionMs}` : '—', unit: avgReactionMs !== null ? 'ms' : '', icon: Zap },
+  ];
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-          Sensitivity Flick Lab
-        </h1>
+      <PageHeader
+        kicker="Training"
+        title="Flick lab"
+        subtitle="15-second drill. Drag to move the crosshair, tap targets as fast as you can."
+      />
 
-        <div className="flex items-center gap-2">
-          {status !== 'running' ? (
-            <button
-              key="start-drill"
-              type="button"
-              onClick={startDrill}
-              className="min-h-[44px] px-5 rounded-xl bg-[#F0263C] hover:bg-[#B8172A] text-white text-sm font-semibold inline-flex items-center gap-2 whitespace-nowrap"
-            >
-              <Play className="w-4 h-4" />
-              <span>{status === 'finished' ? 'Run Again (15s)' : 'Start 15s Drill'}</span>
-            </button>
-          ) : (
-            <button
-              key="stop-drill"
-              type="button"
-              onClick={resetDrill}
-              className="min-h-[44px] px-4 rounded-xl bg-white hover:bg-[#E4E4E7] text-black text-sm font-semibold inline-flex items-center gap-2 whitespace-nowrap"
-            >
-              <RotateCcw className="w-4 h-4" />
-              <span>Stop Drill</span>
-            </button>
-          )}
-        </div>
-      </div>
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+        <div className="min-w-0 space-y-3">
+          {/* Arena */}
+          <div className="surface relative overflow-hidden rounded-3xl p-1.5">
+            <div className="relative overflow-hidden rounded-[20px]">
+              <canvas
+                ref={canvasRef}
+                data-testid="aimlab-canvas"
+                data-state={status}
+                onPointerMove={handlePointerMove}
+                onPointerDown={handlePointerDown}
+                onPointerLeave={() => {
+                  stateRef.current.lastPointer = null;
+                }}
+                className="block h-[min(58dvh,440px)] w-full cursor-crosshair touch-none"
+              />
 
-      {/* Telemetry Row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-[#141417] border border-[#29292F] rounded-xl p-3.5">
-          <div className="text-xs text-[#A1A1AA]">Time Remaining</div>
-          <div className="font-mono text-2xl font-bold text-white tabular-nums mt-0.5">
-            {timeLeft}s
-          </div>
-        </div>
-        <div className="bg-[#141417] border border-[#29292F] rounded-xl p-3.5">
-          <div className="text-xs text-[#A1A1AA]">Targets Hit</div>
-          <div className="font-mono text-2xl font-bold text-white tabular-nums mt-0.5">
-            {hits}
-          </div>
-        </div>
-        <div className="bg-[#141417] border border-[#29292F] rounded-xl p-3.5">
-          <div className="text-xs text-[#A1A1AA]">Accuracy</div>
-          <div className="font-mono text-2xl font-bold text-[#F0263C] tabular-nums mt-0.5">
-            {accuracy}%
-          </div>
-        </div>
-        <div className="bg-[#141417] border border-[#29292F] rounded-xl p-3.5">
-          <div className="text-xs text-[#A1A1AA]">Avg Reaction</div>
-          <div className="font-mono text-2xl font-bold text-white tabular-nums mt-0.5">
-            {avgReactionMs !== null ? `${avgReactionMs}ms` : '—'}
-          </div>
-        </div>
-      </div>
-
-      {/* Interactive Canvas */}
-      <div className="bg-[#141417] border border-[#29292F] rounded-xl p-3 sm:p-4 space-y-4">
-        <div className="relative rounded-xl overflow-hidden border border-[#29292F]">
-          <canvas
-            ref={canvasRef}
-            data-testid="aimlab-canvas"
-            data-state={status}
-            onPointerMove={handlePointerMove}
-            onPointerDown={handlePointerDown}
-            onPointerLeave={() => {
-              stateRef.current.lastPointer = null;
-            }}
-            className="w-full h-[260px] sm:h-[380px] block touch-none cursor-crosshair"
-          />
-
-          {status === 'idle' ? (
-            <div className="absolute inset-0 bg-black/65 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center pointer-events-none">
-              <Crosshair className="w-8 h-8 text-[#F0263C] mb-2" />
-              <h2 className="font-display text-2xl font-bold text-white">
-                Test Your Crosshair Speed
-              </h2>
-              <p className="text-xs sm:text-sm text-[#A1A1AA] max-w-sm mt-1">
-                Press Start 15s Drill, then flick and tap each white-red target as quickly as possible.
-              </p>
-            </div>
-          ) : null}
-
-          {status === 'finished' ? (
-            <div className="absolute inset-0 bg-black/75 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center pointer-events-none">
-              <div className="text-xs font-semibold text-[#F0263C]">
-                Drill Complete {isSignedIn ? '· Saved to cloud' : ''}
+              {/* HUD */}
+              <div className="pointer-events-none absolute inset-x-2 top-2 grid grid-cols-4 gap-1.5">
+                {hud.map(({ label, value, unit, icon: Icon, accent }) => (
+                  <div key={label} className="glass rounded-xl border border-border px-2 py-1.5">
+                    <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-subtle">
+                      <Icon className="size-3" />
+                      {label}
+                    </div>
+                    <div className={cn('font-mono text-base font-bold leading-tight tabular-nums', accent && 'text-primary')}>
+                      {value}
+                      {unit ? <span className="text-[10px] text-muted-foreground">{unit}</span> : null}
+                    </div>
+                  </div>
+                ))}
               </div>
-              <h2 className="font-display text-3xl font-extrabold text-white mt-1">
-                {hits} Hits · {accuracy}% Accuracy
-              </h2>
-              <p className="text-xs sm:text-sm text-[#A1A1AA] mt-1 font-mono tabular-nums">
-                {avgReactionMs ? `Avg Reaction ${avgReactionMs}ms` : 'No hits recorded'} · Best Streak {streak}
-              </p>
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1 bg-surface-3/60">
+                <div className="h-full bg-gradient-primary transition-[width] duration-1000 ease-linear" style={{ width: `${timePct}%` }} />
+              </div>
+
+              <AnimatePresence>
+                {status === 'idle' ? (
+                  <motion.div
+                    key="idle"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-background/70 p-6 text-center backdrop-blur-[2px]"
+                  >
+                    <div className="relative grid size-16 place-items-center">
+                      <span className="absolute inset-0 animate-ping-slow rounded-full border-2 border-primary/50" />
+                      <Crosshair className="size-8 text-primary" />
+                    </div>
+                    <h2 className="mt-3 font-display text-2xl font-bold">Ready to flick?</h2>
+                    <p className="mt-1 max-w-xs text-xs text-muted-foreground">Tap Start, then hit each target as fast as you can.</p>
+                  </motion.div>
+                ) : null}
+                {status === 'finished' ? (
+                  <motion.div
+                    key="finished"
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center bg-background/80 p-6 text-center backdrop-blur-sm"
+                  >
+                    <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+                      Drill complete{isSignedIn ? ' · saved' : ''}
+                    </div>
+                    <div className="mt-2 font-display text-6xl font-extrabold leading-none tabular-nums">{hits}</div>
+                    <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">targets hit</div>
+                    <div className="mt-4 grid grid-cols-3 gap-2">
+                      {[
+                        { k: 'Accuracy', v: `${accuracy}%` },
+                        { k: 'Reaction', v: avgReactionMs ? `${avgReactionMs}ms` : '—' },
+                        { k: 'Streak', v: streak },
+                      ].map((m) => (
+                        <div key={m.k} className="rounded-xl border border-border bg-secondary px-3 py-2">
+                          <div className="font-mono text-sm font-bold tabular-nums">{m.v}</div>
+                          <div className="text-[9px] font-bold uppercase tracking-wider text-subtle">{m.k}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
             </div>
-          ) : null}
-        </div>
-
-        {/* Live Multiplier Control */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-1">
-          <label
-            htmlFor="aimlab-scalar"
-            className="text-xs font-semibold text-[#A1A1AA]"
-          >
-            Crosshair Speed ({primarySlider?.label ?? 'General'})
-          </label>
-          <div className="flex items-center gap-3 sm:w-64 shrink-0">
-            <input
-              id="aimlab-scalar"
-              type="range"
-              min={0.5}
-              max={2.0}
-              step={0.05}
-              value={testScalar}
-              onChange={(e) => setTestScalar(Number(e.target.value))}
-              style={{
-                background: `linear-gradient(to right, #F0263C 0%, #F0263C ${
-                  ((testScalar - 0.5) / 1.5) * 100
-                }%, #29292F ${((testScalar - 0.5) / 1.5) * 100}%, #29292F 100%)`,
-              }}
-              className="giq-slider"
-            />
-            <span className="font-mono text-sm font-bold text-white tabular-nums w-12 text-right">
-              {testScalar.toFixed(2)}x
-            </span>
           </div>
-        </div>
-      </div>
 
-      {/* Drill history */}
-      <section className="bg-[#141417] border border-[#29292F] rounded-xl p-4 sm:p-5 space-y-3">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="font-display text-xl font-bold text-white">
-            Cloud Drill History
-          </h2>
+          {/* Controls */}
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-[auto_minmax(0,1fr)]">
+            {status !== 'running' ? (
+              <Button key="start-drill" variant="glow" size="xl" onClick={startDrill} className="sm:min-w-52">
+                {status === 'finished' ? <RotateCcw /> : <Play />}
+                {status === 'finished' ? 'Run again' : 'Start drill'}
+              </Button>
+            ) : (
+              <Button key="stop-drill" variant="surface" size="xl" onClick={resetDrill} className="sm:min-w-52">
+                <Square /> Stop drill
+              </Button>
+            )}
+            <div className="surface flex h-14 items-center gap-3 rounded-2xl px-4">
+              <label htmlFor="aimlab-scalar" className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+                Speed
+              </label>
+              <RangeSlider id="aimlab-scalar" min={0.5} max={2.0} step={0.05} value={testScalar} onChange={setTestScalar} />
+              <span className="w-12 shrink-0 text-right font-mono text-sm font-bold tabular-nums">{testScalar.toFixed(2)}x</span>
+            </div>
+          </div>
+          <p className="px-1 text-xs text-subtle">Speed starts from your {primarySlider?.label ?? 'general'} value.</p>
+        </div>
+
+        {/* History */}
+        <section className="surface rounded-3xl p-4 sm:p-5">
+          <div className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <span className="grid size-9 shrink-0 place-items-center rounded-xl border border-border bg-secondary text-primary">
+                <History className="size-4" />
+              </span>
+              <h2 className="truncate font-display text-xl font-bold tracking-tight">Run history</h2>
+            </div>
+            {isSignedIn && aimLabRuns.length > 0 ? (
+              <span className="font-mono text-xs font-semibold text-muted-foreground">{aimLabRuns.length} runs</span>
+            ) : null}
+          </div>
+
           {!isSignedIn ? (
-            <button
-              type="button"
-              onClick={onSignIn}
-              className="min-h-[36px] px-3 rounded-lg bg-[#1B1B20] hover:bg-[#29292F] border border-[#29292F] text-xs font-semibold text-white inline-flex items-center gap-1.5"
-            >
-              <LogIn className="w-3.5 h-3.5 text-[#F0263C]" />
-              <span>Sign In to Save Runs</span>
-            </button>
-          ) : null}
-        </div>
-
-        {!isSignedIn ? (
-          <p className="text-xs sm:text-sm text-[#A1A1AA]">
-            Sign in to record and compare your reaction times and accuracy across sessions.
-          </p>
-        ) : aimLabRuns.length === 0 ? (
-          <p className="text-xs sm:text-sm text-[#A1A1AA]">
-            Complete a 15-second drill to record your first run.
-          </p>
-        ) : (
-          <div className="divide-y divide-[#29292F]">
-            {aimLabRuns.map((run) => (
-              <div
-                key={run.id}
-                className="py-2.5 flex items-center justify-between gap-3 text-xs sm:text-sm"
-              >
-                <div className="min-w-0">
-                  <div className="font-semibold text-white">
-                    {run.game === 'free-fire' ? 'Free Fire' : 'BGMI'} · {run.hits} Hits ·{' '}
-                    <span className="text-[#F0263C]">{run.accuracy}%</span>
-                  </div>
-                  <div className="text-xs text-[#A1A1AA] font-mono tabular-nums mt-0.5">
-                    {typeof run.avgReactionMs === 'number'
-                      ? `${run.avgReactionMs}ms avg`
-                      : 'No reaction time'}{' '}
-                    · Streak {run.bestStreak} · {run.scalar.toFixed(2)}x
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => void onDeleteRun(run.id)}
-                  aria-label="Delete drill run"
-                  className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-lg text-[#71717A] hover:text-[#F0263C] hover:bg-[#111114] transition-colors shrink-0"
+            <div className="space-y-3 rounded-2xl border border-dashed border-border-strong p-4 text-center">
+              <p className="text-sm text-muted-foreground">Sign in to keep your runs and track progress.</p>
+              <Button variant="surface" size="md" onClick={onSignIn} className="w-full">
+                <LogIn /> Sign in
+              </Button>
+            </div>
+          ) : aimLabRuns.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-border-strong p-4 text-center text-sm text-muted-foreground">
+              Finish a drill to log your first run.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {aimLabRuns.map((run) => (
+                <li
+                  key={run.id}
+                  className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-2xl border border-border bg-secondary/60 p-2.5"
                 >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+                  <div className="grid size-11 place-items-center rounded-xl bg-background/60 font-mono text-sm font-bold text-primary tabular-nums">
+                    {run.accuracy}%
+                  </div>
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-semibold">
+                      {run.hits} hits · {run.game === 'free-fire' ? 'Free Fire' : 'BGMI'}
+                    </div>
+                    <div className="truncate font-mono text-[11px] text-muted-foreground tabular-nums">
+                      {typeof run.avgReactionMs === 'number' ? `${run.avgReactionMs}ms` : '—'} · streak {run.bestStreak} ·{' '}
+                      {run.scalar.toFixed(2)}x
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => void onDeleteRun(run.id)}
+                    aria-label="Delete drill run"
+                    className="grid size-9 place-items-center rounded-xl text-subtle transition-colors hover:bg-primary/10 hover:text-primary"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
     </div>
   );
 }

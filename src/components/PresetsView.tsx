@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, Globe, Plus, Trash2 } from 'lucide-react';
+import { motion } from 'motion/react';
+import { ArrowRight, Globe, LogIn, Plus, Trash2, User } from 'lucide-react';
 import type { GameId, ProPreset } from '../engine/types';
+import { Button } from '@/components/ui/button';
+import { EmptyState, PageHeader, Segmented } from './giq/primitives';
 
 interface PresetsViewProps {
   presets: ProPreset[];
@@ -44,159 +47,111 @@ export function PresetsView({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Community Presets
-          </h1>
-          <p className="text-xs sm:text-sm text-[#A1A1AA]">
-            Live configurations published by verified Gaming IQ players.
-          </p>
-        </div>
+      <PageHeader
+        kicker="Community"
+        title="Pro presets"
+        subtitle="Setups shared by Gaming IQ players. Tap one to load it into the calibrator."
+      />
 
-        <div className="flex flex-wrap items-center gap-2">
-          {/* Filter Buttons */}
-          <div className="grid grid-cols-3 gap-1 p-1 bg-[#141417] border border-[#29292F] rounded-xl sm:w-auto">
-            {(
-              [
-                { id: 'all', label: 'All Games' },
-                { id: 'free-fire', label: 'Free Fire' },
-                { id: 'pubg-bgmi', label: 'BGMI' },
-              ] as const
-            ).map((tab) => {
-              const active = filter === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setFilter(tab.id)}
-                  className={`min-h-[40px] px-3.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 ${
-                    active
-                      ? 'bg-[#F0263C] text-white'
-                      : 'text-[#A1A1AA] hover:text-white'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      <Segmented
+        layoutId="preset-filter"
+        ariaLabel="Filter by game"
+        className="sm:max-w-sm"
+        value={filter}
+        onChange={setFilter}
+        options={[
+          { id: 'all', label: 'All' },
+          { id: 'free-fire', label: 'Free Fire' },
+          { id: 'pubg-bgmi', label: 'BGMI' },
+        ]}
+      />
 
       {!loaded ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3].map((n) => (
-            <div
-              key={n}
-              className="h-56 rounded-xl bg-[#141417] border border-[#29292F] animate-pulse"
-            />
+            <div key={n} className="skeleton h-60 rounded-3xl" />
           ))}
         </div>
       ) : filteredPresets.length === 0 ? (
-        <div className="bg-[#141417] border border-[#29292F] rounded-xl p-8 sm:p-12 text-center space-y-4">
-          <div className="w-12 h-12 rounded-xl bg-[#111114] border border-[#29292F] flex items-center justify-center mx-auto">
-            <Globe className="w-6 h-6 text-[#F0263C]" />
-          </div>
-          <div className="space-y-1">
-            <h2 className="font-display text-2xl font-bold text-white">
-              No Presets Published Yet
-            </h2>
-            <p className="text-sm text-[#A1A1AA] max-w-md mx-auto">
-              Generate a sensitivity profile in the Calibrator and click Publish Preset to share it to the cloud catalog.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <button
-              type="button"
-              onClick={onGoToCalibrate}
-              className="min-h-[48px] px-5 rounded-xl bg-[#F0263C] hover:bg-[#B8172A] text-white text-sm font-semibold inline-flex items-center gap-2 transition-colors"
-            >
-              <Plus className="w-4 h-4" />
-              <span>Calibrate & Publish</span>
-            </button>
-            {!currentUserId ? (
-              <button
-                type="button"
-                onClick={onRequestSignIn}
-                className="min-h-[48px] px-5 rounded-xl bg-[#1B1B20] hover:bg-[#29292F] border border-[#29292F] text-white text-sm font-semibold transition-colors"
-              >
-                Sign In
-              </button>
-            ) : null}
-          </div>
-        </div>
+        <EmptyState
+          icon={Globe}
+          title="No presets yet"
+          body="Generate a profile in the calibrator and tap Publish to share the first one."
+          actions={
+            <>
+              <Button variant="glow" size="md" onClick={onGoToCalibrate}>
+                <Plus /> Calibrate & publish
+              </Button>
+              {!currentUserId ? (
+                <Button variant="surface" size="md" onClick={onRequestSignIn}>
+                  <LogIn /> Sign in
+                </Button>
+              ) : null}
+            </>
+          }
+        />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredPresets.map((preset) => {
-            const gameLabel =
-              preset.game === 'free-fire'
-                ? 'Garena Free Fire'
-                : 'BGMI (Battlegrounds Mobile India)';
-            const canDelete =
-              Boolean(currentUserId) && (preset.authorId === currentUserId || isAdmin);
-
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredPresets.map((preset, i) => {
+            const canDelete = Boolean(currentUserId) && (preset.authorId === currentUserId || isAdmin);
+            const isFF = preset.game === 'free-fire';
             return (
-              <article
+              <motion.article
                 key={preset.id}
-                className="bg-[#141417] border border-[#29292F] rounded-xl p-5 flex flex-col justify-between gap-5 hover:border-[#3F3F46] transition-colors"
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: Math.min(i, 8) * 0.05, duration: 0.35 }}
+                className="surface group relative flex flex-col overflow-hidden rounded-3xl p-4 transition-colors hover:border-border-strong"
               >
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="text-xs text-[#A1A1AA] font-medium">
-                      <span className="text-[#F0263C] font-semibold">{gameLabel}</span>
-                      <span aria-hidden="true"> · </span>
-                      <span>{preset.claw}</span>
-                      {preset.game === 'pubg-bgmi' ? (
-                        <>
-                          <span aria-hidden="true"> · </span>
-                          <span className="capitalize">
-                            {preset.gyro.replace('-', ' ')} Gyro
-                          </span>
-                        </>
-                      ) : null}
-                    </div>
-
-                    {canDelete ? (
-                      <button
-                        type="button"
-                        disabled={deletingId === preset.id}
-                        onClick={() => void handleDelete(preset.id)}
-                        aria-label={`Delete ${preset.name}`}
-                        className="min-h-[32px] min-w-[32px] flex items-center justify-center rounded-lg text-[#71717A] hover:text-[#F0263C] hover:bg-[#111114] transition-colors shrink-0"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    ) : null}
+                <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-hero opacity-60" />
+                <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+                  <div className="flex min-w-0 items-center gap-1.5 overflow-hidden">
+                    <span className="shrink-0 rounded-full bg-primary/15 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+                      {isFF ? 'Free Fire' : 'BGMI'}
+                    </span>
+                    <span className="truncate rounded-full border border-border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      {preset.claw.replace('-finger', ' finger')}
+                      {!isFF ? ` · gyro ${preset.gyro.replace('-', ' ')}` : ''}
+                    </span>
                   </div>
-
-                  <div>
-                    <h2 className="font-display text-2xl font-bold text-white tracking-tight">
-                      {preset.name}
-                    </h2>
-                    <p className="text-xs text-[#A1A1AA] mt-0.5">
-                      {preset.playerArchetype} · by {preset.authorName}
-                    </p>
-                  </div>
-
-                  <div className="p-3 rounded-lg bg-[#111114] border border-[#29292F] font-mono text-xs font-semibold text-white tabular-nums">
-                    {preset.headlineMetric}
-                  </div>
-
-                  <p className="text-sm text-[#A1A1AA] leading-relaxed">
-                    {preset.description}
-                  </p>
+                  {canDelete ? (
+                    <button
+                      type="button"
+                      disabled={deletingId === preset.id}
+                      onClick={() => void handleDelete(preset.id)}
+                      aria-label={`Delete ${preset.name}`}
+                      className="grid size-8 place-items-center rounded-lg text-subtle transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                    >
+                      <Trash2 className="size-4" />
+                    </button>
+                  ) : null}
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => onApplyPreset(preset)}
-                  className="w-full min-h-[44px] px-4 rounded-xl bg-[#1B1B20] hover:bg-[#F0263C] border border-[#29292F] hover:border-[#F0263C] text-white text-sm font-semibold inline-flex items-center justify-center gap-2 transition-colors whitespace-nowrap"
-                >
-                  <span>Apply Preset</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </article>
+                <h2 className="relative mt-3 line-clamp-2 font-display text-2xl font-bold leading-tight tracking-tight">
+                  {preset.name}
+                </h2>
+                <p className="relative mt-1 flex items-center gap-1.5 truncate text-xs text-muted-foreground">
+                  <User className="size-3.5 shrink-0" />
+                  <span className="truncate">
+                    {preset.authorName} · {preset.playerArchetype}
+                  </span>
+                </p>
+
+                <div className="relative mt-3 rounded-2xl border border-border bg-background/50 px-3 py-2.5 font-mono text-sm font-semibold tabular-nums">
+                  {preset.headlineMetric}
+                </div>
+
+                {preset.description ? (
+                  <p className="relative mt-3 line-clamp-2 text-sm leading-relaxed text-muted-foreground">{preset.description}</p>
+                ) : null}
+
+                <div className="mt-auto pt-4">
+                  <Button variant="surface" size="md" className="w-full group-hover:border-primary/60" onClick={() => onApplyPreset(preset)}>
+                    Apply preset
+                    <ArrowRight className="transition-transform group-hover:translate-x-0.5" />
+                  </Button>
+                </div>
+              </motion.article>
             );
           })}
         </div>

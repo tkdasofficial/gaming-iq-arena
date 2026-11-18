@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { Bookmark, Check, Copy, Crosshair, Globe, RefreshCw } from 'lucide-react';
+import { useState, type FormEvent } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Bookmark, Check, Copy, Crosshair, Globe, RefreshCw, Sparkles } from 'lucide-react';
 import { formatDeviceFullName } from '../engine/devices';
-import type {
-  CalibrationInput,
-  CalibrationResult,
-  SensitivitySliderItem,
-} from '../engine/types';
+import type { CalibrationInput, CalibrationResult, SensitivitySliderItem } from '../engine/types';
 import { FIELD_LIMITS } from '../backend/validation';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { RangeSlider, Segmented, TextField } from './giq/primitives';
 
 interface SensitivityResultsSectionProps {
   input: CalibrationInput;
@@ -21,23 +21,18 @@ interface SensitivityResultsSectionProps {
   onCopyText: (text: string) => void;
   onRegenerate: () => void;
   onSaveProfile: (name: string) => Promise<void>;
-  onPublishPreset: (details: {
-    name: string;
-    playerArchetype: string;
-    description: string;
-  }) => Promise<void>;
+  onPublishPreset: (details: { name: string; playerArchetype: string; description: string }) => Promise<void>;
   onRequestSignIn: () => void;
 }
 
-const BGMI_GROUPS: {
-  category: SensitivitySliderItem['category'];
-  title: string;
-}[] = [
-  { category: 'camera', title: 'Camera Sensitivity' },
-  { category: 'ads', title: 'ADS Sensitivity' },
-  { category: 'gyro', title: 'Gyroscope Sensitivity' },
-  { category: 'ads-gyro', title: 'ADS Gyroscope Sensitivity' },
-  { category: 'free-look', title: 'Camera Sensitivity (Free Look)' },
+type BgmiCategory = SensitivitySliderItem['category'];
+
+const BGMI_GROUPS: { category: BgmiCategory; title: string; short: string }[] = [
+  { category: 'camera', title: 'Camera Sensitivity', short: 'Camera' },
+  { category: 'ads', title: 'ADS Sensitivity', short: 'ADS' },
+  { category: 'gyro', title: 'Gyroscope Sensitivity', short: 'Gyro' },
+  { category: 'ads-gyro', title: 'ADS Gyroscope Sensitivity', short: 'ADS Gyro' },
+  { category: 'free-look', title: 'Camera Sensitivity (Free Look)', short: 'Free look' },
 ];
 
 export function SensitivityResultsSection({
@@ -64,6 +59,7 @@ export function SensitivityResultsSection({
   const [submitting, setSubmitting] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
   const [justPublished, setJustPublished] = useState(false);
+  const [bgmiGroup, setBgmiGroup] = useState<BgmiCategory>('camera');
 
   const handleCopyItem = (key: string, text: string) => {
     onCopyText(text);
@@ -71,7 +67,15 @@ export function SensitivityResultsSection({
     window.setTimeout(() => setCopiedKey(null), 1500);
   };
 
-  const handleSaveSubmit = async (e: React.FormEvent) => {
+  const toggleDrawer = (drawer: 'save' | 'publish') => {
+    if (!isSignedIn) {
+      onRequestSignIn();
+      return;
+    }
+    setActiveDrawer((d) => (d === drawer ? 'none' : drawer));
+  };
+
+  const handleSaveSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!isSignedIn) {
       onRequestSignIn();
@@ -92,7 +96,7 @@ export function SensitivityResultsSection({
     }
   };
 
-  const handlePublishSubmit = async (e: React.FormEvent) => {
+  const handlePublishSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!isSignedIn) {
       onRequestSignIn();
@@ -121,20 +125,17 @@ export function SensitivityResultsSection({
 
   if (isGenerating) {
     return (
-      <section
-        id="generated-results"
-        aria-live="polite"
-        className="bg-[#141417] border border-[#29292F] rounded-xl p-6 space-y-4"
-      >
-        <div className="h-6 w-56 rounded bg-[#1B1B20] animate-pulse" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <div
-              key={n}
-              className="h-24 rounded-lg bg-[#1B1B20] border border-[#29292F] animate-pulse"
-            />
+      <section id="generated-results" aria-live="polite" className="surface scroll-mt-20 space-y-4 rounded-3xl p-5">
+        <div className="skeleton h-7 w-48 rounded-lg" />
+        <div className="skeleton h-4 w-64 rounded" />
+        <div className="grid grid-cols-4 gap-2">
+          {[1, 2, 3, 4].map((n) => (
+            <div key={n} className="skeleton h-16 rounded-2xl" />
           ))}
         </div>
+        {[1, 2, 3, 4].map((n) => (
+          <div key={n} className="skeleton h-14 rounded-2xl" />
+        ))}
       </section>
     );
   }
@@ -144,324 +145,301 @@ export function SensitivityResultsSection({
       <section
         id="generated-results"
         aria-label="Sensitivity results preview"
-        className="bg-[#141417] border border-[#29292F] rounded-xl p-8 text-center space-y-2"
+        className="surface relative scroll-mt-20 overflow-hidden rounded-3xl px-6 py-12 text-center"
       >
-        <div className="w-10 h-10 rounded-xl bg-[#1B1B20] border border-[#29292F] flex items-center justify-center mx-auto">
-          <Crosshair className="w-5 h-5 text-[#71717A]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-dots opacity-60" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-hero" />
+        <div className="relative mx-auto grid size-20 place-items-center">
+          <span className="absolute inset-0 animate-ping-slow rounded-full border-2 border-primary/50" />
+          <span className="absolute inset-3 animate-ping-slow rounded-full border border-primary/40 [animation-delay:0.6s]" />
+          <span className="relative grid size-14 place-items-center rounded-full border border-primary/50 bg-secondary">
+            <Crosshair className="size-6 text-primary" />
+          </span>
         </div>
-        <h2 className="font-display text-xl font-bold text-white">
-          No Sensitivity Profile Generated Yet
-        </h2>
-        <p className="text-sm text-[#A1A1AA] max-w-md mx-auto">
-          Select your game, confirm device specs, and choose your gameplay preferences above to build your configuration.
+        <h2 className="relative mt-5 font-display text-2xl font-bold tracking-tight">Your profile lands here</h2>
+        <p className="relative mx-auto mt-1.5 max-w-xs text-sm text-muted-foreground">
+          Finish the three steps and tap Generate to get tuned values you can copy into the game.
         </p>
       </section>
     );
   }
 
-  const deviceSummary = `${result.gameLabel} · ${formatDeviceFullName(input.device.brand, input.device.model)} · ${input.device.refreshHz}Hz · ${input.claw.replace('-', ' ')}`;
+  const fingers = input.claw.split('-')[0];
+  const metaChips = [result.game === 'free-fire' ? 'Free Fire' : 'BGMI', `${input.device.refreshHz}Hz`, `${fingers} fingers`, input.preferredFps.replace(/ \(.*\)/, '')];
 
-  const renderSliderCard = (slider: SensitivitySliderItem) => {
-    const pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+  const renderSliderRow = (slider: SensitivitySliderItem, index: number) => {
     const isItemCopied = copiedKey === slider.key;
     return (
-      <div
+      <motion.div
         key={slider.key}
-        className="p-3.5 rounded-lg bg-[#1B1B20] border border-[#29292F] space-y-2.5"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.04, duration: 0.3 }}
+        className="rounded-2xl border border-border bg-secondary/60 p-3.5"
       >
-        <div className="flex items-start justify-between gap-2">
-          <label
-            htmlFor={`result-slider-${slider.key}`}
-            className="text-xs font-medium text-[#A1A1AA] leading-snug"
-          >
+        <div className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <label htmlFor={`result-slider-${slider.key}`} className="truncate text-[13px] font-medium text-muted-foreground">
             {slider.label}
           </label>
-          <button
-            type="button"
-            onClick={() =>
-              handleCopyItem(slider.key, `${slider.label}: ${slider.value}${slider.unit}`)
-            }
-            aria-label={`Copy ${slider.label}`}
-            className="min-h-[28px] min-w-[28px] px-1.5 rounded bg-[#111114] border border-[#29292F] hover:border-[#F0263C] text-[#A1A1AA] hover:text-white inline-flex items-center justify-center transition-colors shrink-0"
-          >
-            {isItemCopied ? (
-              <Check className="w-3.5 h-3.5 text-[#F0263C]" />
-            ) : (
-              <Copy className="w-3.5 h-3.5" />
-            )}
-          </button>
-        </div>
-
-        <div className="font-mono text-3xl font-bold text-white tabular-nums leading-none">
-          {slider.value}
-          {slider.unit ? (
-            <span className="text-sm font-semibold text-[#F0263C] ml-0.5">
-              {slider.unit}
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-2xl font-bold leading-none tabular-nums">
+              {slider.value}
+              {slider.unit ? <span className="ml-0.5 text-sm text-primary">{slider.unit}</span> : null}
             </span>
-          ) : null}
+            <button
+              type="button"
+              onClick={() => handleCopyItem(slider.key, `${slider.label}: ${slider.value}${slider.unit}`)}
+              aria-label={`Copy ${slider.label}`}
+              className={cn(
+                'grid size-8 place-items-center rounded-lg border transition-all active:scale-90',
+                isItemCopied
+                  ? 'border-success/50 bg-success/10 text-success'
+                  : 'border-border bg-background/50 text-subtle hover:text-foreground'
+              )}
+            >
+              {isItemCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+            </button>
+          </div>
         </div>
-
-        <input
+        <RangeSlider
           id={`result-slider-${slider.key}`}
-          type="range"
           min={slider.min}
           max={slider.max}
           value={slider.value}
-          onChange={(e) => onSliderChange(slider.key, Number(e.target.value))}
-          style={{
-            background: `linear-gradient(to right, #F0263C 0%, #F0263C ${pct}%, #29292F ${pct}%, #29292F 100%)`,
-          }}
-          className="giq-slider"
+          onChange={(v) => onSliderChange(slider.key, v)}
         />
-      </div>
+      </motion.div>
     );
   };
+
+  const availableGroups = BGMI_GROUPS.filter((g) => result.sliders.some((s) => s.category === g.category));
+  const currentGroup = availableGroups.find((g) => g.category === bgmiGroup) ?? availableGroups[0];
+  const groupSliders = currentGroup ? result.sliders.filter((s) => s.category === currentGroup.category) : [];
+
+  const actions = [
+    {
+      key: 'copy',
+      label: copiedAll ? 'Copied' : 'Copy all',
+      icon: copiedAll ? Check : Copy,
+      onClick: onCopyAll,
+      primary: true,
+      active: false,
+    },
+    {
+      key: 'save',
+      label: justSaved ? 'Saved' : isSignedIn ? 'Save' : 'Sign in',
+      icon: justSaved ? Check : Bookmark,
+      onClick: () => toggleDrawer('save'),
+      active: activeDrawer === 'save',
+    },
+    {
+      key: 'publish',
+      label: justPublished ? 'Shared' : 'Publish',
+      icon: justPublished ? Check : Globe,
+      onClick: () => toggleDrawer('publish'),
+      active: activeDrawer === 'publish',
+    },
+    {
+      key: 'redo',
+      label: hasOverrides ? 'Reset' : 'Redo',
+      icon: RefreshCw,
+      onClick: onRegenerate,
+      active: false,
+    },
+  ];
 
   return (
     <section
       id="generated-results"
       aria-labelledby="generated-results-heading"
-      className="bg-[#141417] border border-[#29292F] rounded-xl p-4 sm:p-6 space-y-5"
+      className="surface relative scroll-mt-20 overflow-hidden rounded-3xl"
     >
-      {/* Results Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#29292F]">
-        <div className="min-w-0">
-          <h2
-            id="generated-results-heading"
-            className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight"
-          >
-            Generated Sensitivity Profile
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-hero" />
+
+      <div className="relative space-y-4 p-4 sm:p-5">
+        {/* Header */}
+        <div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+              <Sparkles className="size-3.5" /> Profile ready
+            </div>
+            <span className="truncate rounded-lg border border-border bg-background/60 px-2 py-1 font-mono text-[10px] font-semibold tabular-nums text-muted-foreground">
+              {result.shareCode}
+            </span>
+          </div>
+          <h2 id="generated-results-heading" className="mt-2 font-display text-3xl font-extrabold leading-none tracking-tight">
+            Your sensitivity
           </h2>
-          <p className="text-xs sm:text-sm text-[#A1A1AA] mt-0.5 truncate">
-            {deviceSummary}
+          <p className="mt-1.5 truncate text-xs text-muted-foreground">
+            {formatDeviceFullName(input.device.brand, input.device.model)}
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <button
-            type="button"
-            onClick={onCopyAll}
-            className="min-h-[40px] px-4 rounded-lg bg-[#F0263C] hover:bg-[#B8172A] text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
-          >
-            {copiedAll ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            <span>{copiedAll ? 'Copied All' : 'Copy All'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              if (!isSignedIn) {
-                onRequestSignIn();
-                return;
-              }
-              setActiveDrawer((d) => (d === 'save' ? 'none' : 'save'));
-            }}
-            className="min-h-[40px] px-3.5 rounded-lg bg-white hover:bg-[#E4E4E7] text-black text-xs font-semibold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
-          >
-            {justSaved ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-[#F0263C]" />
-                <span>Saved</span>
-              </>
-            ) : (
-              <>
-                <Bookmark className="w-3.5 h-3.5" />
-                <span>{isSignedIn ? 'Save to Cloud' : 'Sign In to Save'}</span>
-              </>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              if (!isSignedIn) {
-                onRequestSignIn();
-                return;
-              }
-              setActiveDrawer((d) => (d === 'publish' ? 'none' : 'publish'));
-            }}
-            className="min-h-[40px] px-3.5 rounded-lg bg-[#1B1B20] hover:bg-[#29292F] border border-[#29292F] text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
-          >
-            {justPublished ? (
-              <>
-                <Check className="w-3.5 h-3.5 text-[#F0263C]" />
-                <span>Published</span>
-              </>
-            ) : (
-              <>
-                <Globe className="w-3.5 h-3.5 text-[#F0263C]" />
-                <span>Publish Preset</span>
-              </>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={onRegenerate}
-            className="min-h-[40px] px-3.5 rounded-lg bg-[#1B1B20] hover:bg-[#29292F] border border-[#29292F] text-[#A1A1AA] hover:text-white text-xs font-semibold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>{hasOverrides ? 'Reset & Regenerate' : 'Regenerate'}</span>
-          </button>
+        <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1">
+          {metaChips.map((c) => (
+            <span key={c} className="shrink-0 rounded-full border border-border bg-background/50 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground">
+              {c}
+            </span>
+          ))}
         </div>
-      </div>
 
-      {/* Inline Save Form */}
-      {activeDrawer === 'save' ? (
-        <form
-          onSubmit={(e) => void handleSaveSubmit(e)}
-          className="p-3 rounded-lg bg-[#111114] border border-[#29292F] flex flex-col sm:flex-row gap-2.5"
-        >
-          <label htmlFor="save-profile-name" className="sr-only">
-            Profile Name
-          </label>
-          <input
-            id="save-profile-name"
-            type="text"
-            maxLength={FIELD_LIMITS.setupNameMaxLength}
-            value={profileName}
-            onChange={(e) => setProfileName(e.target.value)}
-            placeholder={`${input.device.model} · ${
-              input.game === 'free-fire' ? 'Free Fire' : 'BGMI'
-            }`}
-            className="flex-1 min-h-[44px] px-3 rounded-lg bg-[#1B1B20] border border-[#29292F] focus:border-[#F0263C] text-sm text-white placeholder-[#71717A] outline-none"
-          />
-          <div className="flex items-center gap-2">
+        {/* Actions */}
+        <div className="grid grid-cols-4 gap-2">
+          {actions.map(({ key, label, icon: Icon, onClick, primary, active }) => (
             <button
-              type="submit"
-              disabled={submitting}
-              className="flex-1 sm:flex-none min-h-[44px] px-4 rounded-lg bg-[#F0263C] hover:bg-[#B8172A] disabled:opacity-60 text-white text-xs font-semibold whitespace-nowrap"
-            >
-              {submitting ? 'Saving...' : 'Confirm Save'}
-            </button>
-            <button
+              key={key}
               type="button"
-              onClick={() => setActiveDrawer('none')}
-              className="min-h-[44px] px-3 rounded-lg bg-[#1B1B20] border border-[#29292F] text-[#A1A1AA] hover:text-white text-xs font-semibold"
+              onClick={onClick}
+              className={cn(
+                'flex h-16 flex-col items-center justify-center gap-1.5 rounded-2xl border text-[11px] font-semibold transition-all active:scale-95',
+                primary
+                  ? 'border-transparent bg-gradient-primary text-primary-foreground shadow-glow'
+                  : active
+                    ? 'border-primary/60 bg-primary/12 text-primary'
+                    : 'border-border bg-secondary text-muted-foreground hover:border-border-strong hover:text-foreground'
+              )}
             >
-              Cancel
+              <Icon className="size-[18px]" />
+              <span className="truncate">{label}</span>
             </button>
-          </div>
-        </form>
-      ) : null}
-
-      {/* Inline Publish Public Preset Form */}
-      {activeDrawer === 'publish' ? (
-        <form
-          onSubmit={(e) => void handlePublishSubmit(e)}
-          className="p-4 rounded-lg bg-[#111114] border border-[#29292F] space-y-3"
-        >
-          <div className="text-xs font-semibold text-white">
-            Publish Public Community Preset
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <input
-              type="text"
-              maxLength={FIELD_LIMITS.presetNameMaxLength}
-              value={profileName}
-              onChange={(e) => setProfileName(e.target.value)}
-              placeholder="Preset title (e.g. S24 Ultra 4-Finger Balanced)"
-              className="min-h-[44px] px-3 rounded-lg bg-[#1B1B20] border border-[#29292F] focus:border-[#F0263C] text-sm text-white placeholder-[#71717A] outline-none"
-            />
-            <input
-              type="text"
-              maxLength={FIELD_LIMITS.presetArchetypeMaxLength}
-              value={presetArchetype}
-              onChange={(e) => setPresetArchetype(e.target.value)}
-              placeholder="Weapon / Role (e.g. M416 · Assaulter)"
-              className="min-h-[44px] px-3 rounded-lg bg-[#1B1B20] border border-[#29292F] focus:border-[#F0263C] text-sm text-white placeholder-[#71717A] outline-none"
-            />
-          </div>
-          <input
-            type="text"
-            maxLength={FIELD_LIMITS.presetDescriptionMaxLength}
-            value={presetDescription}
-            onChange={(e) => setPresetDescription(e.target.value)}
-            placeholder="Brief note on how you tuned this setup..."
-            className="w-full min-h-[44px] px-3 rounded-lg bg-[#1B1B20] border border-[#29292F] focus:border-[#F0263C] text-sm text-white placeholder-[#71717A] outline-none"
-          />
-          <div className="flex items-center gap-2 justify-end">
-            <button
-              type="button"
-              onClick={() => setActiveDrawer('none')}
-              className="min-h-[40px] px-3 rounded-lg bg-[#1B1B20] border border-[#29292F] text-[#A1A1AA] hover:text-white text-xs font-semibold"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="min-h-[40px] px-4 rounded-lg bg-[#F0263C] hover:bg-[#B8172A] disabled:opacity-60 text-white text-xs font-semibold"
-            >
-              {submitting ? 'Publishing...' : 'Publish Preset'}
-            </button>
-          </div>
-        </form>
-      ) : null}
-
-      {/* Game-Specific Output Layout */}
-      {result.game === 'free-fire' ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {result.sliders.map(renderSliderCard)}
+          ))}
         </div>
-      ) : (
-        <div className="space-y-4">
-          {BGMI_GROUPS.map((group) => {
-            const groupSliders = result.sliders.filter(
-              (s) => s.category === group.category
-            );
-            if (groupSliders.length === 0) return null;
-            const groupCopyText = [
-              `${group.title} (${input.device.model})`,
-              ...groupSliders.map((s) => `${s.label}: ${s.value}${s.unit}`),
-            ].join('\n');
-            const isGroupCopied = copiedKey === group.category;
 
-            return (
-              <div
-                key={group.category}
-                className="p-4 rounded-xl bg-[#111114] border border-[#29292F] space-y-3"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="font-display text-lg font-bold text-white tracking-tight">
-                    {group.title}
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => handleCopyItem(group.category, groupCopyText)}
-                    className="min-h-[32px] px-2.5 rounded-lg bg-[#1B1B20] border border-[#29292F] hover:border-[#F0263C] text-xs font-semibold text-[#A1A1AA] hover:text-white inline-flex items-center gap-1.5 transition-colors whitespace-nowrap"
-                  >
-                    {isGroupCopied ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-[#F0263C]" />
-                        <span>Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>Copy Group</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
-                  {groupSliders.map(renderSliderCard)}
+        {/* Save / Publish drawers */}
+        <AnimatePresence initial={false} mode="wait">
+          {activeDrawer === 'save' ? (
+            <motion.form
+              key="save"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onSubmit={(e) => void handleSaveSubmit(e)}
+              className="overflow-hidden"
+            >
+              <div className="space-y-2.5 rounded-2xl border border-border bg-background/50 p-3">
+                <label htmlFor="save-profile-name" className="text-xs font-semibold">
+                  Name this profile
+                </label>
+                <TextField
+                  id="save-profile-name"
+                  maxLength={FIELD_LIMITS.setupNameMaxLength}
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  placeholder={`${input.device.model} · ${input.game === 'free-fire' ? 'Free Fire' : 'BGMI'}`}
+                  autoFocus
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <Button type="button" variant="surface" size="md" onClick={() => setActiveDrawer('none')}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="glow" size="md" disabled={submitting}>
+                    {submitting ? 'Saving…' : 'Save profile'}
+                  </Button>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      )}
+            </motion.form>
+          ) : activeDrawer === 'publish' ? (
+            <motion.form
+              key="publish"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              onSubmit={(e) => void handlePublishSubmit(e)}
+              className="overflow-hidden"
+            >
+              <div className="space-y-2.5 rounded-2xl border border-border bg-background/50 p-3">
+                <div className="text-xs font-semibold">Share with the community</div>
+                <TextField
+                  maxLength={FIELD_LIMITS.presetNameMaxLength}
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  placeholder="Title · e.g. S24 Ultra 4-finger"
+                  aria-label="Preset title"
+                />
+                <TextField
+                  maxLength={FIELD_LIMITS.presetArchetypeMaxLength}
+                  value={presetArchetype}
+                  onChange={(e) => setPresetArchetype(e.target.value)}
+                  placeholder="Role · e.g. M416 Assaulter"
+                  aria-label="Weapon or role"
+                />
+                <TextField
+                  maxLength={FIELD_LIMITS.presetDescriptionMaxLength}
+                  value={presetDescription}
+                  onChange={(e) => setPresetDescription(e.target.value)}
+                  placeholder="How you tuned it (optional)"
+                  aria-label="Description"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <Button type="button" variant="surface" size="md" onClick={() => setActiveDrawer('none')}>
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="glow" size="md" disabled={submitting}>
+                    {submitting ? 'Publishing…' : 'Publish'}
+                  </Button>
+                </div>
+              </div>
+            </motion.form>
+          ) : null}
+        </AnimatePresence>
 
-      {/* Hardware Summary + Neutral Application Note */}
-      <div className="pt-3 border-t border-[#29292F] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-[#A1A1AA]">
-        <div>
-          Apply these baseline values in your in-game Sensitivity settings and test in Training Grounds to adjust by ±5%.
-        </div>
-        <div className="font-mono text-white shrink-0 tabular-nums">
-          {result.shareCode}
-        </div>
+        {/* Values */}
+        {result.game === 'free-fire' ? (
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-1">{result.sliders.map(renderSliderRow)}</div>
+        ) : currentGroup ? (
+          <div className="space-y-3">
+            <div className="no-scrollbar -mx-1 overflow-x-auto px-1">
+              <Segmented
+                layoutId="bgmi-group"
+                ariaLabel="Sensitivity group"
+                size="sm"
+                className="min-w-[420px]"
+                options={availableGroups.map((g) => ({ id: g.category, label: g.short }))}
+                value={currentGroup.category}
+                onChange={setBgmiGroup}
+              />
+            </div>
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+              <h3 className="truncate font-display text-lg font-bold tracking-tight">{currentGroup.title}</h3>
+              <button
+                type="button"
+                onClick={() =>
+                  handleCopyItem(
+                    currentGroup.category,
+                    [`${currentGroup.title} (${input.device.model})`, ...groupSliders.map((s) => `${s.label}: ${s.value}${s.unit}`)].join('\n')
+                  )
+                }
+                className={cn(
+                  'inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-xs font-semibold transition-colors',
+                  copiedKey === currentGroup.category
+                    ? 'border-success/50 bg-success/10 text-success'
+                    : 'border-border bg-secondary text-muted-foreground hover:text-foreground'
+                )}
+              >
+                {copiedKey === currentGroup.category ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                {copiedKey === currentGroup.category ? 'Copied' : 'Copy group'}
+              </button>
+            </div>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={currentGroup.category}
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -12 }}
+                transition={{ duration: 0.2 }}
+                className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-1"
+              >
+                {groupSliders.map(renderSliderRow)}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        ) : null}
+
+        <p className="border-t border-border pt-3 text-xs leading-relaxed text-subtle">
+          Enter these in your in-game sensitivity settings, then test in training and adjust by ±5%.
+        </p>
       </div>
     </section>
   );

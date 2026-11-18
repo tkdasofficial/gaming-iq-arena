@@ -10,8 +10,8 @@
 - Decision: start fresh, no Firebase data copy; no profile editing for now
 
 ## Mobile-first redesign
-- [ ] New design system (black & red, glass bars, glow, animations)
-- [ ] App shell: top bar + floating bottom nav
-- [ ] Calibrate (game, phone, play style, results)
-- [ ] Presets, Saved, Aim Lab, device picker, admin sync, sign-in page
-- [ ] Verify on phone + desktop
+- [x] New design system (black & red, glass bars, glow, animations)
+- [x] App shell: top bar + floating bottom nav
+- [x] Calibrate (game, phone, play style, results)
+- [x] Presets, Saved, Aim Lab, device picker, admin sync, sign-in page
+- [x] Verify on phone + desktop

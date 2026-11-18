@@ -39,3 +39,5 @@ use the editor.
 - Admin rights come only from `public.user_roles` via `has_role`; the owner's verified email is granted admin by the `handle_new_user` trigger.
 - The email-first sign-in check runs in a server function (`src/backend/auth.functions.ts`) calling the service-role-only `email_has_account` RPC; never expose that RPC to anon.
 - `tsconfig.json` has `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` and `noPropertyAccessFromIndexSignature` off because the imported app code was written without them.
+- Shared UI building blocks (Panel, Segmented, OptionTile, Chip, RangeSlider, Sheet, EmptyState…) live in `src/components/giq/`; screens compose these and use only semantic tokens from `src/styles.css`, so the look changes in one place.
+- Animations use the `motion` package (`motion/react`); sliding active indicators rely on unique `layoutId`s per control.
