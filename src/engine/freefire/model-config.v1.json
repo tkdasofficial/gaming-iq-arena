@@ -1,0 +1,153 @@
+{
+  "modelName": "free-fire-hybrid",
+  "version": "1.0.0",
+  "gameIds": ["free-fire"],
+  "slider": { "min": 0, "max": 200 },
+  "statusReliability": { "verified": 1, "manufacturer_reported": 0.75, "user_reported": 0.6, "estimated": 0.35 },
+  "pi": {
+    "weights": { "fps": 0.25, "frameStability": 0.3, "gpu": 0.15, "cpuSingle": 0.1, "cpuMulti": 0.1, "thermal": 0.1 },
+    "normalization": {
+      "fps": { "type": "linear", "worst": 0.5, "best": 1, "unit": "average FPS / FPS cap" },
+      "frameStability": { "type": "linear", "worst": 0.5, "best": 0.95, "unit": "1% low FPS / average FPS" }
+    },
+    "thermalImpairment": { "none": 0, "light": 2.5, "moderate": 5, "heavy": 7.5, "severe": 10 },
+    "benchmarks": {
+      "geekbench-6": {
+        "cpuSingle": { "type": "log", "worst": 400, "best": 3500, "unit": "points" },
+        "cpuMulti": { "type": "log", "worst": 1200, "best": 11000, "unit": "points" }
+      },
+      "3dmark-wild-life-extreme": {
+        "gpu": { "type": "log", "worst": 500, "best": 7000, "unit": "points" }
+      }
+    }
+  },
+  "tdi": {
+    "weights": { "touchLatency": 0.3, "inputConsistency": 0.2, "touchSampling": 0.15, "touchController": 0.15, "screenGeometry": 0.1, "refreshRate": 0.1 },
+    "normalization": {
+      "touchLatency": { "type": "linear", "worst": 120, "best": 20, "unit": "ms end-to-end" },
+      "inputConsistency": { "type": "linear", "worst": 15, "best": 1, "unit": "ms standard deviation" },
+      "touchSampling": { "type": "log", "worst": 60, "best": 720, "unit": "Hz" },
+      "touchController": { "type": "linear", "worst": 0, "best": 10, "unit": "rating" },
+      "screenGeometry": { "type": "linear", "worst": 60, "best": 80, "unit": "mm short edge" },
+      "refreshRate": { "type": "linear", "worst": 30, "best": 144, "unit": "Hz" }
+    }
+  },
+  "playerBuckets": { "fireButtonSize": { "smallMax": 45, "mediumMax": 75 } },
+  "settings": {
+    "general": {
+      "device": [
+        { "input": "frameStability", "mode": "deficit", "coef": 0.05 },
+        { "input": "touchLatency", "mode": "deficit", "coef": 0.04 },
+        { "input": "inputConsistency", "mode": "deficit", "coef": 0.03 },
+        { "input": "screenGeometry", "mode": "centered", "coef": -0.04 }
+      ],
+      "player": {
+        "swipeLength": { "short": 0.08, "medium": 0, "long": -0.08 },
+        "swipeSpeed": { "slow": 0.05, "medium": 0, "fast": -0.05 },
+        "playStyle": { "close-range-aggressive": 0.05, "balanced": 0, "long-range": -0.03, "precision": -0.05 },
+        "comfortPreference": { "fast": 0.04, "balanced": 0, "controlled": -0.04 },
+        "fingerCount": { "2": 0.03, "3": 0, "4": -0.02, "5+": -0.03 }
+      },
+      "confidenceDeviceInputs": ["touchLatency", "inputConsistency", "screenGeometry", "frameStability", "refreshRate"],
+      "confidencePlayerInputs": ["swipeLength", "swipeSpeed", "playStyle", "comfortPreference", "fingerCount", "hudLayout"],
+      "maxAdjustment": 0.25,
+      "loss": { "movementError": 0.35, "overshoot": 0.15, "undershoot": 0.15, "instability": 0.25, "timeToTarget": 0.1 },
+      "feedbackStep": 8
+    },
+    "redDot": {
+      "device": [{ "input": "touchLatency", "mode": "deficit", "coef": 0.04 }],
+      "player": {
+        "dragTechnique": { "drag-shot": 0.06, "mixed": 0, "tap-fire": -0.04 },
+        "swipeSpeed": { "slow": 0.04, "medium": 0, "fast": -0.04 },
+        "fireButtonSize": { "small": 0.03, "medium": 0, "large": -0.03 },
+        "playStyle": { "close-range-aggressive": 0.04, "balanced": 0, "long-range": -0.02, "precision": -0.04 }
+      },
+      "confidenceDeviceInputs": ["touchLatency", "inputConsistency", "touchSampling"],
+      "confidencePlayerInputs": ["dragTechnique", "swipeSpeed", "fireButtonSize", "fireButtonPosition", "hudLayout", "playStyle"],
+      "maxAdjustment": 0.25,
+      "loss": { "movementError": 0.25, "overshoot": 0.35, "undershoot": 0.15, "instability": 0.15, "timeToTarget": 0.1 },
+      "feedbackStep": 8
+    },
+    "scope2x": {
+      "device": [
+        { "input": "frameStability", "mode": "deficit", "coef": 0.03 },
+        { "input": "touchLatency", "mode": "deficit", "coef": 0.03 }
+      ],
+      "player": {
+        "swipeLength": { "short": 0.06, "medium": 0, "long": -0.06 },
+        "swipeSpeed": { "slow": 0.04, "medium": 0, "fast": -0.04 },
+        "weaponPreference": { "smg-shotgun": 0.03, "assault-rifle": 0, "sniper": -0.02, "mixed": 0 },
+        "playStyle": { "close-range-aggressive": 0.03, "balanced": 0, "long-range": -0.03, "precision": -0.04 }
+      },
+      "confidenceDeviceInputs": ["touchLatency", "inputConsistency", "frameStability"],
+      "confidencePlayerInputs": ["swipeLength", "swipeSpeed", "weaponPreference", "playStyle"],
+      "maxAdjustment": 0.25,
+      "loss": { "movementError": 0.3, "overshoot": 0.2, "undershoot": 0.2, "instability": 0.2, "timeToTarget": 0.1 },
+      "feedbackStep": 8
+    },
+    "scope4x": {
+      "device": [
+        { "input": "inputConsistency", "mode": "deficit", "coef": 0.04 },
+        { "input": "screenGeometry", "mode": "centered", "coef": -0.03 }
+      ],
+      "player": {
+        "swipeLength": { "short": 0.05, "medium": 0, "long": -0.05 },
+        "comfortPreference": { "fast": 0.04, "balanced": 0, "controlled": -0.05 },
+        "weaponPreference": { "smg-shotgun": 0.02, "assault-rifle": 0, "sniper": -0.03, "mixed": 0 },
+        "playStyle": { "close-range-aggressive": 0.02, "balanced": 0, "long-range": -0.04, "precision": -0.05 }
+      },
+      "confidenceDeviceInputs": ["inputConsistency", "screenGeometry", "frameStability"],
+      "confidencePlayerInputs": ["swipeLength", "comfortPreference", "weaponPreference", "playStyle"],
+      "maxAdjustment": 0.25,
+      "loss": { "movementError": 0.3, "overshoot": 0.15, "undershoot": 0.15, "instability": 0.3, "timeToTarget": 0.1 },
+      "feedbackStep": 6
+    },
+    "sniper": {
+      "device": [
+        { "input": "inputConsistency", "mode": "deficit", "coef": 0.05 },
+        { "input": "touchLatency", "mode": "deficit", "coef": 0.03 }
+      ],
+      "player": {
+        "playStyle": { "close-range-aggressive": 0.03, "balanced": 0, "long-range": -0.04, "precision": -0.06 },
+        "swipeSpeed": { "slow": 0.03, "medium": 0, "fast": -0.05 },
+        "comfortPreference": { "fast": 0.03, "balanced": 0, "controlled": -0.05 },
+        "weaponPreference": { "smg-shotgun": 0, "assault-rifle": 0, "sniper": -0.03, "mixed": 0 }
+      },
+      "confidenceDeviceInputs": ["inputConsistency", "touchLatency"],
+      "confidencePlayerInputs": ["playStyle", "swipeSpeed", "comfortPreference", "weaponPreference"],
+      "maxAdjustment": 0.25,
+      "loss": { "movementError": 0.3, "overshoot": 0.15, "undershoot": 0.1, "instability": 0.25, "timeToTarget": 0.2 },
+      "feedbackStep": 5
+    },
+    "freeLook": {
+      "device": [{ "input": "screenGeometry", "mode": "centered", "coef": -0.02 }],
+      "player": {
+        "swipeLength": { "short": 0.06, "medium": 0, "long": -0.06 },
+        "comfortPreference": { "fast": 0.06, "balanced": 0, "controlled": -0.05 }
+      },
+      "confidenceDeviceInputs": ["screenGeometry"],
+      "confidencePlayerInputs": ["swipeLength", "comfortPreference", "usesFreeLook"],
+      "maxAdjustment": 0.2,
+      "loss": { "movementError": 0.35, "overshoot": 0.1, "undershoot": 0.1, "instability": 0.1, "timeToTarget": 0.35 },
+      "feedbackStep": 10
+    }
+  },
+  "rangeSpread": { "high": 6, "medium": 12, "low": 20 },
+  "confidence": {
+    "weights": { "device": 0.3, "player": 0.3, "calibration": 0.4 },
+    "calibrationPart": { "calibrated": 1, "feedbackStable": 0.5, "feedback": 0.3, "insufficient_data": 0.15, "stale": 0.05, "not_calibrated": 0 },
+    "high": { "minScore": 0.75, "minDevice": 0.5 },
+    "medium": { "minScore": 0.4 }
+  },
+  "calibration": {
+    "testPoints": [0, 50, 100, 150, 200],
+    "minRepetitions": 5,
+    "minPoints": 3,
+    "fineStep": 5,
+    "swipeDistanceMm": 30,
+    "timeReferenceMs": 1000,
+    "staleWhenChanged": ["gameVersion", "hudLayout", "fireButtonSize", "fireButtonPosition", "fpsCap", "graphicsSetting", "refreshRateHz", "gyroStatus"]
+  },
+  "feedback": { "unstableStepFactor": 0.5 },
+  "usefulness": { "tolerance": 10, "maxSmallCorrections": 2, "smallCorrectionMax": 10 }
+}
