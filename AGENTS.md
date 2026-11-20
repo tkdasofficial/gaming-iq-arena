@@ -45,3 +45,7 @@ use the editor.
 - `tsconfig.json` has `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` and `noPropertyAccessFromIndexSignature` off because the imported app code was written without them.
 - Shared UI building blocks live in `src/components/giq/primitives.tsx`; screens compose these plus shadcn components and use only semantic tokens from `src/styles.css`. Light/dark is driven by `prefers-color-scheme` (the `dark` variant is a media query, no `.dark` class).
 - No animation library: interaction feedback is plain CSS transitions.
+- Free Fire uses the personal calculator in `src/engine/freefire/` (pure, tested in `freefire.test.ts`); its weights/coefficients live in the active `model_versions` row so tuning is a data change, and BGMI/PUBG stay on `src/engine/recommend.ts`. Why: per-game rollout without breaking the existing generator.
+- Player history (`recommendations`, `feedback_events`, `calibration_*`) is written only by server functions in `src/backend/player.functions.ts` or the validating `record_calibration_session` RPC; players can read but never edit it. Why: results and feedback stay trustworthy.
+- `src/start.ts` registers `attachSupabaseAuth` (`src/backend/auth-attacher.ts`) so `requireSupabaseAuth` server functions receive the bearer token. Why: no generated attacher exists for this external project.
+

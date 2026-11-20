@@ -87,7 +87,7 @@ export function FreeFireDetails({ analysis, descriptions = {} }: { analysis: Fre
                 {s.notUsed ? <p className="mt-1.5 text-[11px] text-muted-foreground">You said you don’t use Free Look, so you can leave this as it is.</p> : null}
                 {canFeedback && ids[s.key] ? (
                   <div className="mt-2">
-                    <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-0.5" role="group" aria-label={`How did ${s.label} feel?`}>
+                    <div className="flex flex-wrap gap-1.5" role="group" aria-label={`How did ${s.label} feel?`}>
                       {FEEDBACK.map((f) => (
                         <button
                           key={f.id}

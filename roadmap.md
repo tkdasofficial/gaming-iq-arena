@@ -44,3 +44,12 @@
 - [x] Free Fire: only its six settings; PUBG Mobile + BGMI: shared Camera / ADS / Gyroscope / ADS Gyroscope / Free Look with exact labels (incl. TPP Aim, FPP Aim)
 - [x] Results screen renders by the game's structure (collapsible sections for PUBG/BGMI)
 - [x] Tests for each game's structure + cross-game blocking; check all three games in the browser
+
+## Personal Free Fire calculator (Nov 20 brief)
+- [x] Audit project, database and security
+- [x] Nullable, source-labelled tables for benchmarks, touch and in-game performance data (empty until real measurements exist)
+- [x] Optional "How you play" form for signed-in Free Fire players
+- [x] Six values calculated separately, with range, confidence, data completeness and what moved each value
+- [x] Separate performance and touch/display scores with versioned weights in the database
+- [x] Per-setting feedback that changes only that setting; test results saved in the background (no test screen)
+- [x] Private history of every result, feedback and test result; tests for the calculator rules
