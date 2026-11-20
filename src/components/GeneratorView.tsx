@@ -4,6 +4,7 @@ import { useServerFn } from '@tanstack/react-start';
 import { AlertTriangle, ArrowRight, Gauge, Layers, RotateCcw, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 import { catalogKeys, fetchBrands, fetchDevice, fetchGames, fetchModels, TIER_LABELS, TIER_ORDER } from '../backend/catalog';
 import { generateRecommendation } from '../backend/recommend.functions';
+import { generatePersonalRecommendation } from '../backend/player.functions';
 import { saveResult } from '../backend/services';
 import { useBackend } from '../backend/BackendContext';
 import { deviceSupportIssue, type Recommendation } from '../engine/recommend';
@@ -12,6 +13,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { cn } from '@/lib/utils';
 import { DeviceSpecs } from './DeviceSpecs';
 import { ResultsView } from './ResultsView';
+import { PlayerProfileForm } from './PlayerProfileForm';
 import { Eyebrow, Notice, Spinner, StepLabel } from './giq/primitives';
 
 const LAST_KEY = 'giq:last-result';
@@ -19,7 +21,8 @@ const triggerCls = 'h-11 rounded-lg bg-card px-3 text-sm shadow-none';
 
 export function GeneratorView() {
   const { user, authReady, requestSignIn } = useBackend();
-  const generate = useServerFn(generateRecommendation);
+  const generatePublic = useServerFn(generateRecommendation);
+  const generatePersonal = useServerFn(generatePersonalRecommendation);
 
   const [brandId, setBrandId] = useState('');
   const [modelId, setModelId] = useState('');
@@ -98,7 +101,10 @@ export function GeneratorView() {
     setSaveState('idle');
     setSaveError(null);
     try {
-      const res = await generate({ data: { deviceId: modelId, gameId } });
+      // Signed-in players get their answers, feedback and test results applied, and history saved.
+      const res = user
+        ? await generatePersonal({ data: { deviceId: modelId, gameId } })
+        : await generatePublic({ data: { deviceId: modelId, gameId } });
       if (!res.ok) {
         setGenError(res.error);
         setResult(null);
@@ -274,6 +280,10 @@ export function GeneratorView() {
                 </div>
               )}
             </div>
+
+            {gameId === 'free-fire' && user ? (
+              <PlayerProfileForm gameId={gameId} onSaved={() => { if (result) void onGenerate(); }} />
+            ) : null}
 
             <div className="space-y-2 pt-1">
               <Button type="submit" size="xl" className="w-full" disabled={!canGenerate}>

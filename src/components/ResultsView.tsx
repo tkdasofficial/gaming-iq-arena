@@ -3,6 +3,7 @@ import { Bookmark, BookmarkCheck, Check, ChevronDown, Copy, ExternalLink, Info, 
 import { formatRecommendationText, type Recommendation } from '../engine/recommend';
 import { Button } from '@/components/ui/button';
 import { DeviceSpecs } from './DeviceSpecs';
+import { FreeFireDetails } from './FreeFireDetails';
 import { Eyebrow, Notice, Spinner } from './giq/primitives';
 
 const GYRO_NOTE: Partial<Record<Recommendation['gyro'], string>> = {
@@ -24,6 +25,10 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
   const [copyFailed, setCopyFailed] = useState(false);
   const multiGroup = rec.groups.length > 1;
   const unit = rec.unit;
+  const rangeFor = (coreId: string) => {
+    const s = rec.analysis?.settings.find((x) => x.key === coreId);
+    return s ? `${s.min}–${s.max}` : null;
+  };
 
   const copyAll = async () => {
     try {
@@ -78,6 +83,7 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
                 {c.value}
                 {unit ? <span className="ml-0.5 text-sm text-muted-foreground">{unit}</span> : null}
               </div>
+              {rangeFor(c.id) ? <div className="mt-1.5 text-[11px] text-muted-foreground tabular-nums">Range {rangeFor(c.id)}</div> : null}
               {c.source ? (
                 <div className="mt-1.5 truncate text-[11px] text-subtle" title={c.source}>
                   {c.source}
@@ -93,8 +99,10 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
         ) : null}
       </div>
 
+      {rec.analysis ? <FreeFireDetails analysis={rec.analysis} descriptions={Object.fromEntries(rec.groups.flatMap((g) => g.settings).map((x) => [x.label, x.description ?? '']))} /> : null}
+
       {/* Every in-game slider, laid out the way this game structures them */}
-      {rec.groups.length ? (
+      {rec.groups.length && !rec.analysis ? (
         <section className="surface rounded-xl p-4 sm:p-5" aria-label="All settings">
           <h3 className="text-sm font-semibold">All {rec.gameShortName} settings</h3>
           <p className="mt-0.5 text-[11px] text-muted-foreground">
@@ -172,7 +180,7 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
 
       <p className="px-1 text-xs leading-relaxed text-muted-foreground">
         Calculated from {rec.basis.join(', ')}. These are starting points, not guaranteed perfect values — fine-tune them
-        in a training match.
+        in a training match.{rec.analysis ? ' Accuracy has not been measured yet; it will be tracked as players send feedback.' : ''}
       </p>
     </article>
   );

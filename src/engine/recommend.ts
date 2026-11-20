@@ -5,6 +5,8 @@
  * Missing hardware values stay null — they are never estimated.
  */
 
+import type { FreeFireAnalysis } from './freefire/analyze';
+
 export type GyroSupport = 'hardware' | 'software' | 'none' | 'unknown';
 export type CoreSettingId = 'general' | 'redDot' | 'scope2x' | 'scope4x' | 'sniper' | 'freeLook';
 export type GameExtra = 'fireButton' | 'gyroMode';
@@ -108,6 +110,8 @@ export interface Recommendation {
   extras: { label: string; value: string; note: string }[];
   basis: string[];
   generatedAt: string;
+  /** Free Fire hybrid engine details: ranges, confidence, calibration status, PI/TDI, model version. */
+  analysis?: FreeFireAnalysis;
 }
 
 export const CORE_ORDER: CoreSettingId[] = ['general', 'redDot', 'scope2x', 'scope4x', 'sniper', 'freeLook'];
