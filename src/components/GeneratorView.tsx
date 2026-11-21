@@ -72,8 +72,8 @@ export function GeneratorView() {
       ? 'Select your phone model.'
       : !rotationForm.deviceAge
         ? 'Select how old your phone is.'
-        : !rotationForm.whole || !rotationForm.digit
-          ? 'Enter your rotation test result (whole and decimal).'
+        : Number(rotationForm.whole) + Number(rotationForm.digit) / 10 <= 0
+          ? 'Enter your rotations at General 0 (whole and decimal).'
           : !gameId
             ? 'Select the game you play.'
         : device.isLoading

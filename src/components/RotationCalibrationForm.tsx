@@ -7,36 +7,37 @@ import { StepLabel } from './giq/primitives';
 
 export interface RotationFormValue {
   deviceAge: DeviceAge | '';
-  /** Whole rotations, 1–99 ('' = not chosen). */
+  /** Whole rotations, 0–99 (defaults to '0'). */
   whole: string;
-  /** Decimal digit, 1–9 ('' = not chosen). */
+  /** Decimal digit, 0–9 (defaults to '0'). */
   digit: string;
 }
 
-export const EMPTY_ROTATION_FORM: RotationFormValue = { deviceAge: '', whole: '', digit: '' };
+export const EMPTY_ROTATION_FORM: RotationFormValue = { deviceAge: '', whole: '0', digit: '0' };
 
-export const rotationFormComplete = (v: RotationFormValue) => Boolean(v.deviceAge && v.whole && v.digit);
+/** Complete when a phone age is chosen and the combined rotation is above 0.0 (0.0 = not entered). */
+export const rotationFormComplete = (v: RotationFormValue) => Boolean(v.deviceAge) && Number(v.whole) + Number(v.digit) / 10 > 0;
 
 /** Rebuild the form from a stored zero-sensitivity rotation (e.g. 9.5 → 9 + 5). */
 export function rotationFormFrom(deviceAge: string | undefined, zeroRotation: number | undefined): RotationFormValue {
   if (!deviceAge || !zeroRotation || !DEVICE_AGES.some((a) => a.id === deviceAge)) return EMPTY_ROTATION_FORM;
   const whole = Math.floor(zeroRotation);
   const digit = Math.round((zeroRotation - whole) * 10);
-  return { deviceAge: deviceAge as DeviceAge, whole: String(whole), digit: digit >= 1 && digit <= 9 ? String(digit) : '' };
+  return { deviceAge: deviceAge as DeviceAge, whole: String(whole), digit: digit >= 0 && digit <= 9 ? String(digit) : '0' };
 }
 
 const selectCls =
   'h-11 w-full rounded-lg border border-input bg-card px-3 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50';
 
-const WHOLE_OPTIONS = Array.from({ length: 99 }, (_, i) => i + 1);
-const DIGIT_OPTIONS = Array.from({ length: 9 }, (_, i) => i + 1);
+const WHOLE_OPTIONS = Array.from({ length: 100 }, (_, i) => i);
+const DIGIT_OPTIONS = Array.from({ length: 10 }, (_, i) => i);
 
 /** The rotation test is a Free Fire swipe test, so saved answers are stored against Free Fire. */
 const ROTATION_GAME_ID = 'free-fire';
 
 /**
  * Required steps after the model: phone age, then the zero-sensitivity rotation test as two
- * side-by-side dropdowns (1–99 and 1–9, combined as e.g. 9.5). Locked until a model is picked;
+ * side-by-side dropdowns (0–99 and 0–9, both defaulting to 0, combined as e.g. 9.5). Locked until a model is picked;
  * signed-in players get their saved answers prefilled.
  */
 export function RotationCalibrationForm({
@@ -64,7 +65,7 @@ export function RotationCalibrationForm({
   useEffect(() => {
     const s = saved.data;
     if (!s) return;
-    onChange((current) => (current.deviceAge || current.whole || current.digit ? current : rotationFormFrom(s.deviceAge, s.zeroRotation)));
+    onChange((current) => (current.deviceAge ? current : rotationFormFrom(s.deviceAge, s.zeroRotation)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [saved.data]);
 
@@ -89,7 +90,7 @@ export function RotationCalibrationForm({
 
       <div>
         <StepLabel step={startStep + 1} htmlFor="rotation-whole">
-          Rotation test
+          Rotations
         </StepLabel>
         <p className="mb-2 rounded-lg bg-secondary px-3 py-2 text-[12px] leading-relaxed text-muted-foreground">
           In Free Fire, set <span className="font-medium text-foreground">General to 0</span>. Swipe once from one edge of the screen to the
@@ -97,7 +98,6 @@ export function RotationCalibrationForm({
         </p>
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
           <select id="rotation-whole" required disabled={locked} aria-label="Whole rotations" className={selectCls} value={value.whole} onChange={(e) => set({ whole: e.target.value })}>
-            <option value="">Whole</option>
             {WHOLE_OPTIONS.map((n) => (
               <option key={n} value={n}>
                 {n}
@@ -108,7 +108,6 @@ export function RotationCalibrationForm({
             .
           </span>
           <select required disabled={locked} aria-label="Decimal part" className={selectCls} value={value.digit} onChange={(e) => set({ digit: e.target.value })}>
-            <option value="">Decimal</option>
             {DIGIT_OPTIONS.map((n) => (
               <option key={n} value={n}>
                 {n}
@@ -117,7 +116,7 @@ export function RotationCalibrationForm({
           </select>
         </div>
         <p className="mt-1.5 text-[11px] text-muted-foreground">
-          {value.whole && value.digit ? `${value.whole}.${value.digit} rotations at General 0` : 'Example: 9 whole and 5 decimal = 9.5 rotations'}
+          {Number(value.whole) + Number(value.digit) / 10 > 0 ? `${value.whole}.${value.digit} rotations at General 0` : 'Example: 9 whole and 5 decimal = 9.5 rotations'}
         </p>
       </div>
     </>

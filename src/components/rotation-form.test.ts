@@ -5,11 +5,14 @@ describe('required rotation step', () => {
   it('is incomplete without phone age', () => {
     expect(rotationFormComplete({ deviceAge: '', whole: '9', digit: '5' })).toBe(false);
   });
-  it('is incomplete without the decimal part', () => {
-    expect(rotationFormComplete({ deviceAge: '1-2-years' as never, whole: '9', digit: '' })).toBe(false);
+  it('is incomplete while rotations stay at the 0.0 default', () => {
+    expect(rotationFormComplete({ deviceAge: '1-2-years' as never, whole: '0', digit: '0' })).toBe(false);
   });
   it('is incomplete when empty', () => {
     expect(rotationFormComplete(EMPTY_ROTATION_FORM)).toBe(false);
+  });
+  it('is complete with phone age and a rotation above 0.0', () => {
+    expect(rotationFormComplete({ deviceAge: '1-2-years' as never, whole: '9', digit: '5' })).toBe(true);
   });
   it('restores 9.5 rotations as 9 and 5', () => {
     const v = rotationFormFrom('1-2-years', 9.5);
