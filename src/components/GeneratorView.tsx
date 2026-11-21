@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 import { DeviceSpecs } from './DeviceSpecs';
 import { ResultsView } from './ResultsView';
 import { PlayerProfileForm } from './PlayerProfileForm';
-import { EMPTY_ROTATION_FORM, RotationCalibrationForm, rotationFormComplete, type RotationFormValue } from './RotationCalibrationForm';
+import { EMPTY_ROTATION_FORM, RotationCalibrationForm, rotationFormComplete, rotationFormFrom, type RotationFormValue } from './RotationCalibrationForm';
 import { Eyebrow, Notice, Spinner, StepLabel } from './giq/primitives';
 
 const LAST_KEY = 'giq:last-result';
@@ -55,6 +55,7 @@ export function GeneratorView() {
         setBrandId(last.device.brandId);
         setModelId(last.device.id);
         setGameId(last.gameId);
+        setRotationForm(rotationFormFrom(last.rotation?.deviceAge, last.rotation?.zeroRotation));
         setResult(last);
       }
     } catch {
@@ -63,13 +64,18 @@ export function GeneratorView() {
   }, []);
 
   const supportIssue = device.data ? deviceSupportIssue(device.data) : null;
-  const canGenerate = Boolean(brandId && modelId && gameId && device.data && !supportIssue && !generating);
+  const rotationReady = rotationFormComplete(rotationForm);
+  const canGenerate = Boolean(brandId && modelId && rotationReady && gameId && device.data && !supportIssue && !generating);
   const hint = !brandId
     ? 'Select your phone’s brand to begin.'
     : !modelId
       ? 'Select your phone model.'
-      : !gameId
-        ? 'Select the game you play.'
+      : !rotationForm.deviceAge
+        ? 'Select how old your phone is.'
+        : !rotationForm.whole || !rotationForm.digit
+          ? 'Enter your rotation test result (whole and decimal).'
+          : !gameId
+            ? 'Select the game you play.'
         : device.isLoading
           ? 'Loading phone specifications…'
           : supportIssue;
@@ -109,7 +115,7 @@ export function GeneratorView() {
     setSaveError(null);
     try {
       // Signed-in players get their answers, feedback and test results applied, and history saved.
-      const wantRotation = gameId === 'free-fire' && rotationFormComplete(rotationForm);
+      const wantRotation = gameId === 'free-fire' && rotationReady;
       const rotationInput = wantRotation
         ? { deviceId: modelId, gameId, deviceAge: rotationForm.deviceAge as string, wholeRotations: Number(rotationForm.whole), decimalDigit: Number(rotationForm.digit) }
         : null;
@@ -178,7 +184,7 @@ export function GeneratorView() {
               Sensitivity settings built for your exact phone.
             </h1>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
-              Pick your phone and game. We read its verified display and touch specs and calculate where to start.
+              Pick your phone, enter your rotation test, then choose your game. We read its verified display and touch specs and calculate where to start.
             </p>
           </div>
 
@@ -272,9 +278,12 @@ export function GeneratorView() {
               </div>
             ) : null}
 
-            {/* 3. Game */}
+            {/* 3–4. Phone age + rotation test (required) */}
+            <RotationCalibrationForm deviceId={modelId} signedIn={Boolean(user)} value={rotationForm} onChange={setRotationForm} startStep={3} />
+
+            {/* 5. Game */}
             <div>
-              <StepLabel step={3}>Game</StepLabel>
+              <StepLabel step={5}>Game</StepLabel>
               {games.isError ? (
                 <Notice tone="danger" icon={AlertTriangle} action={<button type="button" className="text-xs font-medium underline" onClick={() => void games.refetch()}>Retry</button>}>
                   Couldn’t load games.
@@ -291,8 +300,10 @@ export function GeneratorView() {
                             type="button"
                             role="radio"
                             aria-checked={active}
+                            disabled={!rotationReady}
                             onClick={() => onGame(g.id)}
                             className={cn(
+                              'disabled:cursor-not-allowed disabled:opacity-50',
                               'h-11 min-w-0 truncate rounded-lg border px-1 text-[13px] font-medium tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                               active ? 'border-primary bg-primary text-primary-foreground' : 'border-input bg-card text-foreground hover:bg-accent'
                             )}
@@ -304,10 +315,6 @@ export function GeneratorView() {
                 </div>
               )}
             </div>
-
-            {gameId === 'free-fire' && modelId ? (
-              <RotationCalibrationForm deviceId={modelId} gameId={gameId} signedIn={Boolean(user)} value={rotationForm} onChange={setRotationForm} />
-            ) : null}
 
             {gameId === 'free-fire' && user ? (
               <PlayerProfileForm gameId={gameId} onSaved={() => { if (result) void onGenerate(); }} />
