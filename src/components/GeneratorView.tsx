@@ -5,15 +5,18 @@ import { AlertTriangle, ArrowRight, Gauge, Layers, RotateCcw, ShieldCheck, Slide
 import { catalogKeys, fetchBrands, fetchDevice, fetchGames, fetchModels, TIER_LABELS, TIER_ORDER } from '../backend/catalog';
 import { generateRecommendation } from '../backend/recommend.functions';
 import { generatePersonalRecommendation } from '../backend/player.functions';
+import { calculateGeneralRotation, calculatePersonalRotation } from '../backend/rotation.functions';
 import { saveResult } from '../backend/services';
 import { useBackend } from '../backend/BackendContext';
 import { deviceSupportIssue, type Recommendation } from '../engine/recommend';
+import { applyRotationToRecommendation } from '../engine/freefire/rotation';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { DeviceSpecs } from './DeviceSpecs';
 import { ResultsView } from './ResultsView';
 import { PlayerProfileForm } from './PlayerProfileForm';
+import { EMPTY_ROTATION_FORM, RotationCalibrationForm, rotationFormComplete, type RotationFormValue } from './RotationCalibrationForm';
 import { Eyebrow, Notice, Spinner, StepLabel } from './giq/primitives';
 
 const LAST_KEY = 'giq:last-result';
@@ -23,10 +26,13 @@ export function GeneratorView() {
   const { user, authReady, requestSignIn } = useBackend();
   const generatePublic = useServerFn(generateRecommendation);
   const generatePersonal = useServerFn(generatePersonalRecommendation);
+  const rotationPublic = useServerFn(calculateGeneralRotation);
+  const rotationPersonal = useServerFn(calculatePersonalRotation);
 
   const [brandId, setBrandId] = useState('');
   const [modelId, setModelId] = useState('');
   const [gameId, setGameId] = useState('');
+  const [rotationForm, setRotationForm] = useState<RotationFormValue>(EMPTY_ROTATION_FORM);
   const [result, setResult] = useState<Recommendation | null>(null);
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);

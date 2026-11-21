@@ -6,6 +6,7 @@
  */
 
 import type { FreeFireAnalysis } from './freefire/analyze';
+import type { RotationResult } from './freefire/rotation';
 
 export type GyroSupport = 'hardware' | 'software' | 'none' | 'unknown';
 export type CoreSettingId = 'general' | 'redDot' | 'scope2x' | 'scope4x' | 'sniper' | 'freeLook';
@@ -112,6 +113,8 @@ export interface Recommendation {
   generatedAt: string;
   /** Free Fire hybrid engine details: ranges, confidence, calibration status, PI/TDI, model version. */
   analysis?: FreeFireAnalysis;
+  /** Free Fire rotation test result; when present it sets the General value. */
+  rotation?: RotationResult & { deviceAge?: string };
 }
 
 export const CORE_ORDER: CoreSettingId[] = ['general', 'redDot', 'scope2x', 'scope4x', 'sniper', 'freeLook'];

@@ -1,0 +1,10 @@
+CREATE INDEX idx_device_rotation_measurements_device ON public.device_rotation_measurements (device_id);
+CREATE INDEX idx_device_rotation_measurements_game ON public.device_rotation_measurements (game_id);
+CREATE INDEX idx_device_user_calibrations_device ON public.device_user_calibrations (device_id);
+CREATE INDEX idx_device_user_calibrations_game ON public.device_user_calibrations (game_id);
+CREATE INDEX idx_general_sensitivity_logs_calibration ON public.general_sensitivity_calculation_logs (calibration_id);
+CREATE INDEX idx_general_sensitivity_logs_device ON public.general_sensitivity_calculation_logs (device_id);
+CREATE INDEX idx_general_sensitivity_logs_game ON public.general_sensitivity_calculation_logs (game_id);
+CREATE INDEX idx_general_sensitivity_logs_user ON public.general_sensitivity_calculation_logs (user_id);
+CREATE INDEX idx_general_sensitivity_config_game ON public.general_sensitivity_config (game_id);
+CREATE INDEX idx_component_quality_profiles_device ON public.component_quality_profiles (device_id);
