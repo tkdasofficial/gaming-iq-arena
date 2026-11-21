@@ -284,6 +284,98 @@ export type Database = {
           },
         ]
       }
+      component_point_rules: {
+        Row: {
+          component_id: string
+          created_at: string
+          id: string
+          importance_weight: number
+          is_enabled: boolean
+          maximum_benchmark: number
+          maximum_point: number
+          minimum_benchmark: number
+          minimum_point: number
+          normalization_method: string
+          rule_version: string
+          updated_at: string
+        }
+        Insert: {
+          component_id: string
+          created_at?: string
+          id: string
+          importance_weight?: number
+          is_enabled?: boolean
+          maximum_benchmark: number
+          maximum_point?: number
+          minimum_benchmark: number
+          minimum_point?: number
+          normalization_method?: string
+          rule_version: string
+          updated_at?: string
+        }
+        Update: {
+          component_id?: string
+          created_at?: string
+          id?: string
+          importance_weight?: number
+          is_enabled?: boolean
+          maximum_benchmark?: number
+          maximum_point?: number
+          minimum_benchmark?: number
+          minimum_point?: number
+          normalization_method?: string
+          rule_version?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      component_quality_profiles: {
+        Row: {
+          benchmark_source: string
+          benchmark_type: string
+          benchmark_unit: string | null
+          benchmark_value: number | null
+          component_id: string
+          created_at: string
+          data_confidence: number | null
+          device_id: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          benchmark_source: string
+          benchmark_type?: string
+          benchmark_unit?: string | null
+          benchmark_value?: number | null
+          component_id: string
+          created_at?: string
+          data_confidence?: number | null
+          device_id: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          benchmark_source?: string
+          benchmark_type?: string
+          benchmark_unit?: string | null
+          benchmark_value?: number | null
+          component_id?: string
+          created_at?: string
+          data_confidence?: number | null
+          device_id?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "component_quality_profiles_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       custom_devices: {
         Row: {
           created_at: string
@@ -307,6 +399,126 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      device_rotation_measurements: {
+        Row: {
+          created_at: string
+          device_id: string
+          game_id: string
+          game_version: string | null
+          id: string
+          measurement_source: string
+          median_rotation: number | null
+          repetition_count: number | null
+          rotation_value: number
+          sensitivity_value: number
+          swipe_protocol: string | null
+          verification_status: string
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          game_id: string
+          game_version?: string | null
+          id?: string
+          measurement_source: string
+          median_rotation?: number | null
+          repetition_count?: number | null
+          rotation_value: number
+          sensitivity_value: number
+          swipe_protocol?: string | null
+          verification_status?: string
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          game_id?: string
+          game_version?: string | null
+          id?: string
+          measurement_source?: string
+          median_rotation?: number | null
+          repetition_count?: number | null
+          rotation_value?: number
+          sensitivity_value?: number
+          swipe_protocol?: string | null
+          verification_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_rotation_measurements_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "device_rotation_measurements_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      device_user_calibrations: {
+        Row: {
+          confidence_level: string
+          created_at: string
+          device_age_range: string
+          device_id: string
+          game_id: string
+          game_version: string | null
+          id: string
+          measurement_method: string | null
+          repetition_count: number | null
+          updated_at: string
+          user_id: string
+          zero_sensitivity_rotation: number
+        }
+        Insert: {
+          confidence_level?: string
+          created_at?: string
+          device_age_range: string
+          device_id: string
+          game_id: string
+          game_version?: string | null
+          id?: string
+          measurement_method?: string | null
+          repetition_count?: number | null
+          updated_at?: string
+          user_id: string
+          zero_sensitivity_rotation: number
+        }
+        Update: {
+          confidence_level?: string
+          created_at?: string
+          device_age_range?: string
+          device_id?: string
+          game_id?: string
+          game_version?: string | null
+          id?: string
+          measurement_method?: string | null
+          repetition_count?: number | null
+          updated_at?: string
+          user_id?: string
+          zero_sensitivity_rotation?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_user_calibrations_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "device_user_calibrations_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       devices: {
         Row: {
@@ -534,6 +746,132 @@ export type Database = {
             columns: ["sensitivity_schema_id"]
             isOneToOne: false
             referencedRelation: "sensitivity_schemas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      general_sensitivity_calculation_logs: {
+        Row: {
+          calculation_status: string
+          calculation_version: string
+          calibration_id: string | null
+          component_contribution: Json | null
+          created_at: string
+          device_id: string
+          final_recommended_sensitivity: number
+          game_id: string
+          id: string
+          maximum_predicted_rotation: number
+          predicted_rotation: number
+          raw_recommended_sensitivity: number
+          target_rotation: number
+          user_id: string | null
+          zero_sensitivity_rotation: number
+        }
+        Insert: {
+          calculation_status: string
+          calculation_version: string
+          calibration_id?: string | null
+          component_contribution?: Json | null
+          created_at?: string
+          device_id: string
+          final_recommended_sensitivity: number
+          game_id: string
+          id?: string
+          maximum_predicted_rotation: number
+          predicted_rotation: number
+          raw_recommended_sensitivity: number
+          target_rotation: number
+          user_id?: string | null
+          zero_sensitivity_rotation: number
+        }
+        Update: {
+          calculation_status?: string
+          calculation_version?: string
+          calibration_id?: string | null
+          component_contribution?: Json | null
+          created_at?: string
+          device_id?: string
+          final_recommended_sensitivity?: number
+          game_id?: string
+          id?: string
+          maximum_predicted_rotation?: number
+          predicted_rotation?: number
+          raw_recommended_sensitivity?: number
+          target_rotation?: number
+          user_id?: string | null
+          zero_sensitivity_rotation?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "general_sensitivity_calculation_logs_calibration_id_fkey"
+            columns: ["calibration_id"]
+            isOneToOne: false
+            referencedRelation: "device_user_calibrations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "general_sensitivity_calculation_logs_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "general_sensitivity_calculation_logs_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      general_sensitivity_config: {
+        Row: {
+          calculation_model: string
+          configuration_version: string
+          created_at: string
+          gain_per_point: number
+          game_id: string
+          id: string
+          is_active: boolean
+          maximum_sensitivity: number
+          minimum_sensitivity: number
+          target_rotation: number
+          updated_at: string
+        }
+        Insert: {
+          calculation_model?: string
+          configuration_version: string
+          created_at?: string
+          gain_per_point?: number
+          game_id: string
+          id: string
+          is_active?: boolean
+          maximum_sensitivity?: number
+          minimum_sensitivity?: number
+          target_rotation: number
+          updated_at?: string
+        }
+        Update: {
+          calculation_model?: string
+          configuration_version?: string
+          created_at?: string
+          gain_per_point?: number
+          game_id?: string
+          id?: string
+          is_active?: boolean
+          maximum_sensitivity?: number
+          minimum_sensitivity?: number
+          target_rotation?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "general_sensitivity_config_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
             referencedColumns: ["id"]
           },
         ]
