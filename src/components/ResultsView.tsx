@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Bookmark, BookmarkCheck, Check, ChevronDown, Copy, ExternalLink, Info, LogIn } from 'lucide-react';
+import { AlertTriangle, Bookmark, BookmarkCheck, Check, ChevronDown, Copy, ExternalLink, Info, LogIn } from 'lucide-react';
 import { formatRecommendationText, type Recommendation } from '../engine/recommend';
+import { DEVICE_AGE_LABELS, type DeviceAge } from '../backend/rotation.core';
 import { Button } from '@/components/ui/button';
 import { DeviceSpecs } from './DeviceSpecs';
 import { FreeFireDetails } from './FreeFireDetails';
@@ -99,6 +100,8 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
         ) : null}
       </div>
 
+      {rec.rotation ? <RotationCard rotation={rec.rotation} unit={unit} /> : null}
+
       {rec.analysis ? <FreeFireDetails analysis={rec.analysis} descriptions={Object.fromEntries(rec.groups.flatMap((g) => g.settings).map((x) => [x.label, x.description ?? '']))} /> : null}
 
       {/* Every in-game slider, laid out the way this game structures them */}
@@ -183,6 +186,58 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
         in a training match.{rec.analysis ? ' Accuracy has not been measured yet; it will be tracked as players send feedback.' : ''}
       </p>
     </article>
+  );
+}
+
+/** General Sensitivity calculated from the player's rotation test. */
+function RotationCard({ rotation, unit }: { rotation: NonNullable<Recommendation['rotation']>; unit: string }) {
+  const ageLabel = rotation.deviceAge ? (DEVICE_AGE_LABELS[rotation.deviceAge as DeviceAge] ?? rotation.deviceAge) : null;
+  const facts: { label: string; value: string }[] = [
+    { label: 'Target rotation', value: String(rotation.targetRotation) },
+    { label: 'Your rotations at General 0', value: String(rotation.zeroRotation) },
+    { label: `Predicted at ${rotation.recommended}`, value: `≈ ${rotation.predictedRotation}` },
+    { label: 'Predicted at 200 (max)', value: `≈ ${rotation.maxPredictedRotation}` },
+  ];
+  if (ageLabel) facts.push({ label: 'Phone age', value: ageLabel });
+  return (
+    <section className="surface rounded-xl p-4 sm:p-5" aria-label="Rotation test result">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <Eyebrow>From your rotation test</Eyebrow>
+          <h3 className="mt-1 text-sm font-semibold">General Sensitivity</h3>
+        </div>
+        <div className="shrink-0 text-right">
+          <div className="font-mono text-[32px] font-medium leading-none tracking-tight tabular-nums">
+            {rotation.recommended}
+            {unit ? <span className="ml-0.5 text-sm text-muted-foreground">{unit}</span> : null}
+          </div>
+        </div>
+      </div>
+      <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
+        {facts.map((f) => (
+          <div key={f.label} className="bg-card p-2.5">
+            <dt className="text-[11px] text-muted-foreground">{f.label}</dt>
+            <dd className="mt-0.5 font-mono text-[13px] font-medium tabular-nums">{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+      {rotation.status === 'unreachable' ? (
+        <Notice tone="danger" icon={AlertTriangle} className="mt-3">
+          This phone reaches about {rotation.maxPredictedRotation} rotations even at General {rotation.recommended}, below the target of{' '}
+          {rotation.targetRotation}. Use {rotation.recommended} — the maximum the game allows.
+        </Notice>
+      ) : rotation.status === 'already-at-target' ? (
+        <Notice icon={Info} className="mt-3">
+          Your phone already makes {rotation.zeroRotation} rotations at General 0, at or above the target of {rotation.targetRotation} — keep General
+          at {rotation.recommended}.
+        </Notice>
+      ) : null}
+      <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
+        {rotation.model === 'measured-curve'
+          ? 'Calculated from verified rotation measurements for this phone.'
+          : 'Calculated with the starting model (General 0 = 1×, 100 = 2×, 200 = 3× rotation). This is a working assumption, not a verified Free Fire mechanic — fine-tune in a training match.'}
+      </p>
+    </section>
   );
 }
 

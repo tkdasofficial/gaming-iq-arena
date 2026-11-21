@@ -53,3 +53,11 @@
 - [x] Separate performance and touch/display scores with versioned weights in the database
 - [x] Per-setting feedback that changes only that setting; test results saved in the background (no test screen)
 - [x] Private history of every result, feedback and test result; tests for the calculator rules
+
+## Rotation-based General Sensitivity (Nov 21 brief)
+- [x] Rotation engine: target 14 rotations, linear 3x assumption, measured-curve support, limits 0–200
+- [x] Tables: config, user calibrations, rotation measurements, component profiles/point rules, calculation logs
+- [x] Two-box rotation picker (1–99 + 1–9 decimal) + device age in the generator (Free Fire)
+- [x] Server calculation with reproducible logs; component points as separate bounded layer (not applied)
+- [x] Result card: recommended General, target, zero rotation, predicted rotations, reachability, phone age
+- [x] Tests: all reference examples (9.5→47, 3→200 unreachable, 6→133, 9→56, 10→40) + inverse point rule

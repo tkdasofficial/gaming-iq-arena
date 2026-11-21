@@ -92,6 +92,7 @@ export function GeneratorView() {
   const onModel = (id: string) => {
     if (!id || id === modelId) return;
     setModelId(id);
+    setRotationForm(EMPTY_ROTATION_FORM);
     clearResult();
   };
   const onGame = (id: string) => {
@@ -108,16 +109,33 @@ export function GeneratorView() {
     setSaveError(null);
     try {
       // Signed-in players get their answers, feedback and test results applied, and history saved.
-      const res = user
-        ? await generatePersonal({ data: { deviceId: modelId, gameId } })
-        : await generatePublic({ data: { deviceId: modelId, gameId } });
+      const wantRotation = gameId === 'free-fire' && rotationFormComplete(rotationForm);
+      const rotationInput = wantRotation
+        ? { deviceId: modelId, gameId, deviceAge: rotationForm.deviceAge as string, wholeRotations: Number(rotationForm.whole), decimalDigit: Number(rotationForm.digit) }
+        : null;
+      const [res, rotRes] = await Promise.all([
+        user ? generatePersonal({ data: { deviceId: modelId, gameId } }) : generatePublic({ data: { deviceId: modelId, gameId } }),
+        rotationInput ? (user ? rotationPersonal({ data: rotationInput }) : rotationPublic({ data: rotationInput })) : Promise.resolve(null),
+      ]);
       if (!res.ok) {
         setGenError(res.error);
         setResult(null);
         return;
       }
-      setResult(res.recommendation);
-      sessionStorage.setItem(LAST_KEY, JSON.stringify(res.recommendation));
+      let recommendation = res.recommendation;
+      if (rotRes) {
+        if (!rotRes.ok) {
+          setGenError(rotRes.error);
+          setResult(null);
+          return;
+        }
+        recommendation = {
+          ...applyRotationToRecommendation(recommendation, rotRes.rotation),
+          rotation: { ...rotRes.rotation, deviceAge: rotRes.deviceAge },
+        };
+      }
+      setResult(recommendation);
+      sessionStorage.setItem(LAST_KEY, JSON.stringify(recommendation));
       window.setTimeout(() => {
         if (window.matchMedia('(max-width: 1023px)').matches) {
           resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -286,6 +304,10 @@ export function GeneratorView() {
                 </div>
               )}
             </div>
+
+            {gameId === 'free-fire' && modelId ? (
+              <RotationCalibrationForm deviceId={modelId} gameId={gameId} signedIn={Boolean(user)} value={rotationForm} onChange={setRotationForm} />
+            ) : null}
 
             {gameId === 'free-fire' && user ? (
               <PlayerProfileForm gameId={gameId} onSaved={() => { if (result) void onGenerate(); }} />
