@@ -61,3 +61,11 @@
 - [x] Server calculation with reproducible logs; component points as separate bounded layer (not applied)
 - [x] Result card: recommended General, target, zero rotation, predicted rotations, reachability, phone age
 - [x] Tests: all reference examples (9.5→47, 3→200 unreachable, 6→133, 9→56, 10→40) + inverse point rule
+
+## Free Fire Version 1 formulas (Nov 21 brief)
+- [x] Store rotations at General 200 (new fields; old General 0 setup switched off)
+- [ ] One calculation function: G = min(200, 2800/R), F = 10.5/R, scopes from Redmi 10C reference, Free Look = G × 65/190, round + clamp
+- [ ] Server: Free Fire values come only from this function; logged with all six values
+- [ ] Rotations step asks for rotations at General 200
+- [ ] Hide "How you play" form and per-setting feedback for Free Fire (user confirmed)
+- [ ] Tests incl. mandatory R = 14 → 200/71/94/56/19/68

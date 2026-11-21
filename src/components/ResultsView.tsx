@@ -100,7 +100,7 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
         ) : null}
       </div>
 
-      {rec.rotation ? <RotationCard rotation={rec.rotation} unit={unit} /> : null}
+      {rec.rotation && 'general200Rotation' in rec.rotation ? <RotationCard rotation={rec.rotation} unit={unit} /> : null}
 
       {rec.analysis ? <FreeFireDetails analysis={rec.analysis} descriptions={Object.fromEntries(rec.groups.flatMap((g) => g.settings).map((x) => [x.label, x.description ?? '']))} /> : null}
 
@@ -189,14 +189,15 @@ export function ResultsView({ rec, saveState = 'hidden', onSave, saveError }: Re
   );
 }
 
-/** General Sensitivity calculated from the player's rotation test. */
+/** How the six Free Fire values were calculated from the player's rotation test. */
 function RotationCard({ rotation, unit }: { rotation: NonNullable<Recommendation['rotation']>; unit: string }) {
   const ageLabel = rotation.deviceAge ? (DEVICE_AGE_LABELS[rotation.deviceAge as DeviceAge] ?? rotation.deviceAge) : null;
+  const factor = Math.round(rotation.scopeFactor * 1000) / 1000;
   const facts: { label: string; value: string }[] = [
-    { label: 'Target rotation', value: String(rotation.targetRotation) },
-    { label: 'Your rotations at General 0', value: String(rotation.zeroRotation) },
-    { label: `Predicted at ${rotation.recommended}`, value: `≈ ${rotation.predictedRotation}` },
-    { label: 'Predicted at 200 (max)', value: `≈ ${rotation.maxPredictedRotation}` },
+    { label: 'Your rotations at General 200', value: String(rotation.general200Rotation) },
+    { label: 'Target rotations', value: String(rotation.targetRotations) },
+    { label: 'Scope factor', value: `${rotation.referenceRotation} ÷ ${rotation.general200Rotation} = ${factor}` },
+    { label: 'Reference phone', value: `${rotation.referenceDevice} (${rotation.referenceRotation})` },
   ];
   if (ageLabel) facts.push({ label: 'Phone age', value: ageLabel });
   return (
@@ -208,34 +209,28 @@ function RotationCard({ rotation, unit }: { rotation: NonNullable<Recommendation
         </div>
         <div className="shrink-0 text-right">
           <div className="font-mono text-[32px] font-medium leading-none tracking-tight tabular-nums">
-            {rotation.recommended}
+            {rotation.values.general}
             {unit ? <span className="ml-0.5 text-sm text-muted-foreground">{unit}</span> : null}
           </div>
         </div>
       </div>
       <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3">
         {facts.map((f) => (
-          <div key={f.label} className="bg-card p-2.5">
+          <div key={f.label} className="min-w-0 bg-card p-2.5">
             <dt className="text-[11px] text-muted-foreground">{f.label}</dt>
-            <dd className="mt-0.5 font-mono text-[13px] font-medium tabular-nums">{f.value}</dd>
+            <dd className="mt-0.5 break-words font-mono text-[13px] font-medium tabular-nums">{f.value}</dd>
           </div>
         ))}
       </dl>
-      {rotation.status === 'unreachable' ? (
-        <Notice tone="danger" icon={AlertTriangle} className="mt-3">
-          This phone reaches about {rotation.maxPredictedRotation} rotations even at General {rotation.recommended}, below the target of{' '}
-          {rotation.targetRotation}. Use {rotation.recommended} — the maximum the game allows.
-        </Notice>
-      ) : rotation.status === 'already-at-target' ? (
+      {rotation.generalCapped ? (
         <Notice icon={Info} className="mt-3">
-          Your phone already makes {rotation.zeroRotation} rotations at General 0, at or above the target of {rotation.targetRotation} — keep General
-          at {rotation.recommended}.
+          Your phone makes {rotation.general200Rotation} rotations at General 200, fewer than the target of {rotation.targetRotations}, so General
+          stays at the maximum of 200.
         </Notice>
       ) : null}
       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-        {rotation.model === 'measured-curve'
-          ? 'Calculated from verified rotation measurements for this phone.'
-          : 'Calculated with the starting model (General 0 = 1×, 100 = 2×, 200 = 3× rotation). This is a working assumption, not a verified Free Fire mechanic — fine-tune in a training match.'}
+        General = 2800 ÷ your rotations (max 200). Red Dot, 2X, 4X and Sniper scale the {rotation.referenceDevice} profile (95, 125, 75, 25) by the
+        scope factor. Free Look = General × 65 ÷ 190.
       </p>
     </section>
   );

@@ -468,12 +468,13 @@ export type Database = {
           device_id: string
           game_id: string
           game_version: string | null
+          general_200_rotation: number | null
           id: string
           measurement_method: string | null
           repetition_count: number | null
           updated_at: string
           user_id: string
-          zero_sensitivity_rotation: number
+          zero_sensitivity_rotation: number | null
         }
         Insert: {
           confidence_level?: string
@@ -482,12 +483,13 @@ export type Database = {
           device_id: string
           game_id: string
           game_version?: string | null
+          general_200_rotation?: number | null
           id?: string
           measurement_method?: string | null
           repetition_count?: number | null
           updated_at?: string
           user_id: string
-          zero_sensitivity_rotation: number
+          zero_sensitivity_rotation?: number | null
         }
         Update: {
           confidence_level?: string
@@ -496,12 +498,13 @@ export type Database = {
           device_id?: string
           game_id?: string
           game_version?: string | null
+          general_200_rotation?: number | null
           id?: string
           measurement_method?: string | null
           repetition_count?: number | null
           updated_at?: string
           user_id?: string
-          zero_sensitivity_rotation?: number
+          zero_sensitivity_rotation?: number | null
         }
         Relationships: [
           {
@@ -759,14 +762,18 @@ export type Database = {
           created_at: string
           device_id: string
           final_recommended_sensitivity: number
+          final_values: Json | null
           game_id: string
+          general_200_rotation: number | null
           id: string
-          maximum_predicted_rotation: number
-          predicted_rotation: number
+          maximum_predicted_rotation: number | null
+          predicted_rotation: number | null
           raw_recommended_sensitivity: number
+          raw_values: Json | null
+          scope_factor: number | null
           target_rotation: number
           user_id: string | null
-          zero_sensitivity_rotation: number
+          zero_sensitivity_rotation: number | null
         }
         Insert: {
           calculation_status: string
@@ -776,14 +783,18 @@ export type Database = {
           created_at?: string
           device_id: string
           final_recommended_sensitivity: number
+          final_values?: Json | null
           game_id: string
+          general_200_rotation?: number | null
           id?: string
-          maximum_predicted_rotation: number
-          predicted_rotation: number
+          maximum_predicted_rotation?: number | null
+          predicted_rotation?: number | null
           raw_recommended_sensitivity: number
+          raw_values?: Json | null
+          scope_factor?: number | null
           target_rotation: number
           user_id?: string | null
-          zero_sensitivity_rotation: number
+          zero_sensitivity_rotation?: number | null
         }
         Update: {
           calculation_status?: string
@@ -793,14 +804,18 @@ export type Database = {
           created_at?: string
           device_id?: string
           final_recommended_sensitivity?: number
+          final_values?: Json | null
           game_id?: string
+          general_200_rotation?: number | null
           id?: string
-          maximum_predicted_rotation?: number
-          predicted_rotation?: number
+          maximum_predicted_rotation?: number | null
+          predicted_rotation?: number | null
           raw_recommended_sensitivity?: number
+          raw_values?: Json | null
+          scope_factor?: number | null
           target_rotation?: number
           user_id?: string | null
-          zero_sensitivity_rotation?: number
+          zero_sensitivity_rotation?: number | null
         }
         Relationships: [
           {

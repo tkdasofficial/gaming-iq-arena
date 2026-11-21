@@ -18,11 +18,11 @@ export const EMPTY_ROTATION_FORM: RotationFormValue = { deviceAge: '', whole: '0
 /** Complete when a phone age is chosen and the combined rotation is above 0.0 (0.0 = not entered). */
 export const rotationFormComplete = (v: RotationFormValue) => Boolean(v.deviceAge) && Number(v.whole) + Number(v.digit) / 10 > 0;
 
-/** Rebuild the form from a stored zero-sensitivity rotation (e.g. 9.5 → 9 + 5). */
-export function rotationFormFrom(deviceAge: string | undefined, zeroRotation: number | undefined): RotationFormValue {
-  if (!deviceAge || !zeroRotation || !DEVICE_AGES.some((a) => a.id === deviceAge)) return EMPTY_ROTATION_FORM;
-  const whole = Math.floor(zeroRotation);
-  const digit = Math.round((zeroRotation - whole) * 10);
+/** Rebuild the form from a stored General 200 rotation count (e.g. 9.5 → 9 + 5). */
+export function rotationFormFrom(deviceAge: string | undefined, rotation: number | undefined): RotationFormValue {
+  if (!deviceAge || !rotation || !DEVICE_AGES.some((a) => a.id === deviceAge)) return EMPTY_ROTATION_FORM;
+  const whole = Math.floor(rotation);
+  const digit = Math.round((rotation - whole) * 10);
   return { deviceAge: deviceAge as DeviceAge, whole: String(whole), digit: digit >= 0 && digit <= 9 ? String(digit) : '0' };
 }
 
@@ -36,7 +36,7 @@ const DIGIT_OPTIONS = Array.from({ length: 10 }, (_, i) => i);
 const ROTATION_GAME_ID = 'free-fire';
 
 /**
- * Required steps after the model: phone age, then the zero-sensitivity rotation test as two
+ * Required steps after the model: phone age, then the General 200 rotation test as two
  * side-by-side dropdowns (0–99 and 0–9, both defaulting to 0, combined as e.g. 9.5). Locked until a model is picked;
  * signed-in players get their saved answers prefilled.
  */
@@ -65,7 +65,7 @@ export function RotationCalibrationForm({
   useEffect(() => {
     const s = saved.data;
     if (!s) return;
-    onChange((current) => (current.deviceAge ? current : rotationFormFrom(s.deviceAge, s.zeroRotation)));
+    onChange((current) => (current.deviceAge ? current : rotationFormFrom(s.deviceAge, s.general200Rotation)));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [saved.data]);
 
@@ -93,7 +93,7 @@ export function RotationCalibrationForm({
           Rotations
         </StepLabel>
         <p className="mb-2 rounded-lg bg-secondary px-3 py-2 text-[12px] leading-relaxed text-muted-foreground">
-          In Free Fire, set <span className="font-medium text-foreground">General to 0</span>. Swipe once from one edge of the screen to the
+          In Free Fire, set <span className="font-medium text-foreground">General to 200</span>. Swipe once from one edge of the screen to the
           other and count how many full turns the camera makes. Repeat 3–5 times and enter the average.
         </p>
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
@@ -116,7 +116,7 @@ export function RotationCalibrationForm({
           </select>
         </div>
         <p className="mt-1.5 text-[11px] text-muted-foreground">
-          {Number(value.whole) + Number(value.digit) / 10 > 0 ? `${value.whole}.${value.digit} rotations at General 0` : 'Example: 9 whole and 5 decimal = 9.5 rotations'}
+          {Number(value.whole) + Number(value.digit) / 10 > 0 ? `${value.whole}.${value.digit} rotations at General 200` : 'Example: 9 whole and 5 decimal = 9.5 rotations'}
         </p>
       </div>
     </>

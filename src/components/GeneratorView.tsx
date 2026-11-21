@@ -5,17 +5,15 @@ import { AlertTriangle, ArrowRight, Gauge, Layers, RotateCcw, ShieldCheck, Slide
 import { catalogKeys, fetchBrands, fetchDevice, fetchGames, fetchModels, TIER_LABELS, TIER_ORDER } from '../backend/catalog';
 import { generateRecommendation } from '../backend/recommend.functions';
 import { generatePersonalRecommendation } from '../backend/player.functions';
-import { calculateGeneralRotation, calculatePersonalRotation } from '../backend/rotation.functions';
+import { calculateFreeFire, calculatePersonalFreeFire } from '../backend/rotation.functions';
 import { saveResult } from '../backend/services';
 import { useBackend } from '../backend/BackendContext';
 import { deviceSupportIssue, type Recommendation } from '../engine/recommend';
-import { applyRotationToRecommendation } from '../engine/freefire/rotation';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { DeviceSpecs } from './DeviceSpecs';
 import { ResultsView } from './ResultsView';
-import { PlayerProfileForm } from './PlayerProfileForm';
 import { EMPTY_ROTATION_FORM, RotationCalibrationForm, rotationFormComplete, rotationFormFrom, type RotationFormValue } from './RotationCalibrationForm';
 import { Eyebrow, Notice, Spinner, StepLabel } from './giq/primitives';
 
@@ -26,8 +24,8 @@ export function GeneratorView() {
   const { user, authReady, requestSignIn } = useBackend();
   const generatePublic = useServerFn(generateRecommendation);
   const generatePersonal = useServerFn(generatePersonalRecommendation);
-  const rotationPublic = useServerFn(calculateGeneralRotation);
-  const rotationPersonal = useServerFn(calculatePersonalRotation);
+  const freeFirePublic = useServerFn(calculateFreeFire);
+  const freeFirePersonal = useServerFn(calculatePersonalFreeFire);
 
   const [brandId, setBrandId] = useState('');
   const [modelId, setModelId] = useState('');
@@ -55,7 +53,7 @@ export function GeneratorView() {
         setBrandId(last.device.brandId);
         setModelId(last.device.id);
         setGameId(last.gameId);
-        setRotationForm(rotationFormFrom(last.rotation?.deviceAge, last.rotation?.zeroRotation));
+        setRotationForm(rotationFormFrom(last.rotation?.deviceAge, last.rotation?.general200Rotation));
         setResult(last);
       }
     } catch {
@@ -73,7 +71,7 @@ export function GeneratorView() {
       : !rotationForm.deviceAge
         ? 'Select how old your phone is.'
         : Number(rotationForm.whole) + Number(rotationForm.digit) / 10 <= 0
-          ? 'Enter your rotations at General 0 (whole and decimal).'
+          ? 'Enter your rotations at General 200 (whole and decimal).'
           : !gameId
             ? 'Select the game you play.'
         : device.isLoading
@@ -114,32 +112,22 @@ export function GeneratorView() {
     setSaveState('idle');
     setSaveError(null);
     try {
-      // Signed-in players get their answers, feedback and test results applied, and history saved.
-      const wantRotation = gameId === 'free-fire' && rotationReady;
-      const rotationInput = wantRotation
-        ? { deviceId: modelId, gameId, deviceAge: rotationForm.deviceAge as string, wholeRotations: Number(rotationForm.whole), decimalDigit: Number(rotationForm.digit) }
-        : null;
-      const [res, rotRes] = await Promise.all([
-        user ? generatePersonal({ data: { deviceId: modelId, gameId } }) : generatePublic({ data: { deviceId: modelId, gameId } }),
-        rotationInput ? (user ? rotationPersonal({ data: rotationInput }) : rotationPublic({ data: rotationInput })) : Promise.resolve(null),
-      ]);
+      // Free Fire: all six values come from the Version 1 formula on the server (rotations at General 200).
+      // BGMI / PUBG Mobile keep their existing generator.
+      const ids = { deviceId: modelId, gameId };
+      const res =
+        gameId === 'free-fire'
+          ? await (() => {
+              const data = { ...ids, deviceAge: rotationForm.deviceAge as string, wholeRotations: Number(rotationForm.whole), decimalDigit: Number(rotationForm.digit) };
+              return user ? freeFirePersonal({ data }) : freeFirePublic({ data });
+            })()
+          : await (user ? generatePersonal({ data: ids }) : generatePublic({ data: ids }));
       if (!res.ok) {
         setGenError(res.error);
         setResult(null);
         return;
       }
-      let recommendation = res.recommendation;
-      if (rotRes) {
-        if (!rotRes.ok) {
-          setGenError(rotRes.error);
-          setResult(null);
-          return;
-        }
-        recommendation = {
-          ...applyRotationToRecommendation(recommendation, rotRes.rotation),
-          rotation: { ...rotRes.rotation, deviceAge: rotRes.deviceAge },
-        };
-      }
+      const recommendation = res.recommendation;
       setResult(recommendation);
       sessionStorage.setItem(LAST_KEY, JSON.stringify(recommendation));
       window.setTimeout(() => {
@@ -315,10 +303,6 @@ export function GeneratorView() {
                 </div>
               )}
             </div>
-
-            {gameId === 'free-fire' && user ? (
-              <PlayerProfileForm gameId={gameId} onSaved={() => { if (result) void onGenerate(); }} />
-            ) : null}
 
             <div className="space-y-2 pt-1">
               <Button type="submit" size="xl" className="w-full" disabled={!canGenerate}>

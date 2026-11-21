@@ -63,7 +63,8 @@ const num = (v: unknown) => (typeof v === 'number' ? v : typeof v === 'string' ?
 export async function computeRecommendation(
   db: Db,
   ids: { deviceId: string; gameId: string },
-  personal?: (ctx: { cfg: ModelConfig; deviceId: string; gameId: string; settingIds: Record<SettingKey, string> }) => Promise<PersonalData>
+  personal?: (ctx: { cfg: ModelConfig; deviceId: string; gameId: string; settingIds: Record<SettingKey, string> }) => Promise<PersonalData>,
+  opts: { baseOnly?: boolean } = {}
 ): Promise<{ ok: true; value: ComputedRecommendation } | { ok: false; error: string }> {
   const [deviceRes, gameRes] = await Promise.all([
     db.from('devices').select('id, data').eq('id', ids.deviceId).maybeSingle(),
@@ -116,7 +117,7 @@ export async function computeRecommendation(
     const rec = buildRecommendation(device, record);
 
     // Games without an active hybrid model keep the existing starting-value engine.
-    if (!modelRes.data) return { ok: true, value: { recommendation: rec } };
+    if (!modelRes.data || opts.baseOnly) return { ok: true, value: { recommendation: rec } };
     const cfg = parseModelConfig(modelRes.data.configuration);
     if (cfg.modelName && `${cfg.modelName}@${cfg.version}` !== modelRes.data.id) throw new Error('model version id mismatch');
     if (!supportsFreeFireEngine(cfg, game.id)) return { ok: true, value: { recommendation: rec } };

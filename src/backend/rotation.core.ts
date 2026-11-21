@@ -1,21 +1,22 @@
 /**
- * Server-side rotation-based General Sensitivity pipeline (Free Fire).
- * Validates the player's rotation test answers, loads the active config and any
- * verified measured curve from the database, computes the recommendation, stores a
- * reproducible calculation log, and (for signed-in players) saves the calibration.
+ * Server-side Free Fire pipeline (Version 1 model).
+ * Validates the player's rotation count at General 200, builds the Free Fire settings
+ * layout for the chosen phone, fills all six values from the single calculation
+ * function, stores a reproducible log, and (for signed-in players) saves the test.
  */
 import type { Json } from '@/integrations/supabase/types';
-import { publicClient, validateIds, type Db } from './recommend.core';
+import { computeRecommendation, publicClient, validateIds, type Db } from './recommend.core';
+import type { Recommendation } from '../engine/recommend';
 import {
-  calculateFromCurve,
-  calculateGeneralSensitivity,
-  MIN_CURVE_POINTS,
-  validateZeroRotation,
-  type CurvePoint,
-  type RotationConfig,
-  type RotationResult,
-} from '../engine/freefire/rotation';
-import { componentProfile, type ComponentPointRule, type ComponentProfileResult, type ComponentReading } from '../engine/freefire/component-points';
+  applyFreeFireV1,
+  calculateFreeFireRaw,
+  FF_V1_REFERENCE,
+  FF_V1_VERSION,
+  FreeFireInputError,
+  INVALID_ROTATION_MESSAGE,
+  summarizeFreeFireV1,
+  validateGeneral200Rotation,
+} from '../engine/freefire/sensitivity-v1';
 
 export const DEVICE_AGES = [
   { id: 'under-6-months', label: 'Less than 6 months' },
@@ -27,91 +28,56 @@ export const DEVICE_AGES = [
 export type DeviceAge = (typeof DEVICE_AGES)[number]['id'];
 export const DEVICE_AGE_LABELS: Record<DeviceAge, string> = Object.fromEntries(DEVICE_AGES.map((a) => [a.id, a.label])) as Record<DeviceAge, string>;
 
-export interface ValidatedRotationInput {
+export const FREE_FIRE_ID = 'free-fire';
+
+export interface ValidatedFreeFireInput {
   deviceId: string;
   gameId: string;
   deviceAge: DeviceAge;
-  zeroRotation: number;
+  /** Rotations at General 200 (R). */
+  general200Rotation: number;
 }
 
-/** Two-box picker: whole rotations (1–99) + decimal digit (1–9) → e.g. 9.5. */
-export function validateRotationInput(input: {
+/** Two-box picker: whole rotations (0–99) + decimal digit (0–9) → R, which must be above 0. */
+export function validateFreeFireInput(input: {
   deviceId: unknown;
   gameId: unknown;
   deviceAge: unknown;
   wholeRotations: unknown;
   decimalDigit: unknown;
-}): ValidatedRotationInput {
+}): ValidatedFreeFireInput {
   const { deviceId, gameId } = validateIds({ deviceId: String(input?.deviceId ?? ''), gameId: String(input?.gameId ?? '') });
+  if (gameId !== FREE_FIRE_ID) throw new Error('This calculation is for Free Fire only.');
   const deviceAge = String(input?.deviceAge ?? '') as DeviceAge;
   if (!DEVICE_AGES.some((a) => a.id === deviceAge)) throw new Error('Pick how old your phone is.');
-  const whole = Number(input?.wholeRotations);
-  const digit = Number(input?.decimalDigit);
-  if (!Number.isInteger(whole) || whole < 1 || whole > 99) throw new Error('Whole rotations must be between 1 and 99.');
-  if (!Number.isInteger(digit) || digit < 1 || digit > 9) throw new Error('The decimal part must be between 1 and 9.');
-  return { deviceId, gameId, deviceAge, zeroRotation: validateZeroRotation(whole + digit / 10) };
+  const whole = input?.wholeRotations;
+  const digit = input?.decimalDigit;
+  if (typeof whole !== 'number' || !Number.isInteger(whole) || whole < 0 || whole > 99) throw new Error(INVALID_ROTATION_MESSAGE);
+  if (typeof digit !== 'number' || !Number.isInteger(digit) || digit < 0 || digit > 9) throw new Error(INVALID_ROTATION_MESSAGE);
+  // Build R from integers so 9 + 5 is exactly 9.5 (no float drift from digit / 10).
+  const r = (whole * 10 + digit) / 10;
+  try {
+    return { deviceId, gameId, deviceAge, general200Rotation: validateGeneral200Rotation(r) };
+  } catch (err) {
+    if (err instanceof FreeFireInputError) throw new Error(err.message);
+    throw err;
+  }
 }
 
-export type RotationResponse =
-  | { ok: true; rotation: RotationResult; components: ComponentProfileResult; deviceAge: DeviceAge }
-  | { ok: false; error: string };
+export type FreeFireResponse = { ok: true; recommendation: Recommendation } | { ok: false; error: string };
 
-const num = (v: unknown) => (typeof v === 'number' ? v : Number(v));
+export async function computeFreeFire(db: Db, input: ValidatedFreeFireInput, userId: string | null): Promise<FreeFireResponse> {
+  // Layout only (names, sections, extras); the six values come from the Version 1 function below.
+  const base = await computeRecommendation(db, { deviceId: input.deviceId, gameId: input.gameId }, undefined, { baseOnly: true });
+  if (!base.ok) return base;
 
-export async function computeRotation(db: Db, input: ValidatedRotationInput, userId: string | null): Promise<RotationResponse> {
-  const [deviceRes, configRes, curveRes, profilesRes, rulesRes] = await Promise.all([
-    db.from('devices').select('id').eq('id', input.deviceId).maybeSingle(),
-    db.from('general_sensitivity_config').select('*').eq('game_id', input.gameId).eq('is_active', true).maybeSingle(),
-    db
-      .from('device_rotation_measurements')
-      .select('sensitivity_value, rotation_value, median_rotation')
-      .eq('device_id', input.deviceId)
-      .eq('game_id', input.gameId)
-      .eq('verification_status', 'verified'),
-    db.from('component_quality_profiles').select('component_id, benchmark_value, data_confidence').eq('device_id', input.deviceId),
-    db.from('component_point_rules').select('*'),
-  ]);
-  const readError = deviceRes.error ?? configRes.error ?? curveRes.error ?? profilesRes.error ?? rulesRes.error;
-  if (readError) {
-    console.error('rotation read failed', readError.message);
-    return { ok: false, error: 'Could not reach the database. Please try again.' };
-  }
-  if (!deviceRes.data) return { ok: false, error: 'This phone is not in the catalog.' };
-  if (!configRes.data) return { ok: false, error: 'This game has no rotation setup yet.' };
-
-  const cfg: RotationConfig = {
-    targetRotation: num(configRes.data.target_rotation),
-    minSensitivity: configRes.data.minimum_sensitivity,
-    maxSensitivity: configRes.data.maximum_sensitivity,
-    gainPerPoint: num(configRes.data.gain_per_point),
-    model: 'linear',
-    version: configRes.data.configuration_version,
+  const summary = summarizeFreeFireV1(input.general200Rotation, input.deviceAge);
+  const raw = calculateFreeFireRaw(input.general200Rotation);
+  const recommendation: Recommendation = {
+    ...applyFreeFireV1(base.value.recommendation, summary.values),
+    basis: [`your ${input.general200Rotation} rotations at General 200`, `the ${FF_V1_REFERENCE.device} reference profile`],
+    rotation: summary,
   };
-
-  const points: CurvePoint[] = (curveRes.data ?? []).map((m) => ({
-    sensitivity: m.sensitivity_value,
-    rotation: num(m.median_rotation ?? m.rotation_value),
-  }));
-  const rotation =
-    (points.length >= MIN_CURVE_POINTS ? calculateFromCurve(input.zeroRotation, points, cfg) : null) ??
-    calculateGeneralSensitivity(input.zeroRotation, cfg);
-
-  // Component points are a separate, bounded layer: recorded, never applied to the value.
-  const readings: ComponentReading[] = (profilesRes.data ?? []).flatMap((p) =>
-    p.benchmark_value === null ? [] : [{ componentId: p.component_id, value: num(p.benchmark_value), confidence: p.data_confidence === null ? null : num(p.data_confidence) }]
-  );
-  const rules: ComponentPointRule[] = (rulesRes.data ?? []).map((r) => ({
-    componentId: r.component_id,
-    minBenchmark: num(r.minimum_benchmark),
-    maxBenchmark: num(r.maximum_benchmark),
-    minPoint: r.minimum_point,
-    maxPoint: r.maximum_point,
-    weight: num(r.importance_weight),
-    method: r.normalization_method === 'linear' ? 'linear' : 'linear-inverse',
-    enabled: r.is_enabled,
-    ruleVersion: r.rule_version,
-  }));
-  const components = componentProfile(readings, rules);
 
   // History is written by the server (service role); players can't insert their own logs.
   const { supabaseAdmin } = await import('@/integrations/supabase/client.server');
@@ -125,8 +91,9 @@ export async function computeRotation(db: Db, input: ValidatedRotationInput, use
           device_id: input.deviceId,
           game_id: input.gameId,
           device_age_range: input.deviceAge,
-          zero_sensitivity_rotation: input.zeroRotation,
-          measurement_method: 'full-screen-swipe',
+          general_200_rotation: input.general200Rotation,
+          zero_sensitivity_rotation: null,
+          measurement_method: 'full-screen-swipe-general-200',
           confidence_level: 'user-reported',
         },
         { onConflict: 'user_id,device_id,game_id' }
@@ -141,19 +108,19 @@ export async function computeRotation(db: Db, input: ValidatedRotationInput, use
     device_id: input.deviceId,
     game_id: input.gameId,
     calibration_id: calibrationId,
-    calculation_version: cfg.version,
-    zero_sensitivity_rotation: input.zeroRotation,
-    target_rotation: cfg.targetRotation,
-    raw_recommended_sensitivity: rotation.rawRecommended,
-    final_recommended_sensitivity: rotation.recommended,
-    predicted_rotation: rotation.predictedRotation,
-    maximum_predicted_rotation: rotation.maxPredictedRotation,
-    component_contribution: components as unknown as Json,
-    calculation_status: rotation.status,
+    calculation_version: FF_V1_VERSION,
+    general_200_rotation: input.general200Rotation,
+    target_rotation: summary.targetRotations,
+    scope_factor: raw.scopeFactor,
+    raw_recommended_sensitivity: raw.values.general,
+    final_recommended_sensitivity: summary.values.general,
+    raw_values: raw.values as unknown as Json,
+    final_values: summary.values as unknown as Json,
+    calculation_status: summary.generalCapped ? 'general-capped' : 'ok',
   });
   if (logError) console.error('calculation log insert failed', logError.message);
 
-  return { ok: true, rotation, components, deviceAge: input.deviceAge };
+  return { ok: true, recommendation };
 }
 
 export { publicClient };
